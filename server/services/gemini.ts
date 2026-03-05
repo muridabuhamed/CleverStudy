@@ -120,3 +120,45 @@ function parseJSONResponse<T>(text: string, fallback: T): T {
     return fallback;
   }
 }
+
+export async function chatWithDocument(
+  documentText: string,
+  userMessage: string,
+  history: { role: 'user' | 'model'; parts: string }[] = []
+): Promise<string> {
+  try {
+    const genAI = getGenAI();
+
+    // System prompt with strict document context
+    const systemPrompt = `You are "AI Helper", a study assistant. You are helping a student understand a specific document.
+
+STRICT RULES:
+1. ONLY answer questions based on the provided document content.
+2. If the user asks something NOT related to the document, politely say: "I'm sorry, I can only help you with questions related to your study document. Please ask something about the content of the file."
+3. Be concise and academic.
+4. If appropriate, offer to:
+   - Create a practice exam/quiz
+   - Create flashcards
+   - Summarize a section
+
+Document Content:
+${documentText.slice(0, 30000)}
+
+Conversation History:
+${history.map(h => `${h.role === 'user' ? 'Student' : 'AI Helper'}: ${h.parts}`).join('\n')}
+`;
+
+    // @ts-ignore - models property exists at runtime
+    const result = await genAI.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: `${systemPrompt}\n\nStudent: ${userMessage}\nAI Helper:`
+    });
+
+    return result.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't generate a response.";
+
+  } catch (error) {
+    console.error('Gemini Chat error:', error);
+    throw new Error('Failed to chat with AI');
+  }
+}
+

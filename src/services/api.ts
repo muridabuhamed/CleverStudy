@@ -28,6 +28,16 @@ export interface ProcessResponse {
   questions: Question[];
 }
 
+export interface FileRecord {
+  id: string;
+  filename: string;
+  original_name: string;
+  created_at: string;
+  topics: string[];
+  questions: Question[];
+  status: 'pending' | 'completed';
+}
+
 export const api = {
   async uploadFile(file: File, onProgress?: (progress: number) => void): Promise<UploadResponse> {
     return new Promise((resolve, reject) => {
@@ -91,6 +101,28 @@ export const api = {
   async healthCheck(): Promise<{ status: string; timestamp: string }> {
     const response = await fetch(`${APP_CONFIG.API_BASE_URL}/health`);
     return handleResponse(response);
+  },
+
+  async getFiles(): Promise<FileRecord[]> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/files`);
+    return handleResponse<FileRecord[]>(response);
+  },
+
+  async deleteFile(fileId: string): Promise<{ success: boolean }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/files/${fileId}`, {
+      method: 'DELETE',
+    });
+    return handleResponse<{ success: boolean }>(response);
+  },
+
+  async chatWithDocument(fileId: string, message: string, history: any[]): Promise<string> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/chat/${fileId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message, history }),
+    });
+    const data = await handleResponse<{ response: string }>(response);
+    return data.response;
   },
 };
 

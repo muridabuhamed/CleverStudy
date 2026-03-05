@@ -6,11 +6,13 @@ import { Processing } from './pages/Processing';
 import { Quiz } from './pages/Quiz';
 import { Results } from './pages/Results';
 import { Topics } from './pages/Topics';
+import { Library } from './pages/Library';
 import { AppState, Question, QuizResult } from './types';
 import { motion, AnimatePresence } from 'motion/react';
-import { api, ApiError } from './services/api';
+import { api, ApiError, FileRecord } from './services/api';
 import { ERROR_MESSAGES, APP_CONFIG } from './config/constants';
 import { PdfViewer } from './components/PdfViewer';
+import { Chat } from './components/Chat';
 
 export default function App() {
   const [state, setState] = React.useState<AppState>('HOME');
@@ -63,6 +65,15 @@ export default function App() {
       setState('UPLOAD'); // Go back to the upload screen to show the error
       console.error('Upload/Process error:', err);
     }
+  };
+
+  const handleStudyFile = (file: FileRecord) => {
+    const baseUrl = APP_CONFIG.API_BASE_URL.replace('/api', '');
+    setPdfUrl(`${baseUrl}/uploads/${file.id}`);
+    setTopics(file.topics);
+    setQuestions(file.questions);
+    setCurrentFileId(file.id);
+    setState('TOPICS');
   };
 
   const handleQuizComplete = (answers: { questionId: string; selectedAnswer: number }[]) => {
@@ -128,8 +139,10 @@ export default function App() {
             }}
           />
         ) : null;
+      case 'LIBRARY':
+        return <Library onStudy={handleStudyFile} onNavigate={setState} />;
       default:
-        return <Home onStart={handleStart} />;
+        return <Home onStart={handleStart} onNavigate={setState} />;
     }
   };
 
@@ -155,10 +168,15 @@ export default function App() {
             </AnimatePresence>
           </div>
 
-          {/* PDF Viewer Area */}
+          {/* PDF Viewer & Chat Area */}
           {['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl && (
-            <div className="w-1/2 h-[calc(100vh-64px)] sticky top-0 p-6 border-l border-slate-200 bg-slate-50">
-              <PdfViewer url={pdfUrl} />
+            <div className="w-1/2 h-[calc(100vh-64px)] sticky top-0 border-l border-slate-200 bg-slate-50 flex flex-col overflow-hidden">
+              <div className="flex-1 min-h-0 bg-white">
+                <PdfViewer url={pdfUrl} />
+              </div>
+              <div className="h-[400px] p-6 pt-0 border-t border-slate-200 bg-slate-50/50">
+                {currentFileId && <Chat fileId={currentFileId} />}
+              </div>
             </div>
           )}
         </div>
@@ -167,7 +185,7 @@ export default function App() {
       <footer className="py-12 border-t border-slate-200 mt-20">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <p className="text-slate-400 text-sm">
-            © 2024 AI Study Helper. Empowering students with artificial intelligence.
+            © 2024 AI Helper. Empowering students with artificial intelligence.
           </p>
         </div>
       </footer>

@@ -16,4 +16,4 @@ export type QuizResult = {
   }[];
 };
 
-export type AppState = 'HOME' | 'UPLOAD' | 'PROCESSING' | 'TOPICS' | 'QUIZ' | 'RESULTS';
+export type AppState = 'HOME' | 'UPLOAD' | 'PROCESSING' | 'TOPICS' | 'QUIZ' | 'RESULTS' | 'LIBRARY';
