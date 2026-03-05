@@ -12,3 +12,6 @@ uploads/
 
 # TypeScript build
 *.tsbuildinfo
+
+# SQLite database
+data/

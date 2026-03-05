@@ -10,8 +10,9 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
-import { analyzeDocument } from './services/gemini.js';
+import { analyzeDocument, chatWithDocument } from './services/gemini.js';
 import { extractTextFromPDF } from './services/pdf-parser.js';
+import { dbService } from './db.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -67,6 +68,9 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     const filePath = req.file.path;
 
     // Send initial response
+    // Save to database
+    dbService.addFile(req.file.filename, req.file.filename, req.file.originalname);
+
     res.json({
       success: true,
       fileId: req.file.filename,
@@ -105,6 +109,9 @@ app.post('/api/process/:fileId', async (req, res) => {
     // Clean up file after processing - Disabled to allow PDF viewing in frontend
     // fs.unlinkSync(filePath);
 
+    // Update database with analysis
+    dbService.updateFileAnalysis(fileId, analysis.topics, analysis.questions);
+
     res.json({
       success: true,
       topics: analysis.topics,
@@ -117,6 +124,29 @@ app.post('/api/process/:fileId', async (req, res) => {
       error: 'Failed to process document',
       details: error instanceof Error ? error.message : 'Unknown error'
     });
+  }
+});
+
+app.post('/api/chat/:fileId', async (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const { message, history } = req.body;
+    const filePath = path.join(uploadsDir, fileId);
+
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    // Extract text from PDF for context
+    const text = await extractTextFromPDF(filePath);
+
+    // Chat with AI using document context
+    const response = await chatWithDocument(text, message, history || []);
+
+    res.json({ response });
+  } catch (error) {
+    console.error('Chat error:', error);
+    res.status(500).json({ error: 'Failed to chat with AI' });
   }
 });
 
@@ -135,6 +165,39 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     error: 'Internal server error',
     details: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
+});
+
+// Library endpoints
+app.get('/api/files', (req, res) => {
+  try {
+    const files = dbService.getAllFiles().map(f => ({
+      ...f,
+      topics: JSON.parse(f.topics || '[]'),
+      questions: JSON.parse(f.questions || '[]')
+    }));
+    res.json(files);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch files' });
+  }
+});
+
+app.delete('/api/files/:fileId', (req, res) => {
+  try {
+    const { fileId } = req.params;
+    const filePath = path.join(uploadsDir, fileId);
+
+    // Delete from filesystem if it exists
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+    }
+
+    // Delete from database
+    dbService.deleteFile(fileId);
+
+    res.json({ success: true, message: 'File deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete file' });
+  }
 });
 
 app.listen(PORT, () => {
