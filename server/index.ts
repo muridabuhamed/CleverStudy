@@ -10,9 +10,12 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
 import { analyzeDocument, chatWithDocument } from './services/gemini.js';
 import { extractTextFromPDF } from './services/pdf-parser.js';
 import { dbService } from './db.js';
+import { authenticateToken, generateToken, AuthRequest } from './middleware/auth.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -58,8 +61,96 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// Authentication endpoints
+app.post('/api/auth/signup', async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'Email, password, and name are required' });
+    }
+
+    // Check if user exists
+    const existingUser = dbService.getUserByEmail(email);
+    if (existingUser) {
+      return res.status(400).json({ error: 'Email already registered' });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const userId = uuidv4();
+
+    // Create user
+    dbService.createUser(userId, email, hashedPassword, name);
+
+    // Generate token
+    const token = generateToken(userId);
+
+    res.json({
+      success: true,
+      token,
+      user: { id: userId, email, name }
+    });
+  } catch (error) {
+    console.error('Signup error:', error);
+    res.status(500).json({ error: 'Failed to create account' });
+  }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    // Find user
+    const user = dbService.getUserByEmail(email);
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Verify password
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+
+    // Generate token
+    const token = generateToken(user.id);
+
+    res.json({
+      success: true,
+      token,
+      user: { id: user.id, email: user.email, name: user.name }
+    });
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Failed to login' });
+  }
+});
+
+app.get('/api/auth/me', authenticateToken, (req: AuthRequest, res) => {
+  try {
+    const user = dbService.getUserById(req.userId!);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      id: user.id,
+      email: user.email,
+      name: user.name
+    });
+  } catch (error) {
+    console.error('Get user error:', error);
+    res.status(500).json({ error: 'Failed to get user' });
+  }
+});
+
 // Upload and process PDF endpoint
-app.post('/api/upload', upload.single('file'), async (req, res) => {
+app.post('/api/upload', authenticateToken, upload.single('file'), async (req: AuthRequest, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
@@ -68,8 +159,8 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     const filePath = req.file.path;
 
     // Send initial response
-    // Save to database
-    dbService.addFile(req.file.filename, req.file.filename, req.file.originalname);
+    // Save to database with user_id
+    dbService.addFile(req.file.filename, req.file.filename, req.file.originalname, req.userId!);
 
     res.json({
       success: true,
@@ -87,7 +178,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
 });
 
 // Process PDF and extract topics
-app.post('/api/process/:fileId', async (req, res) => {
+app.post('/api/process/:fileId', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { fileId } = req.params;
     const filePath = path.join(uploadsDir, fileId);
@@ -127,7 +218,7 @@ app.post('/api/process/:fileId', async (req, res) => {
   }
 });
 
-app.post('/api/chat/:fileId', async (req, res) => {
+app.post('/api/chat/:fileId', authenticateToken, async (req: AuthRequest, res) => {
   try {
     const { fileId } = req.params;
     const { message, history } = req.body;
@@ -168,9 +259,9 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 });
 
 // Library endpoints
-app.get('/api/files', (req, res) => {
+app.get('/api/files', authenticateToken, (req: AuthRequest, res) => {
   try {
-    const files = dbService.getAllFiles().map(f => ({
+    const files = dbService.getFilesByUser(req.userId!).map(f => ({
       ...f,
       topics: JSON.parse(f.topics || '[]'),
       questions: JSON.parse(f.questions || '[]')
@@ -181,7 +272,7 @@ app.get('/api/files', (req, res) => {
   }
 });
 
-app.delete('/api/files/:fileId', (req, res) => {
+app.delete('/api/files/:fileId', authenticateToken, (req: AuthRequest, res) => {
   try {
     const { fileId } = req.params;
     const filePath = path.join(uploadsDir, fileId);
@@ -197,6 +288,43 @@ app.delete('/api/files/:fileId', (req, res) => {
     res.json({ success: true, message: 'File deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete file' });
+  }
+});
+
+// Quiz attempt tracking
+app.post('/api/quiz/submit', authenticateToken, (req: AuthRequest, res) => {
+  try {
+    const { fileId, score, total } = req.body;
+    const attemptId = uuidv4();
+
+    dbService.addQuizAttempt(attemptId, req.userId!, fileId, score, total);
+
+    res.json({ success: true, attemptId });
+  } catch (error) {
+    console.error('Submit quiz error:', error);
+    res.status(500).json({ error: 'Failed to save quiz attempt' });
+  }
+});
+
+// User stats and progress
+app.get('/api/user/stats', authenticateToken, (req: AuthRequest, res) => {
+  try {
+    const stats = dbService.getUserStats(req.userId!);
+    const recentAttempts = dbService.getRecentAttempts(req.userId!, 5);
+
+    res.json({
+      stats: stats || {
+        files_studied: 0,
+        quizzes_taken: 0,
+        avg_score: 0,
+        total_correct: 0,
+        total_questions: 0
+      },
+      recentAttempts
+    });
+  } catch (error) {
+    console.error('Get stats error:', error);
+    res.status(500).json({ error: 'Failed to get user stats' });
   }
 });
 
