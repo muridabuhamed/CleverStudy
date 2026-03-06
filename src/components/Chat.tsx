@@ -36,11 +36,12 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
         try {
             const response = await api.chatWithDocument(fileId, userMessage, messages);
             setMessages(prev => [...prev, { role: 'model', parts: response }]);
-        } catch (error) {
+        } catch (error: any) {
             console.error('Chat error:', error);
+            const errorMessage = error.message || "I'm sorry, I encountered an error while processing your request. Please try again.";
             setMessages(prev => [...prev, {
                 role: 'model',
-                parts: "I'm sorry, I encountered an error while processing your request. Please try again."
+                parts: errorMessage
             }]);
         } finally {
             setIsLoading(false);
@@ -56,7 +57,7 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
                         <MessageSquare className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-slate-900 leading-tight">AI Helper Chat</h3>
+                        <h3 className="font-bold text-slate-900 leading-tight">Smart Assistant</h3>
                         <p className="text-xs text-slate-500">Only answering about this document</p>
                     </div>
                 </div>
@@ -75,7 +76,7 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
                         </div>
                         <div className="max-w-xs">
                             <p className="text-slate-900 font-semibold mb-1">Ask me anything!</p>
-                            <p className="text-sm text-slate-500">I've read your document and I'm ready to help you study. Try asking for a summary or an explanation of a concept.</p>
+                            <p className="text-sm text-slate-500">I've analyzed your document and I'm ready to help you study. Try asking for a summary or an explanation of a concept.</p>
                         </div>
                     </div>
                 )}
@@ -93,8 +94,8 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
                                 {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                             </div>
                             <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${message.role === 'user'
-                                    ? 'bg-slate-100 text-slate-900 rounded-tr-none'
-                                    : 'bg-indigo-50 text-indigo-900 border border-indigo-100 rounded-tl-none'
+                                ? 'bg-slate-100 text-slate-900 rounded-tr-none'
+                                : 'bg-indigo-50 text-indigo-900 border border-indigo-100 rounded-tl-none'
                                 }`}>
                                 {message.parts}
                             </div>

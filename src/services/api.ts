@@ -10,7 +10,9 @@ class ApiError extends Error {
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Unknown error' }));
+    const errorText = await response.text();
+    console.error(`API Error [${response.status}]:`, errorText);
+    const error = JSON.parse(errorText || '{"error": "Unknown error"}');
     throw new ApiError(response.status, error.error || ERROR_MESSAGES.NETWORK_ERROR);
   }
   return response.json();

@@ -25,16 +25,16 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         >
           <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 text-indigo-700 text-sm font-semibold mb-6">
             <Sparkles className="w-4 h-4" />
-            AI-Powered Learning
+            Smart Study Platform
           </span>
           <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight mb-6">
             Master Any Subject with <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
-              AI Helper
+              Smart Study Platform
             </span>
           </h1>
           <p className="text-xl text-slate-600 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Upload your lecture notes, textbooks, or research papers. Our AI analyzes your content
+            Upload your lecture notes, textbooks, or research papers. Our platform analyzes your content
             and generates custom exam questions to help you ace your tests.
           </p>
 
@@ -65,7 +65,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           <FeatureCard
             icon={<Zap className="w-6 h-6 text-amber-500" />}
             title="Instant Analysis"
-            description="Get your study materials analyzed in seconds using state-of-the-art AI models."
+            description="Get your study materials analyzed in seconds using advanced algorithms."
           />
           <FeatureCard
             icon={<Shield className="w-6 h-6 text-emerald-500" />}

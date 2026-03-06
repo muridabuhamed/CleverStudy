@@ -21,7 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
               <BookOpen className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600">
-              AI Helper
+              Smart Study Platform
             </span>
           </div>
 

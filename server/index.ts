@@ -103,7 +103,7 @@ app.post('/api/process/:fileId', async (req, res) => {
       return res.status(400).json({ error: 'Could not extract text from PDF' });
     }
 
-    // Analyze with Gemini AI
+    // Analyze document content
     const analysis = await analyzeDocument(text);
 
     // Clean up file after processing - Disabled to allow PDF viewing in frontend
@@ -140,13 +140,13 @@ app.post('/api/chat/:fileId', async (req, res) => {
     // Extract text from PDF for context
     const text = await extractTextFromPDF(filePath);
 
-    // Chat with AI using document context
+    // Generate response using document context
     const response = await chatWithDocument(text, message, history || []);
 
     res.json({ response });
   } catch (error) {
     console.error('Chat error:', error);
-    res.status(500).json({ error: 'Failed to chat with AI' });
+    res.status(500).json({ error: 'Failed to process chat request' });
   }
 });
 
