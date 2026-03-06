@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 
-const dbPath = path.join(process.cwd(), 'data', 'study_helper.db');
+const dbPath = path.join(process.cwd(), 'data', 'smart_study_platform.db');
 
 // Ensure data directory exists
 const dataDir = path.dirname(dbPath);

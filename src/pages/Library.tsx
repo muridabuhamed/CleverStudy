@@ -89,7 +89,7 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
                     <p className="text-slate-500 mb-8 max-w-sm mx-auto">
                         {searchTerm
                             ? `We couldn't find any documents matching "${searchTerm}"`
-                            : "Upload your first PDF to start building your AI study collection."
+                            : "Upload your first PDF to start building your study collection."
                         }
                     </p>
                     {!searchTerm && (

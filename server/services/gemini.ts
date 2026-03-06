@@ -10,7 +10,7 @@ interface DocumentAnalysis {
 function getGenAI(): any {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    throw new Error('GEMINI_API_KEY environment variable is required');
+    throw new Error('API key environment variable is required');
   }
   // @ts-ignore - Constructor signature mismatch in type definitions
   return new GoogleGenAI({ apiKey });
@@ -97,8 +97,8 @@ JSON:`;
     };
 
   } catch (error) {
-    console.error('Gemini API error:', error);
-    throw new Error('Failed to analyze document with AI');
+    console.error('Analysis error:', error);
+    throw new Error('Failed to analyze document');
   }
 }
 
@@ -130,7 +130,7 @@ export async function chatWithDocument(
     const genAI = getGenAI();
 
     // System prompt with strict document context
-    const systemPrompt = `You are "AI Helper", a study assistant. You are helping a student understand a specific document.
+    const systemPrompt = `You are a study assistant helping a student understand a specific document.
 
 STRICT RULES:
 1. ONLY answer questions based on the provided document content.
@@ -145,20 +145,20 @@ Document Content:
 ${documentText.slice(0, 30000)}
 
 Conversation History:
-${history.map(h => `${h.role === 'user' ? 'Student' : 'AI Helper'}: ${h.parts}`).join('\n')}
+${history.map(h => `${h.role === 'user' ? 'Student' : 'Assistant'}: ${h.parts}`).join('\n')}
 `;
 
     // @ts-ignore - models property exists at runtime
     const result = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: `${systemPrompt}\n\nStudent: ${userMessage}\nAI Helper:`
+      contents: `${systemPrompt}\n\nStudent: ${userMessage}\nAssistant:`
     });
 
     return result.candidates?.[0]?.content?.parts?.[0]?.text || "I'm sorry, I couldn't generate a response.";
 
   } catch (error) {
-    console.error('Gemini Chat error:', error);
-    throw new Error('Failed to chat with AI');
+    console.error('Chat error:', error);
+    throw new Error('Failed to process chat request');
   }
 }
 
