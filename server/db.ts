@@ -44,6 +44,25 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (file_id) REFERENCES files(id)
   );
+
+  CREATE TABLE IF NOT EXISTS flashcards (
+    id TEXT PRIMARY KEY,
+    file_id TEXT NOT NULL,
+    question TEXT NOT NULL,
+    answer TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (file_id) REFERENCES files(id)
+  );
+
+  CREATE TABLE IF NOT EXISTS flashcard_reviews (
+    id TEXT PRIMARY KEY,
+    user_id TEXT NOT NULL,
+    flashcard_id TEXT NOT NULL,
+    difficulty TEXT NOT NULL,
+    reviewed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (flashcard_id) REFERENCES flashcards(id)
+  );
 `);
 
 export interface User {
@@ -72,6 +91,22 @@ export interface QuizAttempt {
     score: number;
     total: number;
     completed_at: string;
+}
+
+export interface Flashcard {
+    id: string;
+    file_id: string;
+    question: string;
+    answer: string;
+    created_at: string;
+}
+
+export interface FlashcardReview {
+    id: string;
+    user_id: string;
+    flashcard_id: string;
+    difficulty: 'easy' | 'medium' | 'hard';
+    reviewed_at: string;
 }
 
 export const dbService = {
@@ -152,5 +187,65 @@ export const dbService = {
             LIMIT ?
         `);
         return stmt.all(userId, limit);
+    },
+
+    // Flashcard operations
+    addFlashcards(flashcards: Array<{ id: string; fileId: string; question: string; answer: string }>) {
+        const stmt = db.prepare('INSERT INTO flashcards (id, file_id, question, answer) VALUES (?, ?, ?, ?)');
+        const insertMany = db.transaction((cards: any[]) => {
+            for (const card of cards) {
+                stmt.run(card.id, card.fileId, card.question, card.answer);
+            }
+        });
+        insertMany(flashcards);
+    },
+
+    getFlashcardsByFile(fileId: string): Flashcard[] {
+        const stmt = db.prepare('SELECT * FROM flashcards WHERE file_id = ? ORDER BY created_at');
+        return stmt.all(fileId) as Flashcard[];
+    },
+
+    getFlashcardById(id: string): Flashcard | undefined {
+        const stmt = db.prepare('SELECT * FROM flashcards WHERE id = ?');
+        return stmt.get(id) as Flashcard | undefined;
+    },
+
+    addFlashcardReview(id: string, userId: string, flashcardId: string, difficulty: string) {
+        const stmt = db.prepare('INSERT INTO flashcard_reviews (id, user_id, flashcard_id, difficulty) VALUES (?, ?, ?, ?)');
+        return stmt.run(id, userId, flashcardId, difficulty);
+    },
+
+    getFlashcardReviews(userId: string, flashcardId: string) {
+        const stmt = db.prepare(`
+            SELECT * FROM flashcard_reviews 
+            WHERE user_id = ? AND flashcard_id = ?
+            ORDER BY reviewed_at DESC
+        `);
+        return stmt.all(userId, flashcardId);
+    },
+
+    getFlashcardStats(userId: string, fileId: string) {
+        const stmt = db.prepare(`
+            SELECT 
+                f.id,
+                f.question,
+                f.answer,
+                COUNT(fr.id) as review_count,
+                fr_last.difficulty as last_difficulty,
+                MAX(fr.reviewed_at) as last_reviewed
+            FROM flashcards f
+            LEFT JOIN flashcard_reviews fr ON f.id = fr.flashcard_id AND fr.user_id = ?
+            LEFT JOIN flashcard_reviews fr_last ON f.id = fr_last.flashcard_id 
+                AND fr_last.user_id = ? 
+                AND fr_last.reviewed_at = (
+                    SELECT MAX(reviewed_at) 
+                    FROM flashcard_reviews 
+                    WHERE flashcard_id = f.id AND user_id = ?
+                )
+            WHERE f.file_id = ?
+            GROUP BY f.id
+            ORDER BY review_count ASC, last_reviewed ASC
+        `);
+        return stmt.all(userId, userId, userId, fileId);
     }
 };

@@ -10,6 +10,7 @@ import { Results } from './pages/Results';
 import { Topics } from './pages/Topics';
 import { Library } from './pages/Library';
 import { Profile } from './pages/Profile';
+import { Flashcards } from './pages/Flashcards';
 import { AppState, Question, QuizResult } from './types';
 import { motion, AnimatePresence } from 'motion/react';
 import { api, ApiError, FileRecord } from './services/api';
@@ -28,14 +29,23 @@ export default function App() {
   const [questions, setQuestions] = React.useState<Question[]>([]);
   const [error, setError] = React.useState<string | null>(null);
   const [currentFileId, setCurrentFileId] = React.useState<string | null>(null);
+  const [currentFileName, setCurrentFileName] = React.useState<string>('');
   const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
 
-  // Redirect to login if not authenticated
+  // Redirect to login and clear all state when user logs out
   React.useEffect(() => {
-    if (!loading && !isAuthenticated && state !== 'SIGNUP') {
-      setState('LOGIN');
+    if (!loading && !isAuthenticated) {
+      // Reset all document state so it doesn't leak to the next user
+      setCurrentFileId(null);
+      setCurrentFileName('');
+      setPdfUrl(null);
+      setTopics([]);
+      setQuestions([]);
+      setQuizResult(null);
+      setError(null);
+      if (state !== 'SIGNUP') setState('LOGIN');
     }
-  }, [isAuthenticated, loading, state]);
+  }, [isAuthenticated, loading]);
 
   const handleStart = () => {
     setError(null);
@@ -53,11 +63,13 @@ export default function App() {
         setUploadProgress(progress);
       });
 
-      const baseUrl = APP_CONFIG.API_BASE_URL.replace('/api', '');
-      const url = `${baseUrl}/uploads/${uploadResult.fileId}`;
+      const apiUrl = new URL(APP_CONFIG.API_BASE_URL);
+      const baseUrl = `${apiUrl.protocol}//${apiUrl.host}`;
+      const url = `${baseUrl}/uploads/${uploadResult.fileId}.pdf`;
 
       setPdfUrl(url);
       setCurrentFileId(uploadResult.fileId);
+      setCurrentFileName(file.name);
       setIsUploading(false);
       setState('PROCESSING');
 
@@ -80,11 +92,13 @@ export default function App() {
   };
 
   const handleStudyFile = (file: FileRecord) => {
-    const baseUrl = APP_CONFIG.API_BASE_URL.replace('/api', '');
+    const apiUrl = new URL(APP_CONFIG.API_BASE_URL);
+    const baseUrl = `${apiUrl.protocol}//${apiUrl.host}`;
     setPdfUrl(`${baseUrl}/uploads/${file.id}`);
     setTopics(file.topics);
     setQuestions(file.questions);
     setCurrentFileId(file.id);
+    setCurrentFileName(file.original_name);
     setState('TOPICS');
   };
 
@@ -154,7 +168,19 @@ export default function App() {
       case 'PROCESSING':
         return <Processing />;
       case 'TOPICS':
-        return <Topics topics={topics} onStartQuiz={() => setState('QUIZ')} />;
+        return <Topics
+          topics={topics}
+          onStartQuiz={() => setState('QUIZ')}
+          onStartFlashcards={() => setState('FLASHCARDS')}
+        />;
+      case 'FLASHCARDS':
+        return currentFileId ? (
+          <Flashcards
+            fileId={currentFileId}
+            fileName={currentFileName}
+            onBack={() => setState('TOPICS')}
+          />
+        ) : null;
       case 'QUIZ':
         return <Quiz questions={questions} onComplete={handleQuizComplete} />;
       case 'RESULTS':
@@ -183,35 +209,36 @@ export default function App() {
       <Navbar currentState={state} onNavigate={setState} />
 
       <main className="relative flex-1 flex flex-col min-h-0">
-        <div className={`flex-1 flex min-h-0 ${['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl ? 'flex-row' : 'flex-col'}`}>
-          {/* Main Content Area */}
-          <div className={`flex-1 overflow-y-auto ${['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl ? 'w-1/2' : 'w-full'}`}>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={state}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="h-full"
-              >
-                {renderContent()}
-              </motion.div>
-            </AnimatePresence>
-          </div>
 
-          {/* PDF Viewer & Chat Area */}
-          {['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl && (
-            <div className="w-1/2 h-[calc(100vh-64px)] sticky top-0 border-l border-slate-200 bg-slate-50 flex flex-col overflow-hidden">
-              <div className="flex-1 min-h-0 bg-white">
-                <PdfViewer url={pdfUrl} />
-              </div>
-              <div className="h-[400px] p-6 pt-0 border-t border-slate-200 bg-slate-50/50">
-                {currentFileId && <Chat fileId={currentFileId} />}
-              </div>
+        {/* PDF + Chat side by side — shown on PROCESSING/TOPICS/QUIZ/RESULTS */}
+        {['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl && (
+          <div className="flex w-full h-[calc(100vh-64px)] border-b border-slate-200 bg-white">
+            {/* PDF Viewer — takes 65% width */}
+            <div className="flex-1 min-w-0 border-r border-slate-200 overflow-hidden">
+              <PdfViewer url={pdfUrl} filename={currentFileName} />
             </div>
-          )}
+            {/* Chat — takes 35% width */}
+            <div className="w-[35%] shrink-0 h-full overflow-hidden">
+              {currentFileId && <Chat fileId={currentFileId} />}
+            </div>
+          </div>
+        )}
+
+        {/* Page Content below */}
+        <div className="flex-1 overflow-y-auto">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={state}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              {renderContent()}
+            </motion.div>
+          </AnimatePresence>
         </div>
+
       </main>
 
       <footer className="py-12 border-t border-slate-200 mt-20">

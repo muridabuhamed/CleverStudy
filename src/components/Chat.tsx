@@ -17,6 +17,12 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
     const [input, setInput] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
     const scrollRef = React.useRef<HTMLDivElement>(null);
+    // Keep a ref to always have the latest messages for the API call
+    const messagesRef = React.useRef<Message[]>([]);
+
+    React.useEffect(() => {
+        messagesRef.current = messages;
+    }, [messages]);
 
     React.useEffect(() => {
         if (scrollRef.current) {
@@ -30,11 +36,13 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
 
         const userMessage = input.trim();
         setInput('');
-        setMessages(prev => [...prev, { role: 'user', parts: userMessage }]);
+        // Capture full history including the new user message for the API call
+        const historyForApi = [...messagesRef.current, { role: 'user' as const, parts: userMessage }];
+        setMessages(historyForApi);
         setIsLoading(true);
 
         try {
-            const response = await api.chatWithDocument(fileId, userMessage, messages);
+            const response = await api.chatWithDocument(fileId, userMessage, historyForApi);
             setMessages(prev => [...prev, { role: 'model', parts: response }]);
         } catch (error: any) {
             console.error('Chat error:', error);

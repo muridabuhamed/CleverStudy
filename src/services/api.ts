@@ -24,7 +24,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
     const errorText = await response.text();
     console.error(`API Error [${response.status}]:`, errorText);
     const error = JSON.parse(errorText || '{"error": "Unknown error"}');
-    throw new ApiError(response.status, error.error || ERROR_MESSAGES.NETWORK_ERROR);
+    throw new ApiError(response.status, error.detail || error.error || ERROR_MESSAGES.NETWORK_ERROR);
   }
   return response.json();
 }
@@ -193,6 +193,38 @@ export const api = {
   async getUserStats(): Promise<any> {
     const response = await fetch(`${APP_CONFIG.API_BASE_URL}/user/stats`, {
       headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  // Flashcard APIs
+  async generateFlashcards(fileId: string, count: number = 15): Promise<any> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/flashcards/generate/${fileId}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({ count }),
+    });
+    return handleResponse(response);
+  },
+
+  async getFlashcards(fileId: string): Promise<any> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/flashcards/${fileId}`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  async reviewFlashcard(flashcardId: string, difficulty: 'easy' | 'medium' | 'hard'): Promise<any> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/flashcards/review`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({ flashcardId, difficulty }),
     });
     return handleResponse(response);
   },

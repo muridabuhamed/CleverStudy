@@ -3,15 +3,16 @@ import { Loader2 } from 'lucide-react';
 
 interface PdfViewerProps {
     url: string;
+    filename?: string;
 }
 
-export const PdfViewer: React.FC<PdfViewerProps> = ({ url }) => {
+export const PdfViewer: React.FC<PdfViewerProps> = ({ url, filename }) => {
     const [isLoading, setIsLoading] = React.useState(true);
 
     return (
         <div className="h-full w-full bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 relative flex flex-col">
             <div className="bg-white border-b border-slate-200 p-4 flex items-center justify-between">
-                <h3 className="font-semibold text-slate-700">Lecture Notes</h3>
+                <h3 className="font-semibold text-slate-700 truncate max-w-xs" title={filename}>{filename || 'Document'}</h3>
             </div>
 
             <div className="flex-1 relative bg-slate-200">

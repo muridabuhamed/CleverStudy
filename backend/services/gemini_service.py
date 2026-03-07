@@ -90,3 +90,55 @@ async def chat_with_document(document_text: str, user_message: str, history: Lis
     except Exception as e:
         print(f"❌ Chat Error: {e}")
         return f"Error: {e}"
+
+async def generate_flashcards(text: str, count: int = 15) -> List[Dict[str, str]]:
+    """Generate flashcards from document text"""
+    model = get_genai_model()
+    
+    # Limit text
+    context = text[:30000]
+    
+    prompt = f"""Generate {count} educational flashcards from this document.
+
+Format as JSON array:
+[
+    {{
+        "question": "What is X?",
+        "answer": "X is..."
+    }}
+]
+
+Rules:
+- Questions should test key concepts
+- Answers should be concise but complete
+- Cover different topics from the document
+- Make questions clear and specific
+
+Document:
+{context}
+
+JSON Array:"""
+    
+    try:
+        response = model.generate_content(prompt)
+        json_str = response.text.strip()
+        
+        # Clean markdown code blocks
+        if json_str.startswith("```json"):
+            json_str = json_str[7:-3].strip()
+        elif json_str.startswith("```"):
+            json_str = json_str[3:-3].strip()
+        
+        flashcards = json.loads(json_str)
+        
+        # Validate format
+        if isinstance(flashcards, list) and len(flashcards) > 0:
+            return flashcards[:count]  # Limit to requested count
+        else:
+            print("Invalid flashcard format from AI")
+            return []
+            
+    except Exception as e:
+        print(f"Failed to generate flashcards: {e}")
+        return []
+

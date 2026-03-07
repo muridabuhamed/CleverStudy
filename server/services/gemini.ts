@@ -162,3 +162,56 @@ ${history.map(h => `${h.role === 'user' ? 'Student' : 'Assistant'}: ${h.parts}`)
   }
 }
 
+export async function generateFlashcards(text: string, count: number = 15): Promise<Array<{ question: string; answer: string }>> {
+  try {
+    const genAI = getGenAI();
+
+    // Use first chunk if text is too long
+    const chunks = chunkText(text, 30000);
+    const analysisText = chunks[0];
+
+    const prompt = `Generate ${count} flashcards from this educational document. Create question-answer pairs that help students learn key concepts.
+
+Document:
+${analysisText}
+
+Requirements:
+- Create ${count} flashcards
+- Questions should be clear and focused on one concept
+- Answers should be concise but complete (2-4 sentences)
+- Cover different topics from the document
+- Mix question types: definitions, concepts, applications, comparisons
+
+Return ONLY a JSON array in this format:
+[
+  {
+    "question": "What is X?",
+    "answer": "X is defined as..."
+  },
+  {
+    "question": "Explain the concept of Y",
+    "answer": "Y refers to..."
+  }
+]
+
+JSON:`;
+
+    // @ts-ignore - models property exists at runtime
+    const result = await genAI.models.generateContent({
+      model: 'gemini-2.5-flash',
+      contents: prompt
+    });
+
+    const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text || '[]';
+    const flashcards = parseJSONResponse<Array<{ question: string; answer: string }>>(responseText, []);
+
+    console.log(`🗂️ Generated ${flashcards.length} flashcards`);
+
+    return flashcards.slice(0, count);
+
+  } catch (error) {
+    console.error('Flashcard generation error:', error);
+    throw new Error('Failed to generate flashcards');
+  }
+}
+

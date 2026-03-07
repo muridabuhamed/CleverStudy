@@ -30,7 +30,7 @@ export const Profile: React.FC = () => {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-12 h-12 border-indigo-600 animate-spin" />
+          <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
           <p className="text-slate-500 font-medium">Loading your profile...</p>
         </div>
       </div>
@@ -134,9 +134,8 @@ export const Profile: React.FC = () => {
                   <div className="text-2xl font-bold text-slate-900">
                     {attempt.score}/{attempt.total}
                   </div>
-                  <div className={`text-sm font-semibold ${
-                    (attempt.score / attempt.total) >= 0.7 ? 'text-emerald-600' : 'text-amber-600'
-                  }`}>
+                  <div className={`text-sm font-semibold ${(attempt.score / attempt.total) >= 0.7 ? 'text-emerald-600' : 'text-amber-600'
+                    }`}>
                     {Math.round((attempt.score / attempt.total) * 100)}%
                   </div>
                 </div>

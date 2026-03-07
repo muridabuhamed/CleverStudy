@@ -7,6 +7,12 @@ coverage/
 .env*
 !.env.example
 
+# Python virtual environments
+venv/
+backend/venv/
+__pycache__/
+*.pyc
+
 # Server uploads
 uploads/
 

@@ -12,7 +12,7 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
-import { analyzeDocument, chatWithDocument } from './services/gemini.js';
+import { analyzeDocument, chatWithDocument, generateFlashcards } from './services/gemini.js';
 import { extractTextFromPDF } from './services/pdf-parser.js';
 import { dbService } from './db.js';
 import { authenticateToken, generateToken, AuthRequest } from './middleware/auth.js';
@@ -325,6 +325,105 @@ app.get('/api/user/stats', authenticateToken, (req: AuthRequest, res) => {
   } catch (error) {
     console.error('Get stats error:', error);
     res.status(500).json({ error: 'Failed to get user stats' });
+  }
+});
+
+// Flashcard endpoints
+app.post('/api/flashcards/generate/:fileId', authenticateToken, async (req: AuthRequest, res) => {
+  try {
+    const { fileId } = req.params;
+    const { count = 15 } = req.body;
+
+    const file = dbService.getFileById(fileId);
+    if (!file) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    // Check if file belongs to user
+    if (file.user_id !== req.userId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    // Extract text from PDF
+    const filePath = path.join(uploadsDir, file.filename);
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: 'PDF file not found' });
+    }
+
+    const text = await extractTextFromPDF(filePath);
+    if (!text || text.trim().length === 0) {
+      return res.status(400).json({ error: 'Could not extract text from PDF' });
+    }
+
+    // Generate flashcards using AI
+    const flashcards = await generateFlashcards(text, count);
+
+    // Save to database
+    const flashcardsWithIds = flashcards.map(fc => ({
+      id: uuidv4(),
+      fileId,
+      question: fc.question,
+      answer: fc.answer
+    }));
+
+    dbService.addFlashcards(flashcardsWithIds);
+
+    res.json({
+      success: true,
+      flashcards: flashcardsWithIds,
+      count: flashcardsWithIds.length
+    });
+
+  } catch (error) {
+    console.error('Generate flashcards error:', error);
+    res.status(500).json({ error: 'Failed to generate flashcards' });
+  }
+});
+
+app.get('/api/flashcards/:fileId', authenticateToken, (req: AuthRequest, res) => {
+  try {
+    const { fileId } = req.params;
+
+    const file = dbService.getFileById(fileId);
+    if (!file) {
+      return res.status(404).json({ error: 'File not found' });
+    }
+
+    // Check if file belongs to user
+    if (file.user_id !== req.userId) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+
+    const flashcards = dbService.getFlashcardsByFile(fileId);
+    const stats = dbService.getFlashcardStats(req.userId!, fileId);
+
+    res.json({
+      flashcards,
+      stats
+    });
+
+  } catch (error) {
+    console.error('Get flashcards error:', error);
+    res.status(500).json({ error: 'Failed to get flashcards' });
+  }
+});
+
+app.post('/api/flashcards/review', authenticateToken, (req: AuthRequest, res) => {
+  try {
+    const { flashcardId, difficulty } = req.body;
+
+    if (!['easy', 'medium', 'hard'].includes(difficulty)) {
+      return res.status(400).json({ error: 'Invalid difficulty level' });
+    }
+
+    const reviewId = uuidv4();
+    dbService.addFlashcardReview(reviewId, req.userId!, flashcardId, difficulty);
+
+    res.json({ success: true, reviewId });
+
+  } catch (error) {
+    console.error('Review flashcard error:', error);
+    res.status(500).json({ error: 'Failed to save review' });
   }
 });
 
