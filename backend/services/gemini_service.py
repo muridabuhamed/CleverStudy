@@ -9,19 +9,36 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 load_dotenv(os.path.join(ROOT_DIR, '.env.local'))
 load_dotenv(os.path.join(ROOT_DIR, '.env'))
 
-def get_genai_model():
+# Primary model first, fallback if quota is exceeded
+_MODELS = ['gemini-2.5-flash', 'gemini-1.5-flash']
+
+def _is_quota_error(e: Exception) -> bool:
+    msg = str(e)
+    return '429' in msg or 'quota' in msg.lower() or 'rate limit' in msg.lower()
+
+def _get_model(model_name: str):
     api_key = os.getenv('GEMINI_API_KEY')
     if not api_key:
-        print("❌ Error: API key not found in environment")
-        raise ValueError("API key environment variable is required")
-    
-    print(f"✅ API Key found: {api_key[:5]}...{api_key[-5:]}")
+        raise ValueError("GEMINI_API_KEY environment variable is required")
     genai.configure(api_key=api_key)
-    return genai.GenerativeModel('gemini-2.5-flash')
+    return genai.GenerativeModel(model_name)
+
+def _generate(prompt: str) -> str:
+    """Try each model in order, falling back on quota errors."""
+    last_error = None
+    for model_name in _MODELS:
+        try:
+            model = _get_model(model_name)
+            response = model.generate_content(prompt)
+            return response.text
+        except Exception as e:
+            if _is_quota_error(e):
+                last_error = e
+                continue
+            raise
+    raise last_error
 
 async def analyze_document(text: str) -> Dict[str, Any]:
-    model = get_genai_model()
-    
     # Limit text to 30k chars
     context = text[:30000]
     
@@ -48,22 +65,19 @@ async def analyze_document(text: str) -> Dict[str, Any]:
     
     JSON:"""
     
-    response = model.generate_content(prompt)
+    raw = _generate(prompt)
     try:
-        # Clean potential markdown markdown code blocks
-        json_str = response.text.strip()
+        json_str = raw.strip()
         if json_str.startswith("```json"):
             json_str = json_str[7:-3].strip()
         elif json_str.startswith("```"):
             json_str = json_str[3:-3].strip()
-        
         return json.loads(json_str)
     except Exception as e:
         print(f"Failed to parse AI response: {e}")
         return {"topics": [], "questions": []}
 
 async def chat_with_document(document_text: str, user_message: str, history: List[Dict[str, str]] = None) -> str:
-    model = get_genai_model()
     context = document_text[:30000]
     
     history_str = ""
@@ -84,18 +98,10 @@ async def chat_with_document(document_text: str, user_message: str, history: Lis
     Student: {user_message}
     Assistant:"""
     
-    try:
-        response = model.generate_content(system_prompt)
-        return response.text
-    except Exception as e:
-        print(f"❌ Chat Error: {e}")
-        return f"Error: {e}"
+    return _generate(system_prompt)
 
 async def generate_flashcards(text: str, count: int = 15) -> List[Dict[str, str]]:
     """Generate flashcards from document text"""
-    model = get_genai_model()
-    
-    # Limit text
     context = text[:30000]
     
     prompt = f"""Generate {count} educational flashcards from this document.
@@ -119,26 +125,16 @@ Document:
 
 JSON Array:"""
     
-    try:
-        response = model.generate_content(prompt)
-        json_str = response.text.strip()
-        
-        # Clean markdown code blocks
-        if json_str.startswith("```json"):
-            json_str = json_str[7:-3].strip()
-        elif json_str.startswith("```"):
-            json_str = json_str[3:-3].strip()
-        
-        flashcards = json.loads(json_str)
-        
-        # Validate format
-        if isinstance(flashcards, list) and len(flashcards) > 0:
-            return flashcards[:count]  # Limit to requested count
-        else:
-            print("Invalid flashcard format from AI")
-            return []
-            
-    except Exception as e:
-        print(f"Failed to generate flashcards: {e}")
-        return []
+    json_str = _generate(prompt).strip()
+    
+    if json_str.startswith("```json"):
+        json_str = json_str[7:-3].strip()
+    elif json_str.startswith("```"):
+        json_str = json_str[3:-3].strip()
+    
+    flashcards = json.loads(json_str)
+    
+    if isinstance(flashcards, list) and len(flashcards) > 0:
+        return flashcards[:count]
+    return []
 

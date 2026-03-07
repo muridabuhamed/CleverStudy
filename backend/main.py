@@ -1,7 +1,7 @@
 import os
 import uuid
 import shutil
-from fastapi import FastAPI, UploadFile, File, HTTPException, Body, Depends
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from typing import List, Optional
@@ -225,8 +225,11 @@ async def process_document_endpoint(file_id: str, user_id: str = Depends(get_cur
     except HTTPException:
         raise
     except Exception as e:
+        msg = str(e)
+        if '429' in msg or 'quota' in msg.lower():
+            raise HTTPException(status_code=429, detail="AI quota exceeded. Please wait a minute and try again.")
         print(f"Processing error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=msg)
 
 @app.post("/api/chat/{file_id}")
 async def chat(file_id: str, request: ChatRequest, user_id: str = Depends(get_current_user)):
@@ -252,9 +255,12 @@ async def chat(file_id: str, request: ChatRequest, user_id: str = Depends(get_cu
     except HTTPException:
         raise
     except Exception as e:
+        msg = str(e)
+        if '429' in msg or 'quota' in msg.lower():
+            raise HTTPException(status_code=429, detail="AI quota exceeded. Please wait a minute and try again.")
         import traceback
         traceback.print_exc()
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=msg)
 
 @app.delete("/api/files/{file_id}")
 async def delete_file(file_id: str, user_id: str = Depends(get_current_user)):
@@ -359,6 +365,9 @@ async def generate_flashcards_endpoint(file_id: str, request: FlashcardGenerateR
     except HTTPException:
         raise
     except Exception as e:
+        msg = str(e)
+        if '429' in msg or 'quota' in msg.lower():
+            raise HTTPException(status_code=429, detail="AI quota exceeded. Please wait a minute and try again.")
         print(f"Generate flashcards error: {e}")
         raise HTTPException(status_code=500, detail="Failed to generate flashcards")
 

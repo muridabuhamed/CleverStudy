@@ -94,7 +94,7 @@ export default function App() {
   const handleStudyFile = (file: FileRecord) => {
     const apiUrl = new URL(APP_CONFIG.API_BASE_URL);
     const baseUrl = `${apiUrl.protocol}//${apiUrl.host}`;
-    setPdfUrl(`${baseUrl}/uploads/${file.id}`);
+    setPdfUrl(`${baseUrl}/uploads/${file.id}.pdf`);
     setTopics(file.topics);
     setQuestions(file.questions);
     setCurrentFileId(file.id);
