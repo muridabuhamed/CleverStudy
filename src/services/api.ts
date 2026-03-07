@@ -1,6 +1,17 @@
 import { Question } from '../types';
 import { APP_CONFIG, ERROR_MESSAGES } from '../config/constants';
 
+// Get auth token from localStorage
+function getAuthToken(): string | null {
+  return localStorage.getItem('auth_token');
+}
+
+// Add auth header to requests
+function getAuthHeaders(): HeadersInit {
+  const token = getAuthToken();
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+}
+
 class ApiError extends Error {
   constructor(public statusCode: number, message: string) {
     super(message);
@@ -41,6 +52,32 @@ export interface FileRecord {
 }
 
 export const api = {
+  // Authentication
+  async login(email: string, password: string): Promise<{ token: string; user: any }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    return handleResponse(response);
+  },
+
+  async signup(email: string, password: string, name: string): Promise<{ token: string; user: any }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/auth/signup`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name }),
+    });
+    return handleResponse(response);
+  },
+
+  async getCurrentUser(token: string): Promise<any> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/auth/me`, {
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+    return handleResponse(response);
+  },
+
   async uploadFile(file: File, onProgress?: (progress: number) => void): Promise<UploadResponse> {
     return new Promise((resolve, reject) => {
       const formData = new FormData();
@@ -85,6 +122,13 @@ export const api = {
       });
 
       xhr.open('POST', `${APP_CONFIG.API_BASE_URL}/upload`);
+      
+      // Add auth header
+      const token = getAuthToken();
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
+      
       xhr.send(formData);
     });
   },
@@ -94,6 +138,7 @@ export const api = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        ...getAuthHeaders()
       },
     });
 
@@ -106,13 +151,16 @@ export const api = {
   },
 
   async getFiles(): Promise<FileRecord[]> {
-    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/files`);
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/files`, {
+      headers: getAuthHeaders()
+    });
     return handleResponse<FileRecord[]>(response);
   },
 
   async deleteFile(fileId: string): Promise<{ success: boolean }> {
     const response = await fetch(`${APP_CONFIG.API_BASE_URL}/files/${fileId}`, {
       method: 'DELETE',
+      headers: getAuthHeaders()
     });
     return handleResponse<{ success: boolean }>(response);
   },
@@ -120,11 +168,33 @@ export const api = {
   async chatWithDocument(fileId: string, message: string, history: any[]): Promise<string> {
     const response = await fetch(`${APP_CONFIG.API_BASE_URL}/chat/${fileId}`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
       body: JSON.stringify({ message, history }),
     });
     const data = await handleResponse<{ response: string }>(response);
     return data.response;
+  },
+
+  async submitQuizAttempt(fileId: string, score: number, total: number): Promise<{ success: boolean; attemptId: string }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/quiz/submit`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({ fileId, score, total }),
+    });
+    return handleResponse(response);
+  },
+
+  async getUserStats(): Promise<any> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/user/stats`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
   },
 };
 

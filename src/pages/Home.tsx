@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight, Sparkles, Shield, Zap } from 'lucide-react';
 import { AppState } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 interface HomeProps {
   onStart: () => void;
@@ -9,6 +10,8 @@ interface HomeProps {
 }
 
 export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
+  const { isAuthenticated } = useAuth();
+  
   return (
     <div className="relative overflow-hidden">
       {/* Background blobs */}
@@ -39,20 +42,41 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button
-              onClick={onStart}
-              className="group relative px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2"
-            >
-              Upload PDF Now
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button
-              onClick={() => onNavigate('LIBRARY')}
-              className="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all flex items-center gap-2"
-            >
-              My Library
-              <ArrowRight className="w-5 h-5 opacity-50" />
-            </button>
+            {isAuthenticated ? (
+              <>
+                <button
+                  onClick={onStart}
+                  className="group relative px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2"
+                >
+                  Upload PDF Now
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button
+                  onClick={() => onNavigate('LIBRARY')}
+                  className="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all flex items-center gap-2"
+                >
+                  My Library
+                  <ArrowRight className="w-5 h-5 opacity-50" />
+                </button>
+              </>
+            ) : (
+              <>
+                <button
+                  onClick={() => onNavigate('SIGNUP')}
+                  className="group relative px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg shadow-xl shadow-indigo-200 hover:bg-indigo-700 transition-all flex items-center gap-2"
+                >
+                  Get Started Free
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button
+                  onClick={() => onNavigate('LOGIN')}
+                  className="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-2xl font-bold text-lg hover:bg-slate-50 transition-all flex items-center gap-2"
+                >
+                  Sign In
+                  <ArrowRight className="w-5 h-5 opacity-50" />
+                </button>
+              </>
+            )}
           </div>
         </motion.div>
 

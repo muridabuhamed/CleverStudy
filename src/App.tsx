@@ -1,20 +1,25 @@
 import React from 'react';
 import { Navbar } from './components/Navbar';
 import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { Signup } from './pages/Signup';
 import { FileUpload } from './components/FileUpload';
 import { Processing } from './pages/Processing';
 import { Quiz } from './pages/Quiz';
 import { Results } from './pages/Results';
 import { Topics } from './pages/Topics';
 import { Library } from './pages/Library';
+import { Profile } from './pages/Profile';
 import { AppState, Question, QuizResult } from './types';
 import { motion, AnimatePresence } from 'motion/react';
 import { api, ApiError, FileRecord } from './services/api';
 import { ERROR_MESSAGES, APP_CONFIG } from './config/constants';
 import { PdfViewer } from './components/PdfViewer';
 import { Chat } from './components/Chat';
+import { useAuth } from './contexts/AuthContext';
 
 export default function App() {
+  const { isAuthenticated, loading } = useAuth();
   const [state, setState] = React.useState<AppState>('HOME');
   const [uploadProgress, setUploadProgress] = React.useState(0);
   const [isUploading, setIsUploading] = React.useState(false);
@@ -24,6 +29,13 @@ export default function App() {
   const [error, setError] = React.useState<string | null>(null);
   const [currentFileId, setCurrentFileId] = React.useState<string | null>(null);
   const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
+
+  // Redirect to login if not authenticated
+  React.useEffect(() => {
+    if (!loading && !isAuthenticated && state !== 'SIGNUP') {
+      setState('LOGIN');
+    }
+  }, [isAuthenticated, loading, state]);
 
   const handleStart = () => {
     setError(null);
@@ -76,7 +88,7 @@ export default function App() {
     setState('TOPICS');
   };
 
-  const handleQuizComplete = (answers: { questionId: string; selectedAnswer: number }[]) => {
+  const handleQuizComplete = async (answers: { questionId: string; selectedAnswer: number }[]) => {
     const results = answers.map(ans => {
       const question = questions.find(q => q.id === ans.questionId);
       return {
@@ -92,13 +104,33 @@ export default function App() {
       total: questions.length,
       answers: results
     });
+
+    // Save quiz attempt to database
+    if (currentFileId) {
+      try {
+        await api.submitQuizAttempt(currentFileId, score, questions.length);
+      } catch (error) {
+        console.error('Failed to save quiz attempt:', error);
+      }
+    }
+
     setState('RESULTS');
   };
 
   const renderContent = () => {
+    // Show authentication screens first
+    if (!isAuthenticated && !loading) {
+      if (state === 'SIGNUP') {
+        return <Signup onSwitchToLogin={() => setState('LOGIN')} />;
+      }
+      return <Login onSwitchToSignup={() => setState('SIGNUP')} />;
+    }
+
     switch (state) {
       case 'HOME':
-        return <Home onStart={handleStart} />;
+        return <Home onStart={handleStart} onNavigate={setState} />;
+      case 'PROFILE':
+        return <Profile />;
       case 'UPLOAD':
         return (
           <div className="max-w-4xl mx-auto py-20 px-4">
