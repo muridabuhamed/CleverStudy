@@ -3,10 +3,11 @@ import json
 import os
 from typing import List, Optional
 
-DB_PATH = os.path.join(os.path.dirname(__file__), '..', 'data', 'smart_study_platform.db')
+_DATA_DIR = os.getenv('DATA_DIR', os.path.join(os.path.dirname(__file__), '..', 'data'))
+DB_PATH = os.path.join(_DATA_DIR, 'smart_study_platform.db')
 
 def init_db():
-    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
+    os.makedirs(_DATA_DIR, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     

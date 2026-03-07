@@ -20,17 +20,18 @@ from auth import get_password_hash, verify_password, create_access_token, get_cu
 app = FastAPI(title="Smart Study Platform API")
 
 # Enable CORS
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Directories
+# Directories — use Render's persistent disk if available, else local
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-UPLOADS_DIR = os.path.join(BASE_DIR, 'uploads')
+UPLOADS_DIR = os.getenv("UPLOADS_DIR", os.path.join(BASE_DIR, 'uploads'))
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 # Static files for PDF serving
