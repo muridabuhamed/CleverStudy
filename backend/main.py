@@ -11,7 +11,8 @@ from database import (
     init_db, add_file_record, update_file_analysis, get_files_by_user, 
     delete_file_record, get_file_by_id, create_user, get_user_by_email, 
     get_user_by_id, add_quiz_attempt, get_user_stats, get_recent_attempts,
-    add_flashcards, get_flashcards_by_file, add_flashcard_review, get_flashcard_stats
+    add_flashcards, get_flashcards_by_file, add_flashcard_review, get_flashcard_stats,
+    get_all_users
 )
 from services.pdf_service import extract_text_from_pdf
 from services.gemini_service import analyze_document, chat_with_document, generate_flashcards
@@ -406,6 +407,17 @@ async def review_flashcard(request: FlashcardReviewRequest, user_id: str = Depen
     except Exception as e:
         print(f"Review flashcard error: {e}")
         raise HTTPException(status_code=500, detail="Failed to save review")
+
+# ============ Admin Endpoint ============
+
+@app.get("/api/admin/users")
+async def admin_get_users(secret: str = ""):
+    """List all registered users (admin only)"""
+    admin_secret = os.getenv("ADMIN_SECRET", "")
+    if not admin_secret or secret != admin_secret:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    users = get_all_users()
+    return {"total": len(users), "users": users}
 
 if __name__ == "__main__":
     import uvicorn

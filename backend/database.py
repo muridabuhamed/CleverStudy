@@ -152,6 +152,15 @@ def get_user_by_id(user_id: str):
     conn.close()
     return dict(row) if row else None
 
+def get_all_users():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute('SELECT id, name, email, created_at FROM users ORDER BY created_at DESC')
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(r) for r in rows]
+
 # File operations by user
 def get_files_by_user(user_id: str):
     conn = sqlite3.connect(DB_PATH)

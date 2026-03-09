@@ -1,111 +1,45 @@
-# Quick Start Script for Smart Study Platform (Python Backend)
+# Smart Study Platform - Start Script
+# Run this from the project root: .\start-python.ps1
 
-Write-Host "🐍 Starting Smart Study Platform with Python Backend..." -ForegroundColor Cyan
-Write-Host ""
+$ROOT = $PSScriptRoot
 
-# Check if .env.local exists
-if (!(Test-Path ".env.local")) {
-    Write-Host "⚠️  .env.local not found!" -ForegroundColor Yellow
-    Write-Host "Creating .env.local from template..." -ForegroundColor Yellow
-    Copy-Item ".env.example" ".env.local"
-    Write-Host ""
-    Write-Host "📝 Please edit .env.local and add your API keys:" -ForegroundColor Red
-    Write-Host "   - GEMINI_API_KEY (required)" -ForegroundColor Red
-    Write-Host "   - JWT_SECRET (required)" -ForegroundColor Red
-    Write-Host ""
-    Write-Host "After adding your keys, run this script again." -ForegroundColor Yellow
+# --- Check .env.local ---
+if (!(Test-Path "$ROOT\.env.local")) {
+    Write-Host "ERROR: .env.local not found." -ForegroundColor Red
+    Write-Host "Copy .env.example to .env.local and fill in your GEMINI_API_KEY." -ForegroundColor Yellow
     exit 1
 }
 
-# Check if API keys are set
-$envContent = Get-Content ".env.local" -Raw
-if ($envContent -match "GEMINI_API_KEY=MY_GEMINI_API_KEY|GEMINI_API_KEY=`"MY_GEMINI_API_KEY`"") {
-    Write-Host "⚠️  Please set your GEMINI_API_KEY in .env.local" -ForegroundColor Red
+# --- Check Python ---
+if (!(Get-Command python -ErrorAction SilentlyContinue)) {
+    Write-Host "ERROR: Python not found. Install Python 3.8+ and try again." -ForegroundColor Red
     exit 1
 }
 
-# Check if Python is installed
-try {
-    $pythonVersion = python --version 2>&1
-    Write-Host "✅ Python found: $pythonVersion" -ForegroundColor Green
-} catch {
-    Write-Host "❌ Python not found! Please install Python 3.8+ first." -ForegroundColor Red
-    exit 1
-}
+# --- Install Python deps if needed ---
+Write-Host "Checking Python dependencies..." -ForegroundColor Cyan
+pip install -r "$ROOT\backend\requirements.txt" -q
 
-# Check if virtual environment exists
-if (!(Test-Path "backend\venv")) {
-    Write-Host "📦 Creating virtual environment..." -ForegroundColor Cyan
-    python -m venv backend\venv
-}
-
-# Activate virtual environment
-Write-Host "🔧 Activating virtual environment..." -ForegroundColor Cyan
-& backend\venv\Scripts\Activate.ps1
-
-# Install/Update Python dependencies
-Write-Host "📦 Installing Python dependencies..." -ForegroundColor Cyan
-pip install -r backend\requirements.txt --quiet
-
-# Check if node_modules exists for frontend
-if (!(Test-Path "node_modules")) {
-    Write-Host "📦 Installing frontend dependencies..." -ForegroundColor Cyan
+# --- Install frontend deps if needed ---
+if (!(Test-Path "$ROOT\frontend\node_modules")) {
+    Write-Host "Installing frontend dependencies..." -ForegroundColor Cyan
+    Push-Location "$ROOT\frontend"
     npm install
+    Pop-Location
 }
 
 Write-Host ""
-Write-Host "✅ Starting servers..." -ForegroundColor Green
-Write-Host ""
-Write-Host "🐍 Python Backend (FastAPI): http://localhost:8000" -ForegroundColor Cyan
-Write-Host "⚛️  Frontend (React): http://localhost:3000" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "📚 API Documentation: http://localhost:8000/docs" -ForegroundColor Yellow
-Write-Host ""
-Write-Host "Press Ctrl+C to stop all servers" -ForegroundColor Yellow
+Write-Host "Starting backend on  http://localhost:8000" -ForegroundColor Green
+Write-Host "Starting frontend on http://localhost:3000" -ForegroundColor Green
 Write-Host ""
 
-# Start both frontend and backend
-$jobs = @()
+# Open backend in a new PowerShell window
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$ROOT\backend'; python main.py"
 
-# Start Python backend
-$backendJob = Start-Job -ScriptBlock {
-    Set-Location $using:PWD
-    & backend\venv\Scripts\Activate.ps1
-    python backend\main.py
-}
-$jobs += $backendJob
-Write-Host "✅ Python backend started (Job ID: $($backendJob.Id))" -ForegroundColor Green
+# Wait for backend to be ready
+Start-Sleep -Seconds 3
 
-# Wait a moment for backend to start
-Start-Sleep -Seconds 2
+# Open frontend in a new PowerShell window
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$ROOT\frontend'; npx vite --port 3000 --host"
 
-# Start frontend
-$frontendJob = Start-Job -ScriptBlock {
-    Set-Location $using:PWD
-    npm run dev
-}
-$jobs += $frontendJob
-Write-Host "✅ Frontend started (Job ID: $($frontendJob.Id))" -ForegroundColor Green
-
-Write-Host ""
-Write-Host "🎉 All services started successfully!" -ForegroundColor Green
-Write-Host ""
-
-# Monitor jobs
-try {
-    while ($true) {
-        foreach ($job in $jobs) {
-            if ($job.State -eq 'Failed' -or $job.State -eq 'Stopped') {
-                Write-Host "❌ Job $($job.Id) has stopped!" -ForegroundColor Red
-                Receive-Job $job
-            }
-        }
-        Start-Sleep -Seconds 1
-    }
-} finally {
-    Write-Host ""
-    Write-Host "🛑 Stopping all services..." -ForegroundColor Yellow
-    $jobs | Stop-Job
-    $jobs | Remove-Job
-    Write-Host "✅ All services stopped" -ForegroundColor Green
-}
+Write-Host "Both windows are open. Close them to stop the servers." -ForegroundColor Yellow
