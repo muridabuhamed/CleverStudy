@@ -1,8 +1,7 @@
 import React from 'react';
 import { Navbar } from './components/Navbar';
 import { Home } from './pages/Home';
-import { Login } from './pages/Login';
-import { Signup } from './pages/Signup';
+import { Auth } from './pages/Auth';
 import { FileUpload } from './components/FileUpload';
 import { Processing } from './pages/Processing';
 import { Quiz } from './pages/Quiz';
@@ -134,10 +133,7 @@ export default function App() {
   const renderContent = () => {
     // Show authentication screens first
     if (!isAuthenticated && !loading) {
-      if (state === 'SIGNUP') {
-        return <Signup onSwitchToLogin={() => setState('LOGIN')} />;
-      }
-      return <Login onSwitchToSignup={() => setState('SIGNUP')} />;
+      return <Auth defaultTab={state === 'SIGNUP' ? 'signup' : 'login'} />;
     }
 
     switch (state) {
