@@ -31,7 +31,7 @@ export default function App() {
   const [currentFileName, setCurrentFileName] = React.useState<string>('');
   const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
 
-  // Redirect to login and clear all state when user logs out
+  // Clear all state when user logs out
   React.useEffect(() => {
     if (!loading && !isAuthenticated) {
       // Reset all document state so it doesn't leak to the next user
@@ -42,7 +42,10 @@ export default function App() {
       setQuestions([]);
       setQuizResult(null);
       setError(null);
-      if (state !== 'SIGNUP') setState('LOGIN');
+      // Stay on HOME page to show landing page to visitors
+      if (state !== 'SIGNUP' && state !== 'LOGIN' && state !== 'HOME') {
+        setState('HOME');
+      }
     }
   }, [isAuthenticated, loading]);
 
@@ -131,9 +134,15 @@ export default function App() {
   };
 
   const renderContent = () => {
-    // Show authentication screens first
-    if (!isAuthenticated && !loading) {
+    // Show authentication screens when explicitly requested
+    if (!isAuthenticated && !loading && (state === 'LOGIN' || state === 'SIGNUP')) {
       return <Auth defaultTab={state === 'SIGNUP' ? 'signup' : 'login'} />;
+    }
+
+    // Protected routes - redirect to login if not authenticated
+    if (!isAuthenticated && !loading && state !== 'HOME') {
+      setState('LOGIN');
+      return <Auth defaultTab="login" />;
     }
 
     switch (state) {
