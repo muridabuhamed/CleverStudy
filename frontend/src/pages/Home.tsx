@@ -13,14 +13,14 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
   const { isAuthenticated } = useAuth();
   
   return (
-    <div className="relative overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+    <div className="relative overflow-hidden min-h-screen bg-gradient-to-br from-indigo-50 via-white to-violet-50">
+      {/* Lightweight animated background */}
+      <div className="absolute inset-0 -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-100 rounded-full blur-3xl opacity-60 animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-violet-100 rounded-full blur-3xl opacity-60 animate-pulse" />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 text-center relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
