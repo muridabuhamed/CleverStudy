@@ -30,6 +30,19 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
         }
     }, [messages, isLoading]);
 
+    // Listen for askAI events from PDF viewer
+    React.useEffect(() => {
+        const handleAskAI = (event: CustomEvent) => {
+            const selectedText = event.detail?.text;
+            if (selectedText) {
+                setInput(`Explain this: "${selectedText}"`);
+            }
+        };
+        
+        window.addEventListener('askAI', handleAskAI as EventListener);
+        return () => window.removeEventListener('askAI', handleAskAI as EventListener);
+    }, []);
+
     const handleSend = async (e?: React.FormEvent) => {
         e?.preventDefault();
         if (!input.trim() || isLoading) return;
@@ -57,7 +70,7 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
     };
 
     return (
-        <div className="flex flex-col h-full bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+        <div className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden">
             {/* Header */}
             <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -78,13 +91,36 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
                 className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth"
             >
                 {messages.length === 0 && (
-                    <div className="h-full flex flex-col items-center justify-center text-center space-y-4 opacity-60">
-                        <div className="bg-slate-100 p-4 rounded-full">
-                            <Sparkles className="w-8 h-8 text-indigo-400" />
+                    <div className="h-full flex flex-col items-center justify-center px-4 py-8">
+                        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-2xl shadow-lg mb-6">
+                            <Sparkles className="w-10 h-10 text-white" />
                         </div>
-                        <div className="max-w-xs">
-                            <p className="text-slate-900 font-semibold mb-1">Ask me anything!</p>
-                            <p className="text-sm text-slate-500">I've analyzed your document and I'm ready to help you study. Try asking for a summary or an explanation of a concept.</p>
+                        <div className="text-center space-y-4 max-w-md">
+                            <h4 className="text-lg font-bold text-slate-900">Ask me anything!</h4>
+                            <p className="text-sm text-slate-600">I've analyzed your document and I'm ready to help you study.</p>
+                            
+                            <div className="space-y-2 mt-6">
+                                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Try asking:</p>
+                                <div className="space-y-2">
+                                    {[
+                                        { icon: "📝", text: "Summarize this page", query: "Can you summarize this page for me?" },
+                                        { icon: "❓", text: "Generate quiz questions", query: "Generate 5 quiz questions from this content" },
+                                        { icon: "🎴", text: "Create flashcards", query: "Create flashcards for the key concepts" },
+                                        { icon: "💡", text: "Explain a concept", query: "Explain [concept] in simple terms" },
+                                    ].map((prompt, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => setInput(prompt.query)}
+                                            className="w-full text-left px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group shadow-sm hover:shadow-md"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-2xl">{prompt.icon}</span>
+                                                <span className="text-sm font-medium text-slate-700 group-hover:text-indigo-700">{prompt.text}</span>
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 )}

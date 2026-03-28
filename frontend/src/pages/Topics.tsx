@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Tag, BookOpen, ArrowRight, Lightbulb, Star, Brain } from 'lucide-react';
+import { ProgressTracker } from '../components/ProgressTracker';
 
 interface TopicsProps {
   topics: string[];
@@ -44,6 +45,11 @@ export const Topics: React.FC<TopicsProps> = ({ topics, onStartQuiz, onStartFlas
             <h3 className="text-xl font-bold text-slate-900">{topic}</h3>
           </motion.div>
         ))}
+      </div>
+
+      {/* Progress Tracker */}
+      <div className="mb-12">
+        <ProgressTracker />
       </div>
 
       <motion.div 

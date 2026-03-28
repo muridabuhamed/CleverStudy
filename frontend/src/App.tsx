@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { api, ApiError, FileRecord } from './services/api';
 import { ERROR_MESSAGES, APP_CONFIG } from './config/constants';
 import { PdfViewer } from './components/PdfViewer';
+import { PdfViewerWithAnnotations } from './components/PdfViewerWithAnnotations';
 import { Chat } from './components/Chat';
 import { useAuth } from './contexts/AuthContext';
 
@@ -215,16 +216,16 @@ export default function App() {
 
       <main className="relative flex-1 flex flex-col min-h-0">
 
-        {/* PDF + Chat side by side — shown on PROCESSING/TOPICS/QUIZ/RESULTS */}
-        {['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl && (
-          <div className="flex w-full h-[calc(100vh-64px)] border-b border-slate-200 bg-white">
-            {/* PDF Viewer — takes 65% width */}
-            <div className="flex-1 min-w-0 border-r border-slate-200 overflow-hidden">
-              <PdfViewer url={pdfUrl} filename={currentFileName} />
+        {/* PDF with Annotations + Chat side by side — shown on PROCESSING/TOPICS/QUIZ/RESULTS */}
+        {['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl && currentFileId && (
+          <div className="flex w-full h-[calc(100vh-64px)] border-b border-slate-200 bg-slate-100 shadow-inner">
+            {/* PDF Viewer with Annotations — takes 70% width */}
+            <div className="flex-1 min-w-0 border-r-2 border-slate-300 overflow-hidden shadow-2xl">
+              <PdfViewerWithAnnotations url={pdfUrl} filename={currentFileName} fileId={currentFileId} />
             </div>
-            {/* Chat — takes 35% width */}
-            <div className="w-[35%] shrink-0 h-full overflow-hidden">
-              {currentFileId && <Chat fileId={currentFileId} />}
+            {/* Chat — takes 30% width */}
+            <div className="w-[30%] shrink-0 h-full overflow-hidden bg-white shadow-xl">
+              <Chat fileId={currentFileId} />
             </div>
           </div>
         )}

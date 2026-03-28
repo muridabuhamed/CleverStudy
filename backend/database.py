@@ -76,6 +76,52 @@ def init_db():
         )
     ''')
     
+    # Highlights table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS highlights (
+            id TEXT PRIMARY KEY,
+            file_id TEXT NOT NULL,
+            user_id TEXT NOT NULL,
+            page_number INTEGER NOT NULL,
+            text_content TEXT NOT NULL,
+            color TEXT DEFAULT '#FFFF00',
+            position_data TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        )
+    ''')
+    
+    # Annotations (notes) table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS annotations (
+            id TEXT PRIMARY KEY,
+            file_id TEXT NOT NULL,
+            user_id TEXT NOT NULL,
+            page_number INTEGER NOT NULL,
+            note_text TEXT NOT NULL,
+            position_data TEXT,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        )
+    ''')
+    
+    # Bookmarks table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS bookmarks (
+            id TEXT PRIMARY KEY,
+            file_id TEXT NOT NULL,
+            user_id TEXT NOT NULL,
+            page_number INTEGER NOT NULL,
+            title TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        )
+    ''')
+    
     conn.commit()
     conn.close()
 
@@ -312,3 +358,156 @@ def get_flashcard_stats(user_id: str, file_id: str):
     rows = cursor.fetchall()
     conn.close()
     return [dict(row) for row in rows]
+
+# Highlight operations
+def add_highlight(highlight_id: str, file_id: str, user_id: str, page_number: int, 
+                  text_content: str, color: str, position_data: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        '''INSERT INTO highlights (id, file_id, user_id, page_number, text_content, color, position_data) 
+           VALUES (?, ?, ?, ?, ?, ?, ?)''',
+        (highlight_id, file_id, user_id, page_number, text_content, color, position_data)
+    )
+    conn.commit()
+    conn.close()
+
+def get_highlights_by_file(file_id: str, user_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(
+        'SELECT * FROM highlights WHERE file_id = ? AND user_id = ? ORDER BY page_number, created_at',
+        (file_id, user_id)
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in rows]
+
+def delete_highlight(highlight_id: str, user_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM highlights WHERE id = ? AND user_id = ?', (highlight_id, user_id))
+    conn.commit()
+    conn.close()
+
+# Annotation (notes) operations
+def add_annotation(annotation_id: str, file_id: str, user_id: str, page_number: int, 
+                   note_text: str, position_data: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        '''INSERT INTO annotations (id, file_id, user_id, page_number, note_text, position_data) 
+           VALUES (?, ?, ?, ?, ?, ?)''',
+        (annotation_id, file_id, user_id, page_number, note_text, position_data)
+    )
+    conn.commit()
+    conn.close()
+
+def get_annotations_by_file(file_id: str, user_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(
+        'SELECT * FROM annotations WHERE file_id = ? AND user_id = ? ORDER BY page_number, created_at',
+        (file_id, user_id)
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in rows]
+
+def update_annotation(annotation_id: str, user_id: str, note_text: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        'UPDATE annotations SET note_text = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ?',
+        (note_text, annotation_id, user_id)
+    )
+    conn.commit()
+    conn.close()
+
+def delete_annotation(annotation_id: str, user_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM annotations WHERE id = ? AND user_id = ?', (annotation_id, user_id))
+    conn.commit()
+    conn.close()
+
+# Bookmark operations
+def add_bookmark(bookmark_id: str, file_id: str, user_id: str, page_number: int, title: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute(
+        'INSERT INTO bookmarks (id, file_id, user_id, page_number, title) VALUES (?, ?, ?, ?, ?)',
+        (bookmark_id, file_id, user_id, page_number, title)
+    )
+    conn.commit()
+    conn.close()
+
+def get_bookmarks_by_file(file_id: str, user_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute(
+        'SELECT * FROM bookmarks WHERE file_id = ? AND user_id = ? ORDER BY page_number',
+        (file_id, user_id)
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return [dict(row) for row in rows]
+
+def delete_bookmark(bookmark_id: str, user_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM bookmarks WHERE id = ? AND user_id = ?', (bookmark_id, user_id))
+    conn.commit()
+    conn.close()
+
+# Search annotations across all content
+def search_annotations(user_id: str, query: str, file_id: Optional[str] = None):
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    
+    results = []
+    
+    # Search highlights
+    if file_id:
+        cursor.execute('''
+            SELECT h.*, f.original_name as file_name, 'highlight' as type
+            FROM highlights h
+            JOIN files f ON h.file_id = f.id
+            WHERE h.user_id = ? AND h.file_id = ? AND h.text_content LIKE ?
+            ORDER BY h.created_at DESC
+        ''', (user_id, file_id, f'%{query}%'))
+    else:
+        cursor.execute('''
+            SELECT h.*, f.original_name as file_name, 'highlight' as type
+            FROM highlights h
+            JOIN files f ON h.file_id = f.id
+            WHERE h.user_id = ? AND h.text_content LIKE ?
+            ORDER BY h.created_at DESC
+        ''', (user_id, f'%{query}%'))
+    results.extend([dict(row) for row in cursor.fetchall()])
+    
+    # Search annotations
+    if file_id:
+        cursor.execute('''
+            SELECT a.*, f.original_name as file_name, 'annotation' as type
+            FROM annotations a
+            JOIN files f ON a.file_id = f.id
+            WHERE a.user_id = ? AND a.file_id = ? AND a.note_text LIKE ?
+            ORDER BY a.created_at DESC
+        ''', (user_id, file_id, f'%{query}%'))
+    else:
+        cursor.execute('''
+            SELECT a.*, f.original_name as file_name, 'annotation' as type
+            FROM annotations a
+            JOIN files f ON a.file_id = f.id
+            WHERE a.user_id = ? AND a.note_text LIKE ?
+            ORDER BY a.created_at DESC
+        ''', (user_id, f'%{query}%'))
+    results.extend([dict(row) for row in cursor.fetchall()])
+    
+    conn.close()
+    return results

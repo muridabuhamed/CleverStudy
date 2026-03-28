@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 
 from config import UPLOADS_DIR
 from database import init_db
-from routers import auth, files, quiz, flashcards, admin
+from routers import auth, files, quiz, flashcards, admin, annotations
 
 app = FastAPI(title="Smart Study Platform API")
 
@@ -30,6 +30,7 @@ app.include_router(files.router)
 app.include_router(quiz.router)
 app.include_router(flashcards.router)
 app.include_router(admin.router)
+app.include_router(annotations.router)
 
 
 @app.get("/api/health")

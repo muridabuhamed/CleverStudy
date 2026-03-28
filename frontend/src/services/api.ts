@@ -1,4 +1,4 @@
-import { Question } from '../types';
+import { Question, Highlight, Annotation, Bookmark, AnnotationSearchResult } from '../types';
 import { APP_CONFIG, ERROR_MESSAGES } from '../config/constants';
 
 // Get auth token from localStorage
@@ -225,6 +225,134 @@ export const api = {
         ...getAuthHeaders()
       },
       body: JSON.stringify({ flashcardId, difficulty }),
+    });
+    return handleResponse(response);
+  },
+
+  // Annotation APIs
+  // Highlights
+  async createHighlight(fileId: string, pageNumber: number, textContent: string, color: string, positionData: any): Promise<{ success: boolean; highlight: Highlight }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/${fileId}/highlight`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({
+        page_number: pageNumber,
+        text_content: textContent,
+        color,
+        position_data: JSON.stringify(positionData)
+      }),
+    });
+    return handleResponse(response);
+  },
+
+  async getHighlights(fileId: string): Promise<{ highlights: Highlight[] }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/${fileId}/highlights`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  async deleteHighlight(highlightId: string): Promise<{ success: boolean }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/highlight/${highlightId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  // Annotations (notes)
+  async createAnnotation(fileId: string, pageNumber: number, noteText: string, positionData: any): Promise<{ success: boolean; annotation: Annotation }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/${fileId}/note`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({
+        page_number: pageNumber,
+        note_text: noteText,
+        position_data: JSON.stringify(positionData)
+      }),
+    });
+    return handleResponse(response);
+  },
+
+  async getAnnotations(fileId: string): Promise<{ annotations: Annotation[] }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/${fileId}/notes`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  async updateAnnotation(annotationId: string, noteText: string): Promise<{ success: boolean }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/note/${annotationId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({ note_text: noteText }),
+    });
+    return handleResponse(response);
+  },
+
+  async deleteAnnotation(annotationId: string): Promise<{ success: boolean }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/note/${annotationId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  // Bookmarks
+  async createBookmark(fileId: string, pageNumber: number, title: string): Promise<{ success: boolean; bookmark: Bookmark }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/${fileId}/bookmark`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({
+        page_number: pageNumber,
+        title
+      }),
+    });
+    return handleResponse(response);
+  },
+
+  async getBookmarks(fileId: string): Promise<{ bookmarks: Bookmark[] }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/${fileId}/bookmarks`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  async deleteBookmark(bookmarkId: string): Promise<{ success: boolean }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/bookmark/${bookmarkId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  // Get all annotations for a file
+  async getAllAnnotations(fileId: string): Promise<{ highlights: Highlight[]; annotations: Annotation[]; bookmarks: Bookmark[] }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/${fileId}/all`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  // Search annotations
+  async searchAnnotations(query: string, fileId?: string): Promise<{ results: AnnotationSearchResult[]; count: number }> {
+    const params = new URLSearchParams({ query });
+    if (fileId) params.append('file_id', fileId);
+    
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/annotations/search?${params}`, {
+      headers: getAuthHeaders()
     });
     return handleResponse(response);
   },

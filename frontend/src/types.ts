@@ -33,4 +33,46 @@ export type FlashcardStats = {
   last_reviewed: string | null;
 };
 
+export type Highlight = {
+  id: string;
+  file_id: string;
+  user_id: string;
+  page_number: number;
+  text_content: string;
+  color: string;
+  position_data: string;
+  created_at: string;
+};
+
+export type Annotation = {
+  id: string;
+  file_id: string;
+  user_id: string;
+  page_number: number;
+  note_text: string;
+  position_data: string;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Bookmark = {
+  id: string;
+  file_id: string;
+  user_id: string;
+  page_number: number;
+  title: string;
+  created_at: string;
+};
+
+export type AnnotationSearchResult = {
+  id: string;
+  file_id: string;
+  file_name: string;
+  page_number: number;
+  type: 'highlight' | 'annotation';
+  text_content?: string;
+  note_text?: string;
+  created_at: string;
+};
+
 export type AppState = 'HOME' | 'LOGIN' | 'SIGNUP' | 'UPLOAD' | 'PROCESSING' | 'TOPICS' | 'QUIZ' | 'RESULTS' | 'LIBRARY' | 'PROFILE' | 'FLASHCARDS';
