@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search } from 'lucide-react';
+import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook } from 'lucide-react';
 import { api, FileRecord } from '../services/api';
 import { AppState, Question } from '../types';
 
@@ -59,7 +59,103 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
     }
 
     return (
-        <div className="max-w-6xl mx-auto py-12 px-4">
+        <div className="max-w-6xl mx-auto py-12 px-4 relative">
+            {/* Floating Books and Papers Background */}
+            <motion.div
+                className="absolute top-20 left-10 text-indigo-400 opacity-25 pointer-events-none"
+                animate={{
+                    y: [0, -25, 0],
+                    rotate: [0, 15, 0]
+                }}
+                transition={{
+                    duration: 7,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+            >
+                <BookOpen size={56} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute top-1/3 right-16 text-violet-400 opacity-30 pointer-events-none"
+                animate={{
+                    y: [0, 30, 0],
+                    rotate: [0, -20, 0]
+                }}
+                transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+            >
+                <Book size={48} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute bottom-24 left-20 text-indigo-500 opacity-28 pointer-events-none"
+                animate={{
+                    y: [0, -20, 0],
+                    rotate: [0, 10, 0]
+                }}
+                transition={{
+                    duration: 6.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1
+                }}
+            >
+                <FileText size={44} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute top-2/3 left-1/4 text-violet-400 opacity-25 pointer-events-none"
+                animate={{
+                    y: [0, 25, 0],
+                    rotate: [0, -15, 0]
+                }}
+                transition={{
+                    duration: 7.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
+                }}
+            >
+                <Notebook size={52} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute top-1/2 right-1/3 text-indigo-400 opacity-30 pointer-events-none"
+                animate={{
+                    y: [0, -30, 0],
+                    rotate: [0, 20, 0]
+                }}
+                transition={{
+                    duration: 9,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.5
+                }}
+            >
+                <GraduationCap size={60} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute bottom-32 right-24 text-violet-500 opacity-32 pointer-events-none"
+                animate={{
+                    y: [0, 20, 0],
+                    rotate: [0, -25, 0]
+                }}
+                transition={{
+                    duration: 8.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1.5
+                }}
+            >
+                <Pencil size={40} />
+            </motion.div>
+
+            <div className="relative z-10">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
                 <div>
                     <h1 className="text-3xl font-bold text-slate-900 mb-2">My Library</h1>
@@ -161,6 +257,7 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
                     ))}
                 </div>
             )}
+            </div>
         </div>
     );
 };

@@ -99,10 +99,10 @@ export const ProgressTracker: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-white to-slate-50 rounded-2xl border border-slate-200 p-6 shadow-xl"
+      className="bg-white rounded-2xl border border-slate-200 p-6 shadow-md hover:shadow-lg transition-shadow"
     >
-      <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl">
+      <div className="flex items-center gap-3 mb-5">
+        <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-md">
           <TrendingUp className="w-5 h-5 text-white" />
         </div>
         <div>
@@ -111,21 +111,21 @@ export const ProgressTracker: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {statCards.map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.1 }}
-            className={`${stat.bgColor} rounded-xl p-4 hover:shadow-md transition-all group cursor-default`}
+            className={`${stat.bgColor} rounded-xl p-4 border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all group cursor-default`}
           >
             <div className="flex flex-col items-center text-center gap-2">
-              <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.color} group-hover:scale-110 transition-transform`}>
+              <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.color} shadow-sm group-hover:scale-110 transition-transform`}>
                 <stat.icon className="w-5 h-5 text-white" />
               </div>
-              <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-              <div className={`text-xs font-medium ${stat.textColor}`}>{stat.label}</div>
+              <div className="text-2xl font-black text-slate-900">{stat.value}</div>
+              <div className={`text-xs font-semibold ${stat.textColor}`}>{stat.label}</div>
             </div>
           </motion.div>
         ))}

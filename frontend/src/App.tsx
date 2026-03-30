@@ -18,6 +18,7 @@ import { PdfViewer } from './components/PdfViewer';
 import { PdfViewerWithAnnotations } from './components/PdfViewerWithAnnotations';
 import { Chat } from './components/Chat';
 import { useAuth } from './contexts/AuthContext';
+import { Book, BookOpen, FileText, Pencil, GraduationCap, Notebook } from 'lucide-react';
 
 export default function App() {
   const { isAuthenticated, loading } = useAuth();
@@ -153,7 +154,120 @@ export default function App() {
         return <Profile />;
       case 'UPLOAD':
         return (
-          <div className="max-w-4xl mx-auto py-20 px-4">
+          <div className="max-w-4xl mx-auto py-20 px-4 relative">
+            {/* Floating Books and Papers Background */}
+            <motion.div
+                className="absolute top-16 left-12 text-indigo-400 opacity-30 pointer-events-none"
+                animate={{
+                    y: [0, -25, 0],
+                    rotate: [0, 15, 0]
+                }}
+                transition={{
+                    duration: 7,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+            >
+                <BookOpen size={60} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute top-1/3 right-20 text-violet-400 opacity-35 pointer-events-none"
+                animate={{
+                    y: [0, 30, 0],
+                    rotate: [0, -20, 0]
+                }}
+                transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.5
+                }}
+            >
+                <Book size={52} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute bottom-20 left-16 text-indigo-500 opacity-32 pointer-events-none"
+                animate={{
+                    y: [0, -20, 0],
+                    rotate: [0, 10, 0]
+                }}
+                transition={{
+                    duration: 6.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1.2
+                }}
+            >
+                <FileText size={48} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute top-1/2 left-1/4 text-violet-400 opacity-28 pointer-events-none"
+                animate={{
+                    y: [0, 25, 0],
+                    rotate: [0, -15, 0]
+                }}
+                transition={{
+                    duration: 7.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
+                }}
+            >
+                <Notebook size={56} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute top-2/3 right-1/3 text-indigo-400 opacity-30 pointer-events-none"
+                animate={{
+                    y: [0, -30, 0],
+                    rotate: [0, 20, 0]
+                }}
+                transition={{
+                    duration: 9,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.8
+                }}
+            >
+                <GraduationCap size={64} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute bottom-32 right-16 text-violet-500 opacity-35 pointer-events-none"
+                animate={{
+                    y: [0, 20, 0],
+                    rotate: [0, -25, 0]
+                }}
+                transition={{
+                    duration: 8.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1.5
+                }}
+            >
+                <Pencil size={44} />
+            </motion.div>
+            
+            <motion.div
+                className="absolute top-1/4 left-1/3 text-indigo-300 opacity-28 pointer-events-none"
+                animate={{
+                    y: [0, -22, 0],
+                    rotate: [0, 12, 0]
+                }}
+                transition={{
+                    duration: 7.8,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.3
+                }}
+            >
+                <Book size={50} />
+            </motion.div>
+
+            <div className="relative z-10">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-slate-900 mb-4">Upload Study Material</h2>
               <p className="text-slate-500">Upload your lecture notes in PDF format to begin analysis.</p>
@@ -169,6 +283,7 @@ export default function App() {
               progress={uploadProgress}
               error={error}
             />
+            </div>
           </div>
         );
       case 'PROCESSING':

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Send, User, Bot, Sparkles, Loader2, MessageSquare } from 'lucide-react';
+import { Send, User, Bot, Sparkles, Loader2, MessageSquare, ChevronRight } from 'lucide-react';
 import { api } from '../services/api';
 
 interface Message {
@@ -16,6 +16,8 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
     const [messages, setMessages] = React.useState<Message[]>([]);
     const [input, setInput] = React.useState('');
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isCollapsed, setIsCollapsed] = React.useState(false);
+    const [showSuggestions, setShowSuggestions] = React.useState(false);
     const scrollRef = React.useRef<HTMLDivElement>(null);
     // Keep a ref to always have the latest messages for the API call
     const messagesRef = React.useRef<Message[]>([]);
@@ -69,37 +71,61 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
         }
     };
 
+    if (isCollapsed) {
+        return (
+            <div className="h-full bg-white border-l border-slate-200 flex items-center justify-center">
+                <button
+                    onClick={() => setIsCollapsed(false)}
+                    className="p-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 transition-all shadow-lg rotate-180"
+                    title="Expand Chat"
+                >
+                    <ChevronRight className="w-5 h-5" />
+                </button>
+            </div>
+        );
+    }
+
     return (
-        <div className="flex flex-col h-full bg-white rounded-2xl border border-slate-200 shadow-2xl overflow-hidden">
+        <div className="flex flex-col h-full bg-gradient-to-b from-white to-slate-50 rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
             {/* Header */}
-            <div className="px-6 py-4 border-b border-slate-100 bg-slate-50/50 flex items-center justify-between">
+            <div className="px-5 py-4 border-b border-slate-200 bg-white flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                    <div className="bg-indigo-600 p-2 rounded-xl">
+                    <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-2.5 rounded-xl shadow-md">
                         <MessageSquare className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-slate-900 leading-tight">Smart Assistant</h3>
-                        <p className="text-xs text-slate-500">Only answering about this document</p>
+                        <h3 className="font-bold text-slate-900 text-base leading-tight">Smart Assistant</h3>
+                        <p className="text-xs text-slate-500">Ask me anything about this document</p>
                     </div>
                 </div>
-                <Sparkles className="w-5 h-5 text-indigo-500 animate-pulse" />
+                <button
+                    onClick={() => setIsCollapsed(true)}
+                    className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                    title="Collapse Chat"
+                >
+                    <ChevronRight className="w-5 h-5 text-slate-400" />
+                </button>
             </div>
 
             {/* Messages */}
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto p-6 space-y-6 scroll-smooth"
+                className="flex-1 overflow-y-auto p-5 space-y-4 scroll-smooth bg-white"
             >
                 {messages.length === 0 && (
                     <div className="h-full flex flex-col items-center justify-center px-4 py-8">
-                        <div className="bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-2xl shadow-lg mb-6">
-                            <Sparkles className="w-10 h-10 text-white" />
+                        <div className="relative">
+                            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl blur-xl opacity-20 animate-pulse"></div>
+                            <div className="relative bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-2xl shadow-lg">
+                                <Sparkles className="w-10 h-10 text-white" />
+                            </div>
                         </div>
-                        <div className="text-center space-y-4 max-w-md">
+                        <div className="text-center space-y-3 max-w-md mt-6">
                             <h4 className="text-lg font-bold text-slate-900">Ask me anything!</h4>
                             <p className="text-sm text-slate-600">I've analyzed your document and I'm ready to help you study.</p>
                             
-                            <div className="space-y-2 mt-6">
+                            {showSuggestions && (
+                            <div className="space-y-2 mt-5">
                                 <p className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Try asking:</p>
                                 <div className="space-y-2">
                                     {[
@@ -111,16 +137,17 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
                                         <button
                                             key={i}
                                             onClick={() => setInput(prompt.query)}
-                                            className="w-full text-left px-4 py-3 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all group shadow-sm hover:shadow-md"
+                                            className="w-full text-left px-4 py-2.5 bg-white border border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-purple-50 transition-all group shadow-sm hover:shadow"
                                         >
                                             <div className="flex items-center gap-3">
-                                                <span className="text-2xl">{prompt.icon}</span>
+                                                <span className="text-xl">{prompt.icon}</span>
                                                 <span className="text-sm font-medium text-slate-700 group-hover:text-indigo-700">{prompt.text}</span>
                                             </div>
                                         </button>
                                     ))}
                                 </div>
                             </div>
+                            )}
                         </div>
                     </div>
                 )}
@@ -132,14 +159,14 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
-                        <div className={`flex gap-3 max-w-[85%] ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${message.role === 'user' ? 'bg-slate-200 text-slate-600' : 'bg-indigo-600 text-white'
+                        <div className={`flex gap-2.5 max-w-[85%] ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                            <div className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm ${message.role === 'user' ? 'bg-slate-200 text-slate-600' : 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white'
                                 }`}>
                                 {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                             </div>
-                            <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${message.role === 'user'
-                                ? 'bg-slate-100 text-slate-900 rounded-tr-none'
-                                : 'bg-indigo-50 text-indigo-900 border border-indigo-100 rounded-tl-none'
+                            <div className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm ${message.role === 'user'
+                                ? 'bg-slate-100 text-slate-900 rounded-tr-md'
+                                : 'bg-gradient-to-r from-indigo-50 to-purple-50 text-slate-900 border border-indigo-100 rounded-tl-md'
                                 }`}>
                                 {message.parts}
                             </div>
@@ -149,13 +176,13 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
 
                 {isLoading && (
                     <div className="flex justify-start">
-                        <div className="flex gap-3 max-w-[85%] items-center">
-                            <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white">
+                        <div className="flex gap-2.5 max-w-[85%] items-center">
+                            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white shadow-sm">
                                 <Bot className="w-4 h-4" />
                             </div>
-                            <div className="bg-slate-100 px-4 py-3 rounded-2xl rounded-tl-none flex items-center gap-2">
-                                <Loader2 className="w-4 h-4 text-indigo-500 animate-spin" />
-                                <span className="text-sm text-slate-500">Thinking...</span>
+                            <div className="bg-slate-100 px-4 py-2.5 rounded-2xl rounded-tl-md flex items-center gap-2 shadow-sm">
+                                <Loader2 className="w-4 h-4 text-indigo-600 animate-spin" />
+                                <span className="text-sm text-slate-600">Thinking...</span>
                             </div>
                         </div>
                     </div>
@@ -165,21 +192,22 @@ export const Chat: React.FC<ChatProps> = ({ fileId }) => {
             {/* Input */}
             <form
                 onSubmit={handleSend}
-                className="p-4 border-t border-slate-100 bg-white"
+                className="p-4 border-t border-slate-200 bg-white"
             >
                 <div className="relative">
                     <input
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
+                        onFocus={() => setShowSuggestions(true)}
                         disabled={isLoading}
                         placeholder="Ask about the document..."
-                        className="w-full pl-4 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-sm"
+                        className="w-full pl-4 pr-12 py-3.5 bg-slate-50 border-2 border-slate-200 rounded-xl focus:outline-none focus:border-indigo-400 focus:bg-white transition-all text-sm shadow-sm"
                     />
                     <button
                         type="submit"
                         disabled={!input.trim() || isLoading}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 disabled:opacity-50 disabled:hover:bg-indigo-600 transition-colors"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 p-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
                     >
                         <Send className="w-4 h-4" />
                     </button>
