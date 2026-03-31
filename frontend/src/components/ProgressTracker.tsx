@@ -99,34 +99,63 @@ export const ProgressTracker: React.FC = () => {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white rounded-2xl border border-slate-200 p-6 shadow-md hover:shadow-lg transition-shadow"
+      className="relative bg-gradient-to-br from-white to-slate-50 rounded-3xl border-2 border-slate-200 p-8 shadow-xl hover:shadow-2xl transition-all overflow-hidden"
     >
-      <div className="flex items-center gap-3 mb-5">
-        <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl shadow-md">
-          <TrendingUp className="w-5 h-5 text-white" />
-        </div>
+      {/* Decorative Gradient Orbs */}
+      <div className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-indigo-400/10 to-purple-400/10 rounded-full blur-3xl"></div>
+      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-gradient-to-br from-violet-400/10 to-pink-400/10 rounded-full blur-3xl"></div>
+
+      <div className="relative flex items-center gap-4 mb-6">
+        <motion.div 
+          whileHover={{ rotate: 360, scale: 1.1 }}
+          transition={{ duration: 0.6 }}
+          className="p-3 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl shadow-lg"
+        >
+          <TrendingUp className="w-6 h-6 text-white" />
+        </motion.div>
         <div>
-          <h3 className="text-lg font-bold text-slate-900">Your Progress Today</h3>
-          <p className="text-xs text-slate-500">Keep up the great work! 🎉</p>
+          <h3 className="text-xl font-black text-slate-900">Your Study Progress</h3>
+          <p className="text-sm text-slate-600 font-medium">You're doing amazing! Keep it up 🚀</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4">
         {statCards.map((stat, index) => (
           <motion.div
             key={stat.label}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.1 }}
-            className={`${stat.bgColor} rounded-xl p-4 border border-slate-100 hover:shadow-md hover:-translate-y-1 transition-all group cursor-default`}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: index * 0.1, type: "spring" }}
+            whileHover={{ y: -5, scale: 1.03 }}
+            className="relative group bg-white rounded-2xl p-5 border-2 border-slate-200 hover:border-indigo-300 shadow-md hover:shadow-xl transition-all cursor-pointer overflow-hidden"
           >
-            <div className="flex flex-col items-center text-center gap-2">
-              <div className={`p-2 rounded-lg bg-gradient-to-br ${stat.color} shadow-sm group-hover:scale-110 transition-transform`}>
-                <stat.icon className="w-5 h-5 text-white" />
+            {/* Subtle Gradient Background on Hover */}
+            <div className={`absolute inset-0 bg-gradient-to-br ${stat.bgColor} opacity-0 group-hover:opacity-50 transition-opacity duration-300`}></div>
+            
+            <div className="relative flex flex-col items-center text-center gap-3">
+              <motion.div 
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
+                className={`p-3 rounded-2xl bg-gradient-to-br ${stat.color} shadow-lg group-hover:shadow-2xl transition-shadow`}
+              >
+                <stat.icon className="w-6 h-6 text-white" />
+              </motion.div>
+              <motion.div 
+                className="text-3xl font-black text-slate-900"
+                whileHover={{ scale: 1.1 }}
+              >
+                {stat.value}
+              </motion.div>
+              <div className={`text-xs font-bold ${stat.textColor} uppercase tracking-wide`}>
+                {stat.label}
               </div>
-              <div className="text-2xl font-black text-slate-900">{stat.value}</div>
-              <div className={`text-xs font-semibold ${stat.textColor}`}>{stat.label}</div>
             </div>
+
+            {/* Shine Effect */}
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"
+              style={{ transform: 'skewX(-20deg)' }}
+            />
           </motion.div>
         ))}
       </div>
