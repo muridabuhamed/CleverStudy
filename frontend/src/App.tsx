@@ -361,14 +361,6 @@ export default function App() {
         </div>
 
       </main>
-
-      <footer className="py-12 border-t border-slate-200 mt-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-slate-400 text-sm">
-            © 2024 Smart Study Platform. Empowering students to achieve academic excellence.
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }

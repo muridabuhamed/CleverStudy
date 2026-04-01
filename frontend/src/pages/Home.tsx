@@ -56,19 +56,23 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 <>
                   <motion.button
                     onClick={onStart}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.05, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="px-8 py-4 bg-gradient-to-r from-indigo-500 to-violet-600 text-white rounded-xl font-bold text-lg hover:shadow-xl transition-all\"
+                    className="group relative px-8 py-4 bg-gradient-to-r from-indigo-500 to-violet-600 text-white rounded-xl font-bold text-lg shadow-2xl shadow-indigo-500/50 hover:shadow-indigo-500/70 transition-all flex items-center gap-2"
                   >
-                    Upload PDF
+                    <Upload className="w-5 h-5" />
+                    Upload PDF Now
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </motion.button>
                   <motion.button
                     onClick={() => onNavigate('LIBRARY')}
-                    whileHover={{ scale: 1.02 }}
+                    whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-xl font-semibold text-lg hover:bg-white/20 transition-all"
+                    className="group px-8 py-4 bg-white/10 backdrop-blur-sm text-white border border-white/20 rounded-xl font-bold text-lg hover:bg-white/20 hover:border-white/30 transition-all flex items-center gap-2"
                   >
+                    <FileText className="w-5 h-5" />
                     My Library
+                    <ArrowRight className="w-5 h-5 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                   </motion.button>
                 </>
               ) : (
@@ -269,81 +273,205 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
-          className="mt-32 mb-16"
+          className="mt-32 mb-20"
         >
           <div className="text-center mb-16">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/20 border border-violet-400/30 text-violet-300 text-sm font-semibold mb-4 backdrop-blur-sm">
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.8 }}
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/30 to-purple-500/30 border-2 border-violet-400/50 text-violet-200 text-sm font-bold mb-6 backdrop-blur-xl shadow-xl"
+            >
+              <Zap className="w-4 h-4" />
               Powerful Features
-            </span>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
-              Everything You Need to Excel
+            </motion.span>
+            <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
+              Everything You Need{' '}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
+                to Excel
+              </span>
             </h2>
-            <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-              Comprehensive tools designed to enhance your learning experience and boost academic performance
+            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+              Comprehensive AI-powered tools designed to transform your learning experience
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <FeatureCard
-              icon={<FileText className="w-6 h-6 text-blue-400" />}
+              icon={<FileText className="w-7 h-7" />}
               title="Upload PDFs & Documents"
-              description="Allow users to upload lecture notes, textbooks, and research papers in formats like PDF, DOCX, and TXT."
+              description="Drag and drop your lecture notes, textbooks, and research papers. Support for PDF, DOCX, and TXT formats."
+              gradient="from-blue-500 to-indigo-600"
               delay={0.9}
             />
             <FeatureCard
-              icon={<MessageSquare className="w-6 h-6 text-emerald-400" />}
+              icon={<MessageSquare className="w-7 h-7" />}
               title="AI Chat with Your Notes"
-              description="Users can ask questions directly about their uploaded materials and receive instant AI explanations."
+              description="Ask questions about your materials and get instant, intelligent explanations powered by advanced AI."
+              gradient="from-emerald-500 to-teal-600"
               delay={1.0}
             />
             <FeatureCard
-              icon={<ListChecks className="w-6 h-6 text-purple-400" />}
+              icon={<ListChecks className="w-7 h-7" />}
               title="Automatic Quiz Generation"
-              description="The system analyzes the uploaded content and generates multiple-choice questions based on key concepts."
+              description="AI analyzes your content and creates smart multiple-choice questions targeting key concepts."
+              gradient="from-purple-500 to-violet-600"
               delay={1.1}
             />
             <FeatureCard
-              icon={<CreditCard className="w-6 h-6 text-pink-400" />}
+              icon={<CreditCard className="w-7 h-7" />}
               title="Smart Flashcards"
-              description="Automatically create flashcards from important terms and definitions to support spaced repetition learning."
+              description="Automatically generate flashcards from important terms with spaced repetition algorithms."
+              gradient="from-pink-500 to-rose-600"
               delay={1.2}
             />
             <FeatureCard
-              icon={<BarChart3 className="w-6 h-6 text-amber-400" />}
+              icon={<BarChart3 className="w-7 h-7" />}
               title="Progress Analytics"
-              description="Track quiz scores, learning progress, and identify weak areas that need more focus."
+              description="Track your quiz scores, monitor learning patterns, and identify areas for improvement."
+              gradient="from-amber-500 to-orange-600"
               delay={1.3}
             />
             <FeatureCard
-              icon={<BookOpenCheck className="w-6 h-6 text-indigo-400" />}
+              icon={<BookOpenCheck className="w-7 h-7" />}
               title="Topic Summaries"
-              description="Generate clear summaries of important sections to help students review faster."
+              description="Get clear, concise summaries of complex topics to accelerate your review and understanding."
+              gradient="from-indigo-500 to-purple-600"
               delay={1.4}
             />
           </div>
         </motion.div>
+
+        {/* Premium Footer */}
+        <motion.footer
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.5, duration: 0.6 }}
+          className="relative mt-32 pt-16 pb-8 border-t border-white/10"
+        >
+          {/* Footer Gradient Orbs */}
+          <div className="absolute top-0 left-1/4 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
+          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl -z-10" />
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            {/* Brand Column */}
+            <div className="md:col-span-2">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl shadow-xl">
+                  <Brain className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-black text-white">Smart Study Platform</h3>
+              </div>
+              <p className="text-slate-400 text-base leading-relaxed max-w-md">
+                Empowering students worldwide to achieve academic excellence through AI-powered learning tools.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div>
+              <h4 className="text-white font-bold text-lg mb-4">Quick Links</h4>
+              <ul className="space-y-3">
+                {['Features', 'How It Works', 'Pricing', 'About Us'].map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2 group">
+                      <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -ml-6 group-hover:ml-0 transition-all" />
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Support */}
+            <div>
+              <h4 className="text-white font-bold text-lg mb-4">Support</h4>
+              <ul className="space-y-3">
+                {['Help Center', 'Contact Us', 'Privacy Policy', 'Terms of Service'].map((link) => (
+                  <li key={link}>
+                    <a href="#" className="text-slate-400 hover:text-violet-400 transition-colors flex items-center gap-2 group">
+                      <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -ml-6 group-hover:ml-0 transition-all" />
+                      {link}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-8 border-t border-white/10">
+            <div className="text-center">
+              <p className="text-slate-400 text-sm">
+                © 2026 Smart Study Platform. All rights reserved.
+              </p>
+            </div>
+          </div>
+        </motion.footer>
       </div>
     </div>
   );
 };
 
-const FeatureCard = ({ icon, title, description, delay }: { icon: React.ReactNode; title: string; description: string; delay?: number }) => (
+const FeatureCard = ({ icon, title, description, gradient, delay }: { 
+  icon: React.ReactNode; 
+  title: string; 
+  description: string; 
+  gradient: string;
+  delay?: number;
+}) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: delay || 0, duration: 0.5 }}
-    whileHover={{ y: -8, scale: 1.02 }}
-    className="group p-8 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 shadow-lg hover:shadow-2xl hover:border-white/20 hover:bg-white/10 transition-all text-left cursor-pointer"
+    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+    animate={{ opacity: 1, y: 0, scale: 1 }}
+    transition={{ delay: delay || 0, duration: 0.5, type: "spring" }}
+    whileHover={{ y: -10, scale: 1.03 }}
+    className="group relative p-8 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-xl hover:shadow-2xl hover:border-white/30 transition-all overflow-hidden cursor-pointer"
   >
+    {/* Animated Gradient Background on Hover */}
     <motion.div 
-      whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.1 }}
-      transition={{ duration: 0.5 }}
-      className="w-12 h-12 bg-gradient-to-br from-indigo-500/20 to-violet-500/20 rounded-2xl flex items-center justify-center mb-6 group-hover:shadow-md transition-shadow border border-indigo-400/20"
-    >
-      {icon}
-    </motion.div>
-    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-indigo-300 transition-colors">{title}</h3>
-    <p className="text-slate-300 leading-relaxed">{description}</p>
+      className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
+      animate={{ 
+        backgroundPosition: ['0% 0%', '100% 100%'],
+      }}
+      transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
+    />
+    
+    {/* Glow Effect */}
+    <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-20 rounded-full blur-3xl transition-all duration-500`} />
+    
+    <div className="relative">
+      <motion.div 
+        whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.15 }}
+        transition={{ duration: 0.6 }}
+        className={`w-14 h-14 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg text-white`}
+      >
+        {icon}
+      </motion.div>
+      
+      <h3 className="text-xl font-bold text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-300 group-hover:to-purple-300 transition-all">
+        {title}
+      </h3>
+      
+      <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+        {description}
+      </p>
+
+      {/* Arrow indicator */}
+      <motion.div
+        initial={{ opacity: 0, x: -10 }}
+        whileHover={{ opacity: 1, x: 0 }}
+        className="absolute bottom-6 right-6 text-white/50 group-hover:text-white/80"
+      >
+        <ArrowRight className="w-5 h-5" />
+      </motion.div>
+    </div>
+
+    {/* Shine Effect */}
+    <motion.div
+      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100"
+      animate={{ x: ['-100%', '100%'] }}
+      transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
+      style={{ transform: 'skewX(-20deg)' }}
+    />
   </motion.div>
 );
 
