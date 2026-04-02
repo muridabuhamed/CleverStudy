@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { BookOpen, Upload, Layout, CheckCircle, HelpCircle, BarChart2, User } from 'lucide-react';
 import { AppState } from '../types';
 import { useAuth } from '../contexts/AuthContext';
+import { ThemeToggle } from './ThemeToggle';
 
 interface NavbarProps {
   currentState: AppState;
@@ -13,7 +14,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
   const { user, isAuthenticated } = useAuth();
   
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/10" style={{ background: 'linear-gradient(90deg, #1F2550, #2A2D6A)' }}>
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/10 dark:border-slate-700/50 bg-gradient-to-r from-slate-900 via-indigo-900 to-violet-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div
@@ -59,7 +60,8 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
             </div>
           )}
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
             {isAuthenticated ? (
               <>
                 <button 
@@ -71,7 +73,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
                 </button>
                 <button
                   onClick={() => onNavigate('PROFILE')}
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 transition-colors"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 dark:bg-slate-800/50 dark:hover:bg-slate-700/50 transition-colors"
                   title={user?.name}
                 >
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-center text-white font-semibold text-sm">
@@ -92,7 +94,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
                 </button>
                 <button
                   onClick={() => onNavigate('LOGIN')}
-                  className="px-6 py-2.5 bg-white/10 text-white border border-white/20 rounded-lg font-semibold text-sm hover:bg-white/20 hover:border-white/30 transition-all"
+                  className="px-6 py-2.5 bg-white/10 text-white border border-white/20 dark:border-slate-700 rounded-lg font-semibold text-sm hover:bg-white/20 dark:hover:bg-slate-700/50 hover:border-white/30 transition-all"
                 >
                   Login
                 </button>

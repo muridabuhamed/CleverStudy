@@ -6,6 +6,9 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
+/* Configure dark mode as class-based for Tailwind v4 */
+@variant dark (.dark &);
+
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900 antialiased;

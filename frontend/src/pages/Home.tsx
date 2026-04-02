@@ -14,12 +14,12 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
   const { isAuthenticated } = useAuth();
   
   return (
-    <div className="relative overflow-hidden min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-violet-900">
+    <div className="relative overflow-hidden min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900 to-violet-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950">
       {/* Animated background elements */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[10%] left-[5%] w-72 h-72 bg-indigo-500 rounded-full blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute top-[60%] right-[10%] w-96 h-96 bg-violet-500 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-[20%] left-[30%] w-64 h-64 bg-pink-500 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[10%] left-[5%] w-72 h-72 bg-indigo-500 dark:bg-indigo-600 rounded-full blur-3xl opacity-20 dark:opacity-30 animate-pulse" />
+        <div className="absolute top-[60%] right-[10%] w-96 h-96 bg-violet-500 dark:bg-violet-600 rounded-full blur-3xl opacity-20 dark:opacity-30 animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute bottom-[20%] left-[30%] w-64 h-64 bg-pink-500 dark:bg-pink-600 rounded-full blur-3xl opacity-20 dark:opacity-30 animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-23 pb-16 relative z-10">
@@ -46,7 +46,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
               </span>
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-300 mb-8 leading-relaxed max-w-xl">
+            <p className="text-lg md:text-xl text-slate-300 dark:text-slate-400 mb-8 leading-relaxed max-w-xl">
               Transform your PDFs into personalized quizzes, smart flashcards, and AI-powered chat. 
               Master any subject with intelligent study tools designed for your success.
             </p>

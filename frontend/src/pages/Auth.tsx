@@ -63,10 +63,10 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-violet-50 flex items-center justify-center p-4 relative overflow-hidden" style={{ background: 'radial-gradient(circle at top, #eef2ff, #f8fafc)' }}>
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-slate-50 to-violet-50 dark:from-slate-900 dark:via-indigo-950 dark:to-violet-950 flex items-center justify-center p-4 relative overflow-hidden">
       {/* Floating background elements */}
       <motion.div
-        className="absolute top-20 left-10 w-32 h-32 bg-indigo-200 rounded-full opacity-20 blur-3xl"
+        className="absolute top-20 left-10 w-32 h-32 bg-indigo-200 dark:bg-indigo-800 rounded-full opacity-20 dark:opacity-30 blur-3xl"
         animate={{
           y: [0, 30, 0],
           x: [0, 20, 0],
@@ -79,7 +79,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
         }}
       />
       <motion.div
-        className="absolute bottom-20 right-10 w-40 h-40 bg-violet-200 rounded-full opacity-20 blur-3xl"
+        className="absolute bottom-20 right-10 w-40 h-40 bg-violet-200 dark:bg-violet-800 rounded-full opacity-20 dark:opacity-30 blur-3xl"
         animate={{
           y: [0, -40, 0],
           x: [0, -20, 0],
@@ -92,7 +92,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
         }}
       />
       <motion.div
-        className="absolute top-1/2 right-1/4 w-24 h-24 bg-indigo-300 rounded-full opacity-10 blur-2xl"
+        className="absolute top-1/2 right-1/4 w-24 h-24 bg-indigo-300 dark:bg-indigo-700 rounded-full opacity-10 dark:opacity-20 blur-2xl"
         animate={{
           y: [0, 20, 0],
           x: [0, -30, 0]
@@ -423,7 +423,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
             Smart Study Platform
           </motion.div>
           <motion.h1 
-            className="text-3xl font-bold text-slate-900" 
+            className="text-3xl font-bold text-slate-900 dark:text-slate-100" 
             style={{ fontWeight: 700, letterSpacing: '-0.5px' }}
             key={activeTab}
             initial={{ opacity: 0, y: 10 }}
@@ -433,7 +433,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
             {activeTab === 'login' ? 'Welcome Back!' : 'Get Started Free'}
           </motion.h1>
           <motion.p 
-            className="text-slate-600 mt-2"
+            className="text-slate-600 dark:text-slate-400 mt-2"
             key={`${activeTab}-subtitle`}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -446,13 +446,13 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
         </motion.div>
 
         <motion.div 
-          className="bg-white rounded-2xl border border-slate-100 overflow-hidden"
+          className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-100 dark:border-slate-700 overflow-hidden"
           style={{ boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}
           whileHover={{ y: -3, boxShadow: '0 25px 50px rgba(0,0,0,0.12)' }}
           transition={{ duration: 0.2 }}
         >
           {/* Tabs */}
-          <div className="flex border-b border-slate-100 bg-slate-50 relative">
+          <div className="flex border-b border-slate-100 dark:border-slate-700 bg-slate-50 dark:bg-slate-900 relative">
             <motion.div
               className="absolute bottom-0 h-0.5 bg-indigo-600"
               initial={false}
@@ -466,8 +466,8 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
               onClick={() => setActiveTab('login')}
               className={`flex-1 py-4 text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
                 activeTab === 'login'
-                  ? 'text-indigo-600 bg-white rounded-t-xl border-b-2 border-indigo-600'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 rounded-t-xl border-b-2 border-indigo-600'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
               style={activeTab === 'login' ? { boxShadow: '0 -4px 10px rgba(0,0,0,0.05)' } : {}}
               whileHover={{ scale: 1.02 }}
@@ -485,8 +485,8 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
               onClick={() => setActiveTab('signup')}
               className={`flex-1 py-4 text-sm font-semibold flex items-center justify-center gap-2 transition-all duration-300 ${
                 activeTab === 'signup'
-                  ? 'text-indigo-600 bg-white rounded-t-xl border-b-2 border-indigo-600'
-                  : 'text-slate-500 hover:text-slate-700'
+                  ? 'text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 rounded-t-xl border-b-2 border-indigo-600'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300'
               }`}
               style={activeTab === 'signup' ? { boxShadow: '0 -4px 10px rgba(0,0,0,0.05)' } : {}}
               whileHover={{ scale: 1.02 }}
@@ -514,7 +514,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                 >
                   {loginError && (
                     <motion.div 
-                      className="mb-5 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm"
+                      className="mb-5 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-2xl text-red-700 dark:text-red-400 text-sm"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
@@ -529,7 +529,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                       transition={{ delay: 0.1 }}
                     >
                       <motion.label 
-                        className="block text-sm font-semibold text-slate-700 mb-2"
+                        className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.15 }}
@@ -550,7 +550,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                           onChange={(e) => setLoginEmail(e.target.value)}
                           placeholder="your@email.com"
                           required
-                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 transition-all"
+                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           style={{ boxShadow: 'none' }}
                           onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.15)'}
                           onBlur={(e) => e.target.style.boxShadow = 'none'}
@@ -563,7 +563,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                       transition={{ delay: 0.2 }}
                     >
                       <motion.label 
-                        className="block text-sm font-semibold text-slate-700 mb-2"
+                        className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.25 }}
@@ -584,7 +584,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                           onChange={(e) => setLoginPassword(e.target.value)}
                           placeholder="••••••••"
                           required
-                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 transition-all"
+                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           style={{ boxShadow: 'none' }}
                           onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.15)'}
                           onBlur={(e) => e.target.style.boxShadow = 'none'}
@@ -638,7 +638,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                 >
                   {signupError && (
                     <motion.div 
-                      className="mb-5 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-sm"
+                      className="mb-5 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-2xl text-red-700 dark:text-red-400 text-sm"
                       initial={{ opacity: 0, y: -10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
@@ -653,7 +653,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                       transition={{ delay: 0.1 }}
                     >
                       <motion.label 
-                        className="block text-sm font-semibold text-slate-700 mb-2"
+                        className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.15 }}
@@ -674,7 +674,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                           onChange={(e) => setSignupName(e.target.value)}
                           placeholder="John Doe"
                           required
-                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 transition-all"
+                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           style={{ boxShadow: 'none' }}
                           onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.15)'}
                           onBlur={(e) => e.target.style.boxShadow = 'none'}
@@ -687,7 +687,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                       transition={{ delay: 0.2 }}
                     >
                       <motion.label 
-                        className="block text-sm font-semibold text-slate-700 mb-2"
+                        className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.25 }}
@@ -708,7 +708,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                           onChange={(e) => setSignupEmail(e.target.value)}
                           placeholder="your@email.com"
                           required
-                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 transition-all"
+                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           style={{ boxShadow: 'none' }}
                           onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.15)'}
                           onBlur={(e) => e.target.style.boxShadow = 'none'}
@@ -721,7 +721,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                       transition={{ delay: 0.3 }}
                     >
                       <motion.label 
-                        className="block text-sm font-semibold text-slate-700 mb-2"
+                        className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.35 }}
@@ -743,7 +743,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                           placeholder="••••••••"
                           required
                           minLength={6}
-                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 transition-all"
+                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           style={{ boxShadow: 'none' }}
                           onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.15)'}
                           onBlur={(e) => e.target.style.boxShadow = 'none'}
@@ -756,7 +756,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                       transition={{ delay: 0.4 }}
                     >
                       <motion.label 
-                        className="block text-sm font-semibold text-slate-700 mb-2"
+                        className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2"
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.45 }}
@@ -778,7 +778,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                           placeholder="••••••••"
                           required
                           minLength={6}
-                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-indigo-500 transition-all"
+                          className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           style={{ boxShadow: 'none' }}
                           onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.15)'}
                           onBlur={(e) => e.target.style.boxShadow = 'none'}
