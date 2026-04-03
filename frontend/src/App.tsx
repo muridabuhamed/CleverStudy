@@ -269,8 +269,8 @@ export default function App() {
 
             <div className="relative z-10">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Upload Study Material</h2>
-              <p className="text-slate-500">Upload your lecture notes in PDF format to begin analysis.</p>
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-4">Upload Study Material</h2>
+              <p className="text-slate-500 dark:text-slate-400">Upload your lecture notes in PDF format to begin analysis.</p>
             </div>
             {error && (
               <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl text-red-700 text-center">
@@ -326,7 +326,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100 transition-colors">
       <Navbar currentState={state} onNavigate={setState} />
 
       <main className="relative flex-1 flex flex-col min-h-0">
@@ -339,7 +339,7 @@ export default function App() {
               <PdfViewerWithAnnotations url={pdfUrl} filename={currentFileName} fileId={currentFileId} />
             </div>
             {/* Chat — takes 30% width */}
-            <div className="w-[30%] shrink-0 h-full overflow-hidden bg-white shadow-xl">
+            <div className="w-[30%] shrink-0 h-full overflow-hidden bg-white dark:bg-slate-800 shadow-xl">
               <Chat fileId={currentFileId} />
             </div>
           </div>

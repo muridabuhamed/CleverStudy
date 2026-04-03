@@ -249,7 +249,7 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
                                 </div>
                             </div>
 
-                            <div className="mt-8 pt-6 border-t border-slate-100 flex items-center justify-between text-sm font-semibold text-indigo-600">
+                            <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between text-sm font-semibold text-indigo-600 dark:text-indigo-400">
                                 <span>Resume Study</span>
                                 <ChevronRight className="w-4 h-4 translate-x-0 group-hover:translate-x-1 transition-transform" />
                             </div>

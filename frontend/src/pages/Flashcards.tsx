@@ -129,7 +129,7 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-violet-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
+          <Loader2 className="w-12 h-12 text-indigo-600 dark:text-indigo-400 animate-spin" />
           <p className="text-slate-600 font-medium">Loading flashcards...</p>
         </div>
       </div>
@@ -142,7 +142,7 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
         <div className="max-w-2xl mx-auto">
           <button
             onClick={onBack}
-            className="mb-8 flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+            className="mb-8 flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Back
@@ -197,7 +197,7 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
         <div className="flex items-center justify-between mb-8">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+            className="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
             Back
@@ -205,11 +205,11 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
 
           <div className="flex items-center gap-4">
             <div className="text-sm text-slate-600">
-              <span className="font-bold text-indigo-600">{currentIndex + 1}</span> / {flashcards.length}
+              <span className="font-bold text-indigo-600 dark:text-indigo-400">{currentIndex + 1}</span> / {flashcards.length}
             </div>
             <button
               onClick={handleReset}
-              className="p-2 hover:bg-white rounded-xl transition-colors"
+              className="p-2 hover:bg-white dark:hover:bg-slate-700 rounded-xl transition-colors"
               title="Reset to first card"
             >
               <RotateCcw className="w-5 h-5 text-slate-600" />
@@ -253,11 +253,11 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
                 >
                   {/* Front */}
                   <div
-                    className="absolute inset-0 bg-white rounded-3xl shadow-2xl border-2 border-indigo-200 p-12 flex flex-col items-center justify-center"
+                    className="absolute inset-0 bg-white dark:bg-slate-800 rounded-3xl shadow-2xl border-2 border-indigo-200 dark:border-indigo-700 p-12 flex flex-col items-center justify-center"
                     style={{ backfaceVisibility: 'hidden' }}
                   >
-                    <Brain className="w-12 h-12 text-indigo-600 mb-6" />
-                    <h3 className="text-2xl font-bold text-slate-900 text-center mb-4">
+                    <Brain className="w-12 h-12 text-indigo-600 dark:text-indigo-400 mb-6" />
+                    <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 text-center mb-4">
                       {currentCard.question}
                     </h3>
                     <p className="text-slate-500 text-sm">Click to reveal answer</p>
@@ -326,7 +326,7 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
           <button
             onClick={handlePrevious}
             disabled={currentIndex === 0}
-            className="px-6 py-3 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl font-semibold text-slate-700 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl font-semibold text-slate-700 dark:text-slate-300 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Previous
           </button>

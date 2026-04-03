@@ -30,8 +30,8 @@ export const Profile: React.FC = () => {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-12 h-12 text-indigo-600 animate-spin" />
-          <p className="text-slate-500 font-medium">Loading your profile...</p>
+          <Loader2 className="w-12 h-12 text-indigo-600 dark:text-indigo-400 animate-spin" />
+          <p className="text-slate-500 dark:text-slate-400 font-medium">Loading your profile...</p>
         </div>
       </div>
     );
@@ -142,15 +142,15 @@ export const Profile: React.FC = () => {
           transition={{ delay: 0.2 }}
           className="lg:col-span-1"
         >
-          <div className="bg-white rounded-3xl border border-slate-200 p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
-                  <Trophy className="w-5 h-5 text-amber-600" />
+                <div className="w-10 h-10 bg-amber-100 dark:bg-amber-900/30 rounded-xl flex items-center justify-center">
+                  <Trophy className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">Achievements</h2>
-                  <p className="text-sm text-slate-500">{unlockedCount}/{achievements.length} unlocked</p>
+                  <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Achievements</h2>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">{unlockedCount}/{achievements.length} unlocked</p>
                 </div>
               </div>
             </div>
@@ -161,8 +161,8 @@ export const Profile: React.FC = () => {
                   key={achievement.id}
                   className={`p-4 rounded-2xl border-2 transition-all ${
                     achievement.unlocked
-                      ? 'border-slate-200 bg-gradient-to-br from-white to-slate-50'
-                      : 'border-dashed border-slate-200 bg-slate-50/30 opacity-40'
+                      ? 'border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-700'
+                      : 'border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/30 dark:bg-slate-800/30 opacity-40'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -170,10 +170,10 @@ export const Profile: React.FC = () => {
                       {achievement.icon}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-slate-900 text-sm mb-1">
+                      <h3 className="font-semibold text-slate-900 dark:text-slate-100 text-sm mb-1">
                         {achievement.name}
                       </h3>
-                      <p className="text-xs text-slate-600">
+                      <p className="text-xs text-slate-600 dark:text-slate-400">
                         {achievement.description}
                       </p>
                     </div>
@@ -191,12 +191,12 @@ export const Profile: React.FC = () => {
           transition={{ delay: 0.3 }}
           className="lg:col-span-2"
         >
-          <div className="bg-white rounded-3xl border border-slate-200 p-6 mb-6">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-6 mb-6">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-indigo-100 rounded-xl flex items-center justify-center">
-                <Brain className="w-5 h-5 text-indigo-600" />
+              <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
+                <Brain className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <h2 className="text-lg font-bold text-slate-900">Study Insights</h2>
+              <h2 className="text-lg font-bold text-slate-900 dark:text-slate-100">Study Insights</h2>
             </div>
             
             <div className="grid grid-cols-2 gap-4">
@@ -238,28 +238,28 @@ export const Profile: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="bg-white rounded-3xl border border-slate-200 p-8"
+        className="bg-white dark:bg-slate-800 rounded-3xl border border-slate-200 dark:border-slate-700 p-8"
       >
         <div className="flex items-center gap-3 mb-6">
-          <TrendingUp className="w-6 h-6 text-indigo-600" />
-          <h2 className="text-2xl font-bold text-slate-900">Recent Quizzes</h2>
+          <TrendingUp className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Recent Quizzes</h2>
         </div>
 
         {recentAttempts.length === 0 ? (
           <div className="text-center py-16">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-50 to-violet-50 rounded-full mb-6">
-              <Trophy className="w-10 h-10 text-indigo-400" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-900/30 dark:to-violet-900/30 rounded-full mb-6">
+              <Trophy className="w-10 h-10 text-indigo-400 dark:text-indigo-500" />
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Ready to Start Learning?</h3>
-            <p className="text-slate-600 mb-6 max-w-md mx-auto">
+            <h3 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2">Ready to Start Learning?</h3>
+            <p className="text-slate-600 dark:text-slate-400 mb-6 max-w-md mx-auto">
               Upload your first study document and take a quiz to see your progress and achievements here.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <button className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all flex items-center gap-2 justify-center">
+              <button className="px-6 py-3 bg-indigo-600 dark:bg-indigo-500 text-white rounded-xl font-semibold hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all flex items-center gap-2 justify-center">
                 <Upload className="w-5 h-5" />
                 Upload Document
               </button>
-              <button className="px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all flex items-center gap-2 justify-center">
+              <button className="px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-all flex items-center gap-2 justify-center">
                 <BookOpen className="w-5 h-5" />
                 Browse Library
               </button>
@@ -270,21 +270,21 @@ export const Profile: React.FC = () => {
             {recentAttempts.map((attempt: any) => (
               <div
                 key={attempt.id}
-                className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:border-indigo-200 transition-all"
+                className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 transition-all"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-                    <FileText className="w-6 h-6 text-indigo-600" />
+                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-900">{attempt.file_name}</h3>
-                    <p className="text-sm text-slate-500">
+                    <h3 className="font-semibold text-slate-900 dark:text-slate-100">{attempt.file_name}</h3>
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       {new Date(attempt.completed_at).toLocaleDateString()}
                     </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-slate-900">
+                  <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                     {attempt.score}/{attempt.total}
                   </div>
                   <div className={`text-sm font-semibold ${(attempt.score / attempt.total) >= 0.7 ? 'text-emerald-600' : 'text-amber-600'
@@ -305,25 +305,25 @@ const StatCard = ({ icon, label, value, bgColor }: { icon: React.ReactNode; labe
   <motion.div
     initial={{ opacity: 0, scale: 0.95 }}
     animate={{ opacity: 1, scale: 1 }}
-    className="bg-white rounded-2xl border border-slate-200 p-6 hover:shadow-lg transition-all"
+    className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 p-6 hover:shadow-lg transition-all"
   >
     <div className={`w-12 h-12 ${bgColor} rounded-xl flex items-center justify-center mb-4`}>
       {icon}
     </div>
-    <div className="text-3xl font-bold text-slate-900 mb-1">{value}</div>
-    <div className="text-sm text-slate-500 font-medium">{label}</div>
+    <div className="text-3xl font-bold text-slate-900 dark:text-slate-100 mb-1">{value}</div>
+    <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">{label}</div>
   </motion.div>
 );
 
 const InsightCard = ({ icon, label, value, description, color }: { icon: React.ReactNode; label: string; value: string; description: string; color: string }) => (
-  <div className={`${color} rounded-2xl p-4 border border-slate-200`}>
+  <div className={`${color} dark:bg-opacity-20 rounded-2xl p-4 border border-slate-200 dark:border-slate-700`}>
     <div className="flex items-center gap-3 mb-2">
-      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+      <div className="w-8 h-8 bg-white dark:bg-slate-800 rounded-lg flex items-center justify-center">
         {icon}
       </div>
-      <span className="text-sm font-semibold text-slate-700">{label}</span>
+      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</span>
     </div>
-    <div className="text-2xl font-bold text-slate-900 mb-1">{value}</div>
-    <div className="text-xs text-slate-600">{description}</div>
+    <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">{value}</div>
+    <div className="text-xs text-slate-600 dark:text-slate-400">{description}</div>
   </div>
 );

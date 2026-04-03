@@ -54,7 +54,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload, isUploading, p
       <div
         className={`relative border-2 border-dashed rounded-2xl p-12 transition-all ${
           dragActive ? "border-indigo-500 bg-indigo-50" : "border-slate-300 hover:border-indigo-400"
-        } ${file ? "bg-slate-50" : "bg-white"}`}
+        } ${file ? "bg-slate-50 dark:bg-slate-800" : "bg-white dark:bg-slate-800"}`}
         onDragEnter={handleDrag}
         onDragLeave={handleDrag}
         onDragOver={handleDrag}
@@ -71,9 +71,9 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload, isUploading, p
           {!file ? (
             <>
               <div className="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-                <Upload className="w-8 h-8 text-indigo-600" />
+                <Upload className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-900">Click or drag PDF to upload</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">Click or drag PDF to upload</h3>
               <p className="text-sm text-slate-500 mt-1">Maximum file size 10MB</p>
             </>
           ) : (
@@ -81,7 +81,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload, isUploading, p
               <div className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-4">
                 <FileText className="w-8 h-8 text-emerald-600" />
               </div>
-              <h3 className="text-lg font-semibold text-slate-900">{file.name}</h3>
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">{file.name}</h3>
               <p className="text-sm text-slate-500 mt-1">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
               
               <button 
@@ -110,7 +110,7 @@ export const FileUpload: React.FC<FileUploadProps> = ({ onUpload, isUploading, p
         <div className="mt-8">
           <div className="flex justify-between mb-2">
             <span className="text-sm font-medium text-slate-700">Uploading...</span>
-            <span className="text-sm font-medium text-indigo-600">{progress}%</span>
+            <span className="text-sm font-medium text-indigo-600 dark:text-indigo-400">{progress}%</span>
           </div>
           <div className="w-full bg-slate-200 rounded-full h-2.5">
             <motion.div 

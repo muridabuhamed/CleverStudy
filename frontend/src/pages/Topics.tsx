@@ -50,10 +50,10 @@ export const Topics: React.FC<TopicsProps> = ({ topics, onStartQuiz, onStartFlas
             <Sparkles className="w-4 h-4" />
             Analysis Complete
           </motion.div>
-          <h2 className="text-5xl font-black text-slate-900 mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+          <h2 className="text-5xl font-black text-slate-900 dark:text-slate-100 mb-4 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
             Key Topics Discovered
           </h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-600 dark:text-slate-400 text-lg max-w-2xl mx-auto leading-relaxed">
             Master these essential concepts to excel in your studies
           </p>
         </motion.div>
@@ -71,7 +71,7 @@ export const Topics: React.FC<TopicsProps> = ({ topics, onStartQuiz, onStartFlas
                 stiffness: 100
               }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className="group relative p-6 bg-white rounded-3xl border-2 border-slate-200 hover:border-indigo-300 shadow-lg hover:shadow-2xl transition-all cursor-pointer overflow-hidden"
+              className="group relative p-6 bg-white dark:bg-slate-800 rounded-3xl border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-500 shadow-lg hover:shadow-2xl transition-all cursor-pointer overflow-hidden"
             >
               {/* Animated Gradient Background */}
               <motion.div 
@@ -101,12 +101,12 @@ export const Topics: React.FC<TopicsProps> = ({ topics, onStartQuiz, onStartFlas
                     <Star className="w-5 h-5 text-slate-300 group-hover:text-amber-400 group-hover:fill-amber-400 transition-all duration-300" />
                   </motion.div>
                 </div>
-                <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-indigo-700 transition-colors">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100 leading-snug group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">
                   {topic}
                 </h3>
                 
                 {/* Topic Number Badge */}
-                <div className="absolute bottom-4 right-4 w-8 h-8 bg-gradient-to-br from-slate-100 to-slate-200 rounded-full flex items-center justify-center text-xs font-black text-slate-500 group-hover:from-indigo-100 group-hover:to-purple-100 group-hover:text-indigo-600 transition-all">
+                <div className="absolute bottom-4 right-4 w-8 h-8 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 rounded-full flex items-center justify-center text-xs font-black text-slate-500 dark:text-slate-400 group-hover:from-indigo-100 group-hover:to-purple-100 dark:group-hover:from-indigo-900 dark:group-hover:to-purple-900 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-all">
                   {idx + 1}
                 </div>
               </div>

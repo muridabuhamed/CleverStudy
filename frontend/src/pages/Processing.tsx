@@ -25,10 +25,10 @@ export const Processing: React.FC = () => {
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-          className="w-32 h-32 border-4 border-indigo-100 border-t-indigo-600 rounded-full"
+          className="w-32 h-32 border-4 border-indigo-100 dark:border-indigo-900 border-t-indigo-600 dark:border-t-indigo-400 rounded-full"
         />
         <div className="absolute inset-0 flex items-center justify-center">
-          <BrainCircuit className="w-12 h-12 text-indigo-600 animate-pulse" />
+          <BrainCircuit className="w-12 h-12 text-indigo-600 dark:text-indigo-400 animate-pulse" />
         </div>
       </div>
 
@@ -38,8 +38,8 @@ export const Processing: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         className="space-y-4"
       >
-        <h2 className="text-2xl font-bold text-slate-900">Analyzing your document</h2>
-        <p className="text-slate-500 text-lg max-w-md mx-auto">
+        <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Analyzing your document</h2>
+        <p className="text-slate-500 dark:text-slate-400 text-lg max-w-md mx-auto">
           {steps[step]}
         </p>
       </motion.div>
@@ -55,7 +55,7 @@ export const Processing: React.FC = () => {
 
 const StatusIcon = ({ active, icon }: { active: boolean; icon: React.ReactNode }) => (
   <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-    active ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-400'
+    active ? 'bg-indigo-600 dark:bg-indigo-500 text-white' : 'bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500'
   }`}>
     {icon}
   </div>
