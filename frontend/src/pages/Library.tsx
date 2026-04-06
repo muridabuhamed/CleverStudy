@@ -1,6 +1,6 @@
 import React from 'react';
-import { motion } from 'motion/react';
-import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook, AlertTriangle, X } from 'lucide-react';
 import { api, FileRecord } from '../services/api';
 import { AppState, Question } from '../types';
 
@@ -13,6 +13,8 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
     const [files, setFiles] = React.useState<FileRecord[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState('');
+    const [fileToDelete, setFileToDelete] = React.useState<FileRecord | null>(null);
+    const [isDeleting, setIsDeleting] = React.useState(false);
 
     const loadFiles = async () => {
         try {
@@ -30,15 +32,41 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
         loadFiles();
     }, []);
 
-    const handleDelete = async (e: React.MouseEvent, fileId: string) => {
-        e.stopPropagation();
-        if (window.confirm('Are you sure you want to delete this document?')) {
-            try {
-                await api.deleteFile(fileId);
-                setFiles(files.filter(f => f.id !== fileId));
-            } catch (error) {
-                console.error('Failed to delete file:', error);
+    // Handle ESC key to close modal
+    React.useEffect(() => {
+        const handleEscape = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && fileToDelete && !isDeleting) {
+                setFileToDelete(null);
             }
+        };
+        window.addEventListener('keydown', handleEscape);
+        return () => window.removeEventListener('keydown', handleEscape);
+    }, [fileToDelete, isDeleting]);
+
+    const handleDelete = (e: React.MouseEvent, file: FileRecord) => {
+        e.stopPropagation();
+        setFileToDelete(file);
+    };
+
+    const confirmDelete = async () => {
+        if (!fileToDelete) return;
+        
+        setIsDeleting(true);
+        try {
+            await api.deleteFile(fileToDelete.id);
+            setFiles(files.filter(f => f.id !== fileToDelete.id));
+            setFileToDelete(null);
+        } catch (error) {
+            console.error('Failed to delete file:', error);
+            alert('Failed to delete file. Please try again.');
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    const cancelDelete = () => {
+        if (!isDeleting) {
+            setFileToDelete(null);
         }
     };
 
@@ -213,7 +241,7 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
                                     <FileText className="w-6 h-6" />
                                 </div>
                                 <button
-                                    onClick={(e) => handleDelete(e, file.id)}
+                                    onClick={(e) => handleDelete(e, file)}
                                     className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all"
                                     title="Delete document"
                                 >
@@ -258,6 +286,99 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
                 </div>
             )}
             </div>
+
+            {/* Delete Confirmation Modal */}
+            <AnimatePresence>
+                {fileToDelete && (
+                    <>
+                        {/* Backdrop */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            onClick={cancelDelete}
+                            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                        >
+                            {/* Modal */}
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                                animate={{ opacity: 1, scale: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                                onClick={(e) => e.stopPropagation()}
+                                className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-md w-full p-8 relative border border-slate-200 dark:border-slate-700"
+                            >
+                                {/* Close button */}
+                                <button
+                                    onClick={cancelDelete}
+                                    disabled={isDeleting}
+                                    className="absolute top-4 right-4 p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                    aria-label="Close"
+                                >
+                                    <X className="w-5 h-5" />
+                                </button>
+
+                                {/* Warning Icon */}
+                                <div className="mb-6">
+                                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto">
+                                        <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
+                                    </div>
+                                </div>
+
+                                {/* Content */}
+                                <div className="text-center mb-8">
+                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
+                                        Delete Document?
+                                    </h3>
+                                    <p className="text-slate-600 dark:text-slate-400 mb-4">
+                                        Are you sure you want to delete this document? This action cannot be undone.
+                                    </p>
+                                    <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
+                                        <div className="flex items-start gap-3">
+                                            <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
+                                            <div className="text-left flex-1 min-w-0">
+                                                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
+                                                    {fileToDelete.original_name}
+                                                </p>
+                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                                    {fileToDelete.topics.length} topics • Created {new Date(fileToDelete.created_at).toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Actions */}
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={cancelDelete}
+                                        disabled={isDeleting}
+                                        className="flex-1 px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={confirmDelete}
+                                        disabled={isDeleting}
+                                        className="flex-1 px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-xl font-semibold hover:bg-red-700 dark:hover:bg-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    >
+                                        {isDeleting ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                                Deleting...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Trash2 className="w-4 h-4" />
+                                                Delete
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </motion.div>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
         </div>
     );
 };
