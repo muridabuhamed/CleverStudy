@@ -83,21 +83,21 @@ export const Profile: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-r from-indigo-600 to-violet-600 rounded-3xl p-8 text-white mb-8 shadow-xl"
+        className="bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-900 dark:to-violet-900 rounded-3xl p-8 text-white mb-8 shadow-xl dark:shadow-none dark:border dark:border-slate-700/50"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+            <div className="w-20 h-20 bg-white/20 dark:bg-white/10 rounded-full flex items-center justify-center backdrop-blur-sm border border-white/20">
               <User className="w-10 h-10" />
             </div>
             <div>
               <h1 className="text-3xl font-bold mb-1">{user?.name}</h1>
-              <p className="text-indigo-100">{user?.email}</p>
+              <p className="text-indigo-100 dark:text-indigo-200">{user?.email}</p>
             </div>
           </div>
           <button
             onClick={logout}
-            className="px-6 py-3 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl font-semibold transition-all flex items-center gap-2"
+            className="px-6 py-3 bg-white/20 hover:bg-white/30 dark:bg-white/10 dark:hover:bg-white/20 backdrop-blur-sm rounded-xl font-semibold transition-all flex items-center gap-2 border border-white/20"
           >
             <LogOut className="w-5 h-5" />
             Sign Out
@@ -108,28 +108,28 @@ export const Profile: React.FC = () => {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         <StatCard
-          icon={<FileText className="w-6 h-6 text-indigo-600" />}
+          icon={<FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />}
           label="Files Studied"
           value={stats?.files_studied || 0}
-          bgColor="bg-indigo-50"
+          bgColor="bg-indigo-50 dark:bg-indigo-950/50"
         />
         <StatCard
-          icon={<Trophy className="w-6 h-6 text-amber-600" />}
+          icon={<Trophy className="w-6 h-6 text-amber-600 dark:text-amber-400" />}
           label="Quizzes Taken"
           value={stats?.quizzes_taken || 0}
-          bgColor="bg-amber-50"
+          bgColor="bg-amber-50 dark:bg-amber-950/50"
         />
         <StatCard
-          icon={<Target className="w-6 h-6 text-emerald-600" />}
+          icon={<Target className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />}
           label="Average Score"
           value={`${avgScore}%`}
-          bgColor="bg-emerald-50"
+          bgColor="bg-emerald-50 dark:bg-emerald-950/50"
         />
         <StatCard
-          icon={<Award className="w-6 h-6 text-violet-600" />}
+          icon={<Award className="w-6 h-6 text-violet-600 dark:text-violet-400" />}
           label="Total Correct"
           value={`${stats?.total_correct || 0}/${stats?.total_questions || 0}`}
-          bgColor="bg-violet-50"
+          bgColor="bg-violet-50 dark:bg-violet-950/50"
         />
       </div>
 
@@ -161,8 +161,8 @@ export const Profile: React.FC = () => {
                   key={achievement.id}
                   className={`p-4 rounded-2xl border-2 transition-all ${
                     achievement.unlocked
-                      ? 'border-slate-200 dark:border-slate-700 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-700'
-                      : 'border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/30 dark:bg-slate-800/30 opacity-40'
+                      ? 'border-slate-200 dark:border-slate-600 bg-gradient-to-br from-white to-slate-50 dark:from-slate-700 dark:to-slate-800/50'
+                      : 'border-dashed border-slate-200 dark:border-slate-700 bg-slate-50/30 dark:bg-slate-800/20 opacity-40'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -201,32 +201,32 @@ export const Profile: React.FC = () => {
             
             <div className="grid grid-cols-2 gap-4">
               <InsightCard
-                icon={<Flame className="w-5 h-5 text-orange-500" />}
+                icon={<Flame className="w-5 h-5 text-orange-500 dark:text-orange-400" />}
                 label="Study Streak"
                 value={stats?.quizzes_taken > 0 ? `${Math.min(stats?.quizzes_taken, 7)} days` : '0 days'}
                 description="Keep it up!"
-                color="bg-orange-50"
+                color="bg-orange-50 dark:bg-orange-950/30"
               />
               <InsightCard
-                icon={<Zap className="w-5 h-5 text-yellow-500" />}
+                icon={<Zap className="w-5 h-5 text-yellow-500 dark:text-yellow-400" />}
                 label="Best Score"
                 value={stats?.quizzes_taken > 0 ? `${avgScore}%` : '—'}
                 description="Personal best"
-                color="bg-yellow-50"
+                color="bg-yellow-50 dark:bg-yellow-950/30"
               />
               <InsightCard
-                icon={<Target className="w-5 h-5 text-emerald-500" />}
+                icon={<Target className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />}
                 label="Accuracy"
                 value={stats?.total_questions > 0 ? `${Math.round((stats?.total_correct / stats?.total_questions) * 100)}%` : '—'}
                 description="Overall performance"
-                color="bg-emerald-50"
+                color="bg-emerald-50 dark:bg-emerald-950/30"
               />
               <InsightCard
-                icon={<Calendar className="w-5 h-5 text-violet-500" />}
+                icon={<Calendar className="w-5 h-5 text-violet-500 dark:text-violet-400" />}
                 label="This Week"
                 value={`${stats?.quizzes_taken || 0} quizzes`}
                 description="Keep learning!"
-                color="bg-violet-50"
+                color="bg-violet-50 dark:bg-violet-950/30"
               />
             </div>
           </div>
@@ -270,10 +270,10 @@ export const Profile: React.FC = () => {
             {recentAttempts.map((attempt: any) => (
               <div
                 key={attempt.id}
-                className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-700 transition-all"
+                className="flex items-center justify-between p-4 bg-slate-50 dark:bg-slate-700/50 rounded-2xl border border-slate-100 dark:border-slate-700/50 hover:border-indigo-200 dark:hover:border-indigo-600/50 transition-all"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center border border-indigo-200 dark:border-indigo-800/50">
                     <FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                   </div>
                   <div>
@@ -287,7 +287,7 @@ export const Profile: React.FC = () => {
                   <div className="text-2xl font-bold text-slate-900 dark:text-slate-100">
                     {attempt.score}/{attempt.total}
                   </div>
-                  <div className={`text-sm font-semibold ${(attempt.score / attempt.total) >= 0.7 ? 'text-emerald-600' : 'text-amber-600'
+                  <div className={`text-sm font-semibold ${(attempt.score / attempt.total) >= 0.7 ? 'text-emerald-600 dark:text-emerald-400' : 'text-amber-600 dark:text-amber-400'
                     }`}>
                     {Math.round((attempt.score / attempt.total) * 100)}%
                   </div>
@@ -316,12 +316,12 @@ const StatCard = ({ icon, label, value, bgColor }: { icon: React.ReactNode; labe
 );
 
 const InsightCard = ({ icon, label, value, description, color }: { icon: React.ReactNode; label: string; value: string; description: string; color: string }) => (
-  <div className={`${color} dark:bg-opacity-20 rounded-2xl p-4 border border-slate-200 dark:border-slate-700`}>
+  <div className={`${color} rounded-2xl p-4 border border-slate-200 dark:border-slate-700/50`}>
     <div className="flex items-center gap-3 mb-2">
-      <div className="w-8 h-8 bg-white dark:bg-slate-800 rounded-lg flex items-center justify-center">
+      <div className="w-8 h-8 bg-white dark:bg-slate-700 rounded-lg flex items-center justify-center shadow-sm">
         {icon}
       </div>
-      <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">{label}</span>
+      <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">{label}</span>
     </div>
     <div className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-1">{value}</div>
     <div className="text-xs text-slate-600 dark:text-slate-400">{description}</div>
