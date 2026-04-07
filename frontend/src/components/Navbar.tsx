@@ -64,16 +64,20 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
             <ThemeToggle />
             {isAuthenticated ? (
               <>
-                <button 
+                <motion.button 
                   onClick={() => onNavigate('PROFILE')}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   className="p-2 text-slate-400 hover:text-indigo-400 transition-colors"
                   title="View Profile"
                 >
                   <BarChart2 className="w-5 h-5" />
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={() => onNavigate('PROFILE')}
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 dark:bg-slate-800/50 dark:hover:bg-slate-700/50 transition-colors"
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 dark:bg-slate-800/50 dark:hover:bg-slate-700/50 transition-all"
                   title={user?.name}
                 >
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 flex items-center justify-center text-white font-semibold text-sm">
@@ -82,22 +86,26 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
                   <span className="text-sm font-medium text-white hidden lg:block">
                     {user?.name}
                   </span>
-                </button>
+                </motion.button>
               </>
             ) : (
               <>
-                <button
+                <motion.button
                   onClick={() => onNavigate('SIGNUP')}
-                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg font-bold text-sm hover:shadow-lg hover:shadow-indigo-500/50 hover:scale-105 transition-all"
+                  whileHover={{ scale: 1.05, y: -1 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg font-bold text-sm hover:shadow-lg hover:shadow-indigo-500/50 transition-all"
                 >
                   Sign Up
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={() => onNavigate('LOGIN')}
+                  whileHover={{ scale: 1.02, y: -1 }}
+                  whileTap={{ scale: 0.98 }}
                   className="px-6 py-2.5 bg-white/10 text-white border border-white/20 dark:border-slate-700 rounded-lg font-semibold text-sm hover:bg-white/20 dark:hover:bg-slate-700/50 hover:border-white/30 transition-all"
                 >
                   Login
-                </button>
+                </motion.button>
               </>
             )}
           </div>

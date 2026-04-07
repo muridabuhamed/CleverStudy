@@ -10,7 +10,75 @@
 @variant dark (.dark &);
 
 @layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
     @apply bg-slate-50 text-slate-900 antialiased;
+  }
+  
+  /* Smooth dark mode transitions */
+  .dark {
+    color-scheme: dark;
+  }
+}
+
+@layer utilities {
+  /* Smooth animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+  
+  /* Smooth hover effects */
+  .smooth-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+  
+  .smooth-hover:hover {
+    @apply transform -translate-y-1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }

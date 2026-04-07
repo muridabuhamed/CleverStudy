@@ -39,20 +39,24 @@ export const Results: React.FC<ResultsProps> = ({ questions, result, onRestart, 
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button 
+          <motion.button 
             onClick={onRestart}
-            className="w-full sm:w-auto px-8 py-4 bg-indigo-600 dark:bg-indigo-500 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all shadow-lg shadow-indigo-100 dark:shadow-indigo-900/50"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto px-8 py-4 bg-indigo-600 dark:bg-indigo-500 text-white rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 dark:hover:bg-indigo-600 transition-all shadow-lg shadow-indigo-100 dark:shadow-indigo-900/50 hover:shadow-xl"
           >
             <RotateCcw className="w-5 h-5" />
             Try Again
-          </button>
-          <button 
+          </motion.button>
+          <motion.button 
             onClick={onNewUpload}
-            className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-all hover:shadow-md"
           >
             <Upload className="w-5 h-5" />
             Upload New PDF
-          </button>
+          </motion.button>
         </div>
       </motion.div>
 

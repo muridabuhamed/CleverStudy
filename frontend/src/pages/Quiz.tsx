@@ -78,43 +78,51 @@ export const Quiz: React.FC<QuizProps> = ({ questions, onComplete }) => {
 
         <div className="space-y-3">
           {currentQuestion.options.map((option, idx) => (
-            <button
+            <motion.button
               key={idx}
               onClick={() => handleSelect(idx)}
+              whileHover={{ scale: 1.01, x: 4 }}
+              whileTap={{ scale: 0.99 }}
               className={`w-full text-left p-5 rounded-2xl border-2 transition-all flex items-center gap-4 ${
                 selectedAnswers[currentQuestion.id] === idx
-                  ? "border-indigo-600 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100"
-                  : "border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300"
+                  ? "border-indigo-600 dark:border-indigo-500 bg-indigo-50/50 dark:bg-indigo-900/30 text-indigo-900 dark:text-indigo-100 shadow-md"
+                  : "border-slate-100 dark:border-slate-700 hover:border-slate-200 dark:hover:border-slate-600 text-slate-700 dark:text-slate-300 hover:shadow-sm"
               }`}
             >
-              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-all ${
                 selectedAnswers[currentQuestion.id] === idx
-                  ? "border-indigo-600 bg-indigo-600"
-                  : "border-slate-300"
+                  ? "border-indigo-600 bg-indigo-600 scale-110"
+                  : "border-slate-300 dark:border-slate-600"
               }`}>
                 {selectedAnswers[currentQuestion.id] === idx && (
-                  <div className="w-2 h-2 bg-white rounded-full" />
+                  <motion.div 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="w-2 h-2 bg-white rounded-full" 
+                  />
                 )}
               </div>
               <span className="font-medium">{option}</span>
-            </button>
+            </motion.button>
           ))}
         </div>
       </motion.div>
 
       <div className="mt-8 flex justify-end">
-        <button
+        <motion.button
           disabled={selectedAnswers[currentQuestion.id] === undefined}
           onClick={handleNext}
+          whileHover={selectedAnswers[currentQuestion.id] !== undefined ? { scale: 1.02, x: 2 } : {}}
+          whileTap={selectedAnswers[currentQuestion.id] !== undefined ? { scale: 0.98 } : {}}
           className={`px-8 py-4 rounded-2xl font-bold flex items-center gap-2 transition-all ${
             selectedAnswers[currentQuestion.id] === undefined
               ? "bg-slate-100 dark:bg-slate-700 text-slate-400 dark:text-slate-500 cursor-not-allowed"
-              : "bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg shadow-indigo-100 dark:shadow-indigo-900/50 hover:bg-indigo-700 dark:hover:bg-indigo-600"
+              : "bg-indigo-600 dark:bg-indigo-500 text-white shadow-lg shadow-indigo-100 dark:shadow-indigo-900/50 hover:bg-indigo-700 dark:hover:bg-indigo-600 hover:shadow-xl"
           }`}
         >
           {isLast ? "Finish Quiz" : "Next Question"}
           <ChevronRight className="w-5 h-5" />
-        </button>
+        </motion.button>
       </div>
     </div>
   );
