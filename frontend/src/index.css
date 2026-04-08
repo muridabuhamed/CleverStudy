@@ -50,6 +50,11 @@
   .smooth-hover:hover {
     @apply transform -translate-y-1;
   }
+  
+  /* Page transition container - optimized for performance */
+  .page-transition {
+    will-change: transform, opacity;
+  }
 }
 
 @keyframes fadeIn {

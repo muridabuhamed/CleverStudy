@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { api } from '../services/api';
 import { FlashcardStats } from '../types';
+import { StudyTimer } from '../components/StudyTimer';
 
 interface FlashcardsProps {
   fileId: string;
@@ -192,6 +193,11 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-violet-50 py-12 px-4">
+      {/* Study Timer */}
+      <div className="fixed top-20 right-6 z-50">
+        <StudyTimer fileId={parseInt(fileId)} />
+      </div>
+      
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

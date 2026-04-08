@@ -2,16 +2,24 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Tag, BookOpen, ArrowRight, Lightbulb, Star, Brain, Sparkles, Zap } from 'lucide-react';
 import { ProgressTracker } from '../components/ProgressTracker';
+import { StudyTimer } from '../components/StudyTimer';
 
 interface TopicsProps {
   topics: string[];
+  fileId: number | null;
   onStartQuiz: () => void;
   onStartFlashcards: () => void;
 }
 
-export const Topics: React.FC<TopicsProps> = ({ topics, onStartQuiz, onStartFlashcards }) => {
+export const Topics: React.FC<TopicsProps> = ({ topics, fileId, onStartQuiz, onStartFlashcards }) => {
   return (
     <div className="relative min-h-screen py-12 px-6">
+      {/* Study Timer */}
+      {fileId && (
+        <div className="fixed top-20 right-6 z-50">
+          <StudyTimer fileId={fileId} />
+        </div>
+      )}
       {/* Animated Background Elements */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <motion.div 

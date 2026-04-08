@@ -122,6 +122,20 @@ def init_db():
         )
     ''')
     
+    # Study sessions table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS study_sessions (
+            id TEXT PRIMARY KEY,
+            user_id TEXT NOT NULL,
+            file_id TEXT NOT NULL,
+            duration_seconds INTEGER NOT NULL,
+            started_at DATETIME NOT NULL,
+            ended_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id),
+            FOREIGN KEY (file_id) REFERENCES files(id)
+        )
+    ''')
+    
     conn.commit()
     conn.close()
 
@@ -511,3 +525,38 @@ def search_annotations(user_id: str, query: str, file_id: Optional[str] = None):
     
     conn.close()
     return results
+
+# Study sessions operations
+def add_study_session(session_id: str, user_id: str, file_id: str, duration_seconds: int, started_at: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO study_sessions (id, user_id, file_id, duration_seconds, started_at)
+        VALUES (?, ?, ?, ?, ?)
+    ''', (session_id, user_id, file_id, duration_seconds, started_at))
+    conn.commit()
+    conn.close()
+
+def get_total_study_time(user_id: str, file_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT COALESCE(SUM(duration_seconds), 0) as total_seconds
+        FROM study_sessions
+        WHERE user_id = ? AND file_id = ?
+    ''', (user_id, file_id))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else 0
+
+def get_user_total_study_time(user_id: str):
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('''
+        SELECT COALESCE(SUM(duration_seconds), 0) as total_seconds
+        FROM study_sessions
+        WHERE user_id = ?
+    ''', (user_id,))
+    result = cursor.fetchone()
+    conn.close()
+    return result[0] if result else 0

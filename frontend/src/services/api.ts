@@ -356,6 +356,37 @@ export const api = {
     });
     return handleResponse(response);
   },
+
+  // Study Session APIs
+  async saveStudySession(fileId: string, durationSeconds: number, startedAt: string): Promise<{ success: boolean; sessionId: string }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/study/session`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders()
+      },
+      body: JSON.stringify({
+        fileId,
+        durationSeconds,
+        startedAt
+      }),
+    });
+    return handleResponse(response);
+  },
+
+  async getStudyTime(fileId: string): Promise<{ totalSeconds: number }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/study/time/${fileId}`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
+
+  async getTotalStudyTime(): Promise<{ totalSeconds: number }> {
+    const response = await fetch(`${APP_CONFIG.API_BASE_URL}/study/time`, {
+      headers: getAuthHeaders()
+    });
+    return handleResponse(response);
+  },
 };
 
 export { ApiError };

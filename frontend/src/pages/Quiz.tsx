@@ -2,13 +2,15 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Question } from '../types';
 import { ChevronRight, HelpCircle, Clock } from 'lucide-react';
+import { StudyTimer } from '../components/StudyTimer';
 
 interface QuizProps {
   questions: Question[];
+  fileId: number | null;
   onComplete: (answers: { questionId: string; selectedAnswer: number }[]) => void;
 }
 
-export const Quiz: React.FC<QuizProps> = ({ questions, onComplete }) => {
+export const Quiz: React.FC<QuizProps> = ({ questions, fileId, onComplete }) => {
   const [currentIndex, setCurrentIndex] = React.useState(0);
   const [selectedAnswers, setSelectedAnswers] = React.useState<Record<string, number>>({});
   
@@ -38,6 +40,13 @@ export const Quiz: React.FC<QuizProps> = ({ questions, onComplete }) => {
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
+      {/* Study Timer */}
+      {fileId && (
+        <div className="fixed top-20 right-6 z-50">
+          <StudyTimer fileId={fileId} />
+        </div>
+      )}
+      
       {/* Quiz Header */}
       <div className="mb-8">
         <div className="flex justify-between items-end mb-4">

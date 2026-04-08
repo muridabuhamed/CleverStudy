@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { User, Trophy, FileText, Target, TrendingUp, Award, LogOut, Loader2, Flame, Calendar, Brain, Zap, BookOpen, Upload } from 'lucide-react';
+import { User, Trophy, FileText, Target, TrendingUp, Award, LogOut, Loader2, Flame, Calendar, Brain, Zap, BookOpen, Upload, Clock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { api } from '../services/api';
 
@@ -8,6 +8,7 @@ export const Profile: React.FC = () => {
   const { user, logout } = useAuth();
   const [stats, setStats] = useState<any>(null);
   const [recentAttempts, setRecentAttempts] = useState<any[]>([]);
+  const [totalStudyTime, setTotalStudyTime] = useState<number>(0);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -19,6 +20,10 @@ export const Profile: React.FC = () => {
       const data = await api.getUserStats();
       setStats(data.stats);
       setRecentAttempts(data.recentAttempts);
+      
+      // Load total study time
+      const studyTimeData = await api.getTotalStudyTime();
+      setTotalStudyTime(studyTimeData.total_seconds || 0);
     } catch (error) {
       console.error('Failed to load stats:', error);
     } finally {
@@ -38,6 +43,16 @@ export const Profile: React.FC = () => {
   }
 
   const avgScore = stats?.avg_score ? Math.round(stats.avg_score) : 0;
+  
+  // Format study time for display
+  const formatStudyTime = (seconds: number): string => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    }
+    return `${minutes}m`;
+  };
 
   // Calculate achievements
   const achievements = [
@@ -106,7 +121,7 @@ export const Profile: React.FC = () => {
       </motion.div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
         <StatCard
           icon={<FileText className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />}
           label="Files Studied"
@@ -124,6 +139,12 @@ export const Profile: React.FC = () => {
           label="Average Score"
           value={`${avgScore}%`}
           bgColor="bg-emerald-50 dark:bg-emerald-950/50"
+        />
+        <StatCard
+          icon={<Clock className="w-6 h-6 text-blue-600 dark:text-blue-400" />}
+          label="Study Time"
+          value={formatStudyTime(totalStudyTime)}
+          bgColor="bg-blue-50 dark:bg-blue-950/50"
         />
         <StatCard
           icon={<Award className="w-6 h-6 text-violet-600 dark:text-violet-400" />}

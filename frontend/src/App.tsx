@@ -135,6 +135,15 @@ export default function App() {
     setState('RESULTS');
   };
 
+  const getPageTransition = (currentState: AppState) => {
+    // Ultra-lightweight transitions - just opacity + minimal movement
+    return {
+      initial: { opacity: 0, y: 5 },
+      animate: { opacity: 1, y: 0 },
+      exit: { opacity: 0, y: -5 }
+    };
+  };
+
   const renderContent = () => {
     // Show authentication screens when explicitly requested
     if (!isAuthenticated && !loading && (state === 'LOGIN' || state === 'SIGNUP')) {
@@ -291,6 +300,7 @@ export default function App() {
       case 'TOPICS':
         return <Topics
           topics={topics}
+          fileId={currentFileId}
           onStartQuiz={() => setState('QUIZ')}
           onStartFlashcards={() => setState('FLASHCARDS')}
         />;
@@ -303,7 +313,7 @@ export default function App() {
           />
         ) : null;
       case 'QUIZ':
-        return <Quiz questions={questions} onComplete={handleQuizComplete} />;
+        return <Quiz questions={questions} fileId={currentFileId} onComplete={handleQuizComplete} />;
       case 'RESULTS':
         return quizResult ? (
           <Results
@@ -350,10 +360,13 @@ export default function App() {
           <AnimatePresence mode="wait">
             <motion.div
               key={state}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
+              initial={getPageTransition(state).initial}
+              animate={getPageTransition(state).animate}
+              exit={getPageTransition(state).exit}
+              transition={{ 
+                duration: 0.25,
+                ease: "easeOut"
+              }}
             >
               {renderContent()}
             </motion.div>
