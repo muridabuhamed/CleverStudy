@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { LogIn, UserPlus, Mail, Lock, User, Loader2, Sparkles, Book, BookOpen, FileText, Pencil, GraduationCap, Notebook } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 
 type Tab = 'login' | 'signup';
 
@@ -11,6 +12,7 @@ interface AuthProps {
 
 export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
   const [activeTab, setActiveTab] = useState<Tab>(defaultTab);
+  const toast = useToast();
 
   // Login state
   const [loginEmail, setLoginEmail] = useState('');
@@ -34,8 +36,11 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
     setLoginLoading(true);
     try {
       await login(loginEmail, loginPassword);
+      toast.success('Welcome Back!', `Successfully logged in as ${loginEmail}`);
     } catch (err: any) {
-      setLoginError(err.message || 'Failed to login. Please check your credentials.');
+      const errorMsg = err.message || 'Failed to login. Please check your credentials.';
+      setLoginError(errorMsg);
+      toast.error('Login Failed', errorMsg);
     } finally {
       setLoginLoading(false);
     }
@@ -45,18 +50,25 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
     e.preventDefault();
     setSignupError('');
     if (signupPassword.length < 6) {
-      setSignupError('Password must be at least 6 characters long');
+      const errorMsg = 'Password must be at least 6 characters long';
+      setSignupError(errorMsg);
+      toast.warning('Invalid Password', errorMsg);
       return;
     }
     if (signupPassword !== signupConfirm) {
-      setSignupError('Passwords do not match');
+      const errorMsg = 'Passwords do not match';
+      setSignupError(errorMsg);
+      toast.warning('Password Mismatch', errorMsg);
       return;
     }
     setSignupLoading(true);
     try {
       await signup(signupEmail, signupPassword, signupName);
+      toast.success('Account Created!', `Welcome ${signupName}! Your account has been created successfully.`);
     } catch (err: any) {
-      setSignupError(err.message || 'Failed to create account. Please try again.');
+      const errorMsg = err.message || 'Failed to create account. Please try again.';
+      setSignupError(errorMsg);
+      toast.error('Signup Failed', errorMsg);
     } finally {
       setSignupLoading(false);
     }

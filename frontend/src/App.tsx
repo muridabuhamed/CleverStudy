@@ -18,10 +18,13 @@ import { PdfViewer } from './components/PdfViewer';
 import { PdfViewerWithAnnotations } from './components/PdfViewerWithAnnotations';
 import { Chat } from './components/Chat';
 import { useAuth } from './contexts/AuthContext';
+import { useToast } from './contexts/ToastContext';
+import { ToastContainer } from './components/Toast';
 import { Book, BookOpen, FileText, Pencil, GraduationCap, Notebook } from 'lucide-react';
 
 export default function App() {
   const { isAuthenticated, loading } = useAuth();
+  const toast = useToast();
   const [state, setState] = React.useState<AppState>('HOME');
   const [uploadProgress, setUploadProgress] = React.useState(0);
   const [isUploading, setIsUploading] = React.useState(false);
@@ -77,12 +80,18 @@ export default function App() {
       setIsUploading(false);
       setState('PROCESSING');
 
+      // Show success toast
+      toast.success('Upload Complete!', `${file.name} uploaded successfully`);
+
       // Process document with AI
       const processResult = await api.processDocument(uploadResult.fileId);
 
       setTopics(processResult.topics);
       setQuestions(processResult.questions);
       setState('TOPICS');
+
+      // Show processing complete toast
+      toast.success('Analysis Complete!', `Found ${processResult.topics.length} topics and ${processResult.questions.length} questions`);
 
     } catch (err) {
       setIsUploading(false);
@@ -92,6 +101,9 @@ export default function App() {
       setError(errorMessage);
       setState('UPLOAD'); // Go back to the upload screen to show the error
       console.error('Upload/Process error:', err);
+      
+      // Show error toast
+      toast.error('Upload Failed', errorMessage);
     }
   };
 
@@ -337,6 +349,9 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100 transition-colors">
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismissToast} />
+      
       <Navbar currentState={state} onNavigate={setState} />
 
       <main className="relative flex-1 flex flex-col min-h-0">

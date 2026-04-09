@@ -4,6 +4,7 @@ import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, 
 import { api, FileRecord } from '../services/api';
 import { AppState, Question } from '../types';
 import { Modal } from '../components/Modal';
+import { useToast } from '../contexts/ToastContext';
 
 interface LibraryProps {
     onStudy: (file: FileRecord) => void;
@@ -11,6 +12,7 @@ interface LibraryProps {
 }
 
 export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
+    const toast = useToast();
     const [files, setFiles] = React.useState<FileRecord[]>([]);
     const [isLoading, setIsLoading] = React.useState(true);
     const [searchTerm, setSearchTerm] = React.useState('');
@@ -24,6 +26,7 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
             setFiles(data);
         } catch (error) {
             console.error('Failed to load files:', error);
+            toast.error('Failed to Load', 'Could not load your library. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -45,10 +48,11 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
         try {
             await api.deleteFile(fileToDelete.id);
             setFiles(files.filter(f => f.id !== fileToDelete.id));
+            toast.success('Document Deleted', `${fileToDelete.original_name} has been removed from your library`);
             setFileToDelete(null);
         } catch (error) {
             console.error('Failed to delete file:', error);
-            alert('Failed to delete file. Please try again.');
+            toast.error('Delete Failed', 'Could not delete the document. Please try again.');
         } finally {
             setIsDeleting(false);
         }
