@@ -33,9 +33,20 @@ def init_db():
             topics TEXT,
             questions TEXT,
             status TEXT DEFAULT 'pending',
+            cached_text TEXT,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
     ''')
+    
+    # Migration: Add cached_text column if it doesn't exist (for existing databases)
+    try:
+        cursor.execute("PRAGMA table_info(files)")
+        columns = [column[1] for column in cursor.fetchall()]
+        if 'cached_text' not in columns:
+            cursor.execute('ALTER TABLE files ADD COLUMN cached_text TEXT')
+            print("✓ Added cached_text column to files table")
+    except Exception as e:
+        print(f"Migration note: {e}")
     
     # Quiz attempts table
     cursor.execute('''
@@ -252,6 +263,31 @@ def get_file_by_id(file_id: str):
         file_dict['questions'] = json.loads(row['questions']) if row['questions'] else []
         return file_dict
     return None
+
+def get_cached_text(file_id: str) -> Optional[str]:
+    """Get cached PDF text from database"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('SELECT cached_text FROM files WHERE id = ?', (file_id,))
+    row = cursor.fetchone()
+    conn.close()
+    return row[0] if row and row[0] else None
+
+def set_cached_text(file_id: str, text: str):
+    """Save extracted PDF text to database for faster re-use"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('UPDATE files SET cached_text = ? WHERE id = ?', (text, file_id))
+    conn.commit()
+    conn.close()
+
+def update_file_status(file_id: str, status: str):
+    """Update file processing status"""
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+    cursor.execute('UPDATE files SET status = ? WHERE id = ?', (status, file_id))
+    conn.commit()
+    conn.close()
 
 # Quiz attempts
 def add_quiz_attempt(attempt_id: str, user_id: str, file_id: str, score: int, total: int):

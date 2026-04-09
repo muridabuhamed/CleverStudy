@@ -3,12 +3,13 @@ import uuid
 import shutil
 import traceback
 from typing import List, Optional
-from fastapi import APIRouter, HTTPException, Depends, UploadFile, File
+from fastapi import APIRouter, HTTPException, Depends, UploadFile, File, BackgroundTasks
 from pydantic import BaseModel
 from config import UPLOADS_DIR
 from database import (
     add_file_record, get_files_by_user, delete_file_record,
-    get_file_by_id, update_file_analysis
+    get_file_by_id, update_file_analysis, get_cached_text, 
+    set_cached_text, update_file_status
 )
 from services.pdf_service import extract_text_from_pdf
 from services.gemini_service import analyze_document, chat_with_document
@@ -66,10 +67,21 @@ async def process_document_endpoint(file_id: str, user_id: str = Depends(get_cur
         if not os.path.exists(file_path):
             raise HTTPException(status_code=404, detail="File not found on disk")
 
-        text = extract_text_from_pdf(file_path)
+        # Try to get cached text first (HUGE speedup!)
+        text = get_cached_text(file_id)
+        if not text:
+            # Extract and cache for next time
+            text = extract_text_from_pdf(file_path)
+            if text:
+                set_cached_text(file_id, text)
+        
         if not text:
             raise HTTPException(status_code=400, detail="Could not extract text from PDF")
 
+        # Update status to processing
+        update_file_status(file_id, 'processing')
+
+        # Analyze document with AI
         analysis = await analyze_document(text)
         update_file_analysis(file_id, analysis['topics'], analysis['questions'])
 
@@ -81,6 +93,7 @@ async def process_document_endpoint(file_id: str, user_id: str = Depends(get_cur
         if '429' in msg or 'quota' in msg.lower():
             raise HTTPException(status_code=429, detail="AI quota exceeded. Please wait a minute and try again.")
         print(f"Processing error: {e}")
+        update_file_status(file_id, 'error')
         raise HTTPException(status_code=500, detail=msg)
 
 
@@ -93,11 +106,18 @@ async def chat(file_id: str, request: ChatRequest, user_id: str = Depends(get_cu
         if file_record['user_id'] != user_id:
             raise HTTPException(status_code=403, detail="Access denied")
 
-        file_path = os.path.join(UPLOADS_DIR, file_id + '.pdf')
-        if not os.path.exists(file_path):
-            raise HTTPException(status_code=404, detail="File not found on disk")
-
-        text = extract_text_from_pdf(file_path)
+        # Try to get cached text first (HUGE speedup for chat!)
+        text = get_cached_text(file_id)
+        if not text:
+            # Extract and cache for next time
+            file_path = os.path.join(UPLOADS_DIR, file_id + '.pdf')
+            if not os.path.exists(file_path):
+                raise HTTPException(status_code=404, detail="File not found on disk")
+            
+            text = extract_text_from_pdf(file_path)
+            if text:
+                set_cached_text(file_id, text)
+        
         if not text:
             return {"response": "I'm sorry, I couldn't read the text from this PDF. It might be scanned or empty."}
 
