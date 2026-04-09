@@ -1,8 +1,9 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook, AlertTriangle, X } from 'lucide-react';
+import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook, AlertTriangle } from 'lucide-react';
 import { api, FileRecord } from '../services/api';
 import { AppState, Question } from '../types';
+import { Modal } from '../components/Modal';
 
 interface LibraryProps {
     onStudy: (file: FileRecord) => void;
@@ -31,17 +32,6 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
     React.useEffect(() => {
         loadFiles();
     }, []);
-
-    // Handle ESC key to close modal
-    React.useEffect(() => {
-        const handleEscape = (e: KeyboardEvent) => {
-            if (e.key === 'Escape' && fileToDelete && !isDeleting) {
-                setFileToDelete(null);
-            }
-        };
-        window.addEventListener('keydown', handleEscape);
-        return () => window.removeEventListener('keydown', handleEscape);
-    }, [fileToDelete, isDeleting]);
 
     const handleDelete = (e: React.MouseEvent, file: FileRecord) => {
         e.stopPropagation();
@@ -228,25 +218,36 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredFiles.map((file) => (
+                    {filteredFiles.map((file, index) => (
                         <motion.div
                             key={file.id}
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.05, duration: 0.4 }}
+                            whileHover={{ 
+                                y: -8,
+                                transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] }
+                            }}
                             onClick={() => onStudy(file)}
-                            className="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all cursor-pointer shadow-sm hover:shadow-xl"
+                            className="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-6 hover:border-indigo-500 dark:hover:border-indigo-400 transition-all cursor-pointer shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10"
                         >
                             <div className="flex items-start justify-between mb-4">
-                                <div className="bg-indigo-50 dark:bg-indigo-900/30 w-12 h-12 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                                <motion.div
+                                    whileHover={{ scale: 1.05, rotate: 5 }}
+                                    transition={{ type: 'spring', stiffness: 300 }}
+                                    className="bg-indigo-50 dark:bg-indigo-900/30 w-12 h-12 rounded-2xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-600 group-hover:text-white transition-colors"
+                                >
                                     <FileText className="w-6 h-6" />
-                                </div>
-                                <button
+                                </motion.div>
+                                <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
                                     onClick={(e) => handleDelete(e, file)}
                                     className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all"
                                     title="Delete document"
                                 >
                                     <Trash2 className="w-4 h-4" />
-                                </button>
+                                </motion.button>
                             </div>
 
                             <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-2 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
@@ -279,7 +280,12 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
 
                             <div className="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700 flex items-center justify-between text-sm font-semibold text-indigo-600 dark:text-indigo-400">
                                 <span>Resume Study</span>
-                                <ChevronRight className="w-4 h-4 translate-x-0 group-hover:translate-x-1 transition-transform" />
+                                <motion.div
+                                    animate={{ x: [0, 5, 0] }}
+                                    transition={{ duration: 1.5, repeat: Infinity }}
+                                >
+                                    <ChevronRight className="w-4 h-4" />
+                                </motion.div>
                             </div>
                         </motion.div>
                     ))}
@@ -287,98 +293,112 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
             )}
             </div>
 
-            {/* Delete Confirmation Modal */}
-            <AnimatePresence>
+            {/* Delete Confirmation Modal with Smooth Transitions */}
+            <Modal
+                isOpen={!!fileToDelete}
+                onClose={cancelDelete}
+                maxWidth="md"
+                showCloseButton={!isDeleting}
+                closeOnBackdropClick={!isDeleting}
+                closeOnEscape={!isDeleting}
+            >
                 {fileToDelete && (
                     <>
-                        {/* Backdrop */}
+                        {/* Warning Icon with bounce animation */}
                         <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={cancelDelete}
-                            className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{
+                                delay: 0.2,
+                                type: 'spring',
+                                stiffness: 200,
+                                damping: 15,
+                            }}
+                            className="mb-6"
                         >
-                            {/* Modal */}
+                            <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto">
+                                <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
+                            </div>
+                        </motion.div>
+
+                        {/* Content with stagger animation */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.25, duration: 0.3 }}
+                            className="text-center mb-8"
+                        >
+                            <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
+                                Delete Document?
+                            </h3>
+                            <p className="text-slate-600 dark:text-slate-400 mb-4">
+                                Are you sure you want to delete this document? This action cannot be undone.
+                            </p>
+
+                            {/* File info card with slide animation */}
                             <motion.div
-                                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                                animate={{ opacity: 1, scale: 1, y: 0 }}
-                                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                                onClick={(e) => e.stopPropagation()}
-                                className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-md w-full p-8 relative border border-slate-200 dark:border-slate-700"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.3, duration: 0.3 }}
+                                className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700"
                             >
-                                {/* Close button */}
-                                <button
-                                    onClick={cancelDelete}
-                                    disabled={isDeleting}
-                                    className="absolute top-4 right-4 p-2 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                    aria-label="Close"
-                                >
-                                    <X className="w-5 h-5" />
-                                </button>
-
-                                {/* Warning Icon */}
-                                <div className="mb-6">
-                                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mx-auto">
-                                        <AlertTriangle className="w-8 h-8 text-red-600 dark:text-red-400" />
+                                <div className="flex items-start gap-3">
+                                    <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
+                                    <div className="text-left flex-1 min-w-0">
+                                        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
+                                            {fileToDelete.original_name}
+                                        </p>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                            {fileToDelete.topics.length} topics • Created {new Date(fileToDelete.created_at).toLocaleDateString()}
+                                        </p>
                                     </div>
-                                </div>
-
-                                {/* Content */}
-                                <div className="text-center mb-8">
-                                    <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-3">
-                                        Delete Document?
-                                    </h3>
-                                    <p className="text-slate-600 dark:text-slate-400 mb-4">
-                                        Are you sure you want to delete this document? This action cannot be undone.
-                                    </p>
-                                    <div className="bg-slate-50 dark:bg-slate-900/50 rounded-2xl p-4 border border-slate-200 dark:border-slate-700">
-                                        <div className="flex items-start gap-3">
-                                            <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" />
-                                            <div className="text-left flex-1 min-w-0">
-                                                <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 truncate">
-                                                    {fileToDelete.original_name}
-                                                </p>
-                                                <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                                                    {fileToDelete.topics.length} topics • Created {new Date(fileToDelete.created_at).toLocaleDateString()}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Actions */}
-                                <div className="flex gap-3">
-                                    <button
-                                        onClick={cancelDelete}
-                                        disabled={isDeleting}
-                                        className="flex-1 px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
-                                        Cancel
-                                    </button>
-                                    <button
-                                        onClick={confirmDelete}
-                                        disabled={isDeleting}
-                                        className="flex-1 px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-xl font-semibold hover:bg-red-700 dark:hover:bg-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                                    >
-                                        {isDeleting ? (
-                                            <>
-                                                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                                Deleting...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <Trash2 className="w-4 h-4" />
-                                                Delete
-                                            </>
-                                        )}
-                                    </button>
                                 </div>
                             </motion.div>
                         </motion.div>
+
+                        {/* Actions with stagger */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.35, duration: 0.3 }}
+                            className="flex gap-3"
+                        >
+                            <motion.button
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={cancelDelete}
+                                disabled={isDeleting}
+                                className="flex-1 px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl font-semibold hover:bg-slate-200 dark:hover:bg-slate-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                Cancel
+                            </motion.button>
+                            <motion.button
+                                whileHover={{ scale: isDeleting ? 1 : 1.02 }}
+                                whileTap={{ scale: isDeleting ? 1 : 0.98 }}
+                                onClick={confirmDelete}
+                                disabled={isDeleting}
+                                className="flex-1 px-6 py-3 bg-red-600 dark:bg-red-500 text-white rounded-xl font-semibold hover:bg-red-700 dark:hover:bg-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            >
+                                {isDeleting ? (
+                                    <>
+                                        <motion.div
+                                            animate={{ rotate: 360 }}
+                                            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                                            className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                                        />
+                                        Deleting...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Trash2 className="w-4 h-4" />
+                                        Delete
+                                    </>
+                                )}
+                            </motion.button>
+                        </motion.div>
                     </>
                 )}
-            </AnimatePresence>
+            </Modal>
         </div>
     );
 };

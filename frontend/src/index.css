@@ -26,6 +26,13 @@
   .dark {
     color-scheme: dark;
   }
+
+  /* Hardware acceleration for smooth animations */
+  [class*="motion-"] {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
 }
 
 @layer utilities {
@@ -54,6 +61,23 @@
   /* Page transition container - optimized for performance */
   .page-transition {
     will-change: transform, opacity;
+  }
+
+  /* Modal backdrop animation support */
+  .backdrop-blur-smooth {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: backdrop-filter 0.3s ease-in-out;
+  }
+
+  /* Button press effect */
+  .btn-press {
+    @apply active:scale-95 transition-transform duration-100;
+  }
+
+  /* Card hover lift effect */
+  .card-lift {
+    @apply hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ease-out;
   }
 }
 
