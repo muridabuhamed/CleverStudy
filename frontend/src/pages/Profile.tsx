@@ -23,7 +23,7 @@ export const Profile: React.FC = () => {
       
       // Load total study time
       const studyTimeData = await api.getTotalStudyTime();
-      setTotalStudyTime(studyTimeData.total_seconds || 0);
+      setTotalStudyTime(studyTimeData.totalSeconds || 0);
     } catch (error) {
       console.error('Failed to load stats:', error);
     } finally {
