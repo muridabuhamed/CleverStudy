@@ -38,7 +38,17 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
       await login(loginEmail, loginPassword);
       toast.success('Welcome Back!', `Successfully logged in as ${loginEmail}`);
     } catch (err: any) {
-      const errorMsg = err.message || 'Failed to login. Please check your credentials.';
+      // Extract error message properly
+      let errorMsg = 'Failed to login. Please check your credentials.';
+      if (typeof err === 'string') {
+        errorMsg = err;
+      } else if (err?.message && typeof err.message === 'string') {
+        errorMsg = err.message;
+      } else if (err?.detail && typeof err.detail === 'string') {
+        errorMsg = err.detail;
+      } else if (err?.error && typeof err.error === 'string') {
+        errorMsg = err.error;
+      }
       setLoginError(errorMsg);
       toast.error('Login Failed', errorMsg);
     } finally {
@@ -49,12 +59,33 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setSignupError('');
-    if (signupPassword.length < 6) {
-      const errorMsg = 'Password must be at least 6 characters long';
+    
+    // Validate password strength (match backend requirements)
+    if (signupPassword.length < 8) {
+      const errorMsg = 'Password must be at least 8 characters long';
       setSignupError(errorMsg);
       toast.warning('Invalid Password', errorMsg);
       return;
     }
+    if (!/[A-Z]/.test(signupPassword)) {
+      const errorMsg = 'Password must contain at least one uppercase letter';
+      setSignupError(errorMsg);
+      toast.warning('Invalid Password', errorMsg);
+      return;
+    }
+    if (!/[a-z]/.test(signupPassword)) {
+      const errorMsg = 'Password must contain at least one lowercase letter';
+      setSignupError(errorMsg);
+      toast.warning('Invalid Password', errorMsg);
+      return;
+    }
+    if (!/\d/.test(signupPassword)) {
+      const errorMsg = 'Password must contain at least one digit';
+      setSignupError(errorMsg);
+      toast.warning('Invalid Password', errorMsg);
+      return;
+    }
+    
     if (signupPassword !== signupConfirm) {
       const errorMsg = 'Passwords do not match';
       setSignupError(errorMsg);
@@ -66,7 +97,17 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
       await signup(signupEmail, signupPassword, signupName);
       toast.success('Account Created!', `Welcome ${signupName}! Your account has been created successfully.`);
     } catch (err: any) {
-      const errorMsg = err.message || 'Failed to create account. Please try again.';
+      // Extract error message properly
+      let errorMsg = 'Failed to create account. Please try again.';
+      if (typeof err === 'string') {
+        errorMsg = err;
+      } else if (err?.message && typeof err.message === 'string') {
+        errorMsg = err.message;
+      } else if (err?.detail && typeof err.detail === 'string') {
+        errorMsg = err.detail;
+      } else if (err?.error && typeof err.error === 'string') {
+        errorMsg = err.error;
+      }
       setSignupError(errorMsg);
       toast.error('Signup Failed', errorMsg);
     } finally {
@@ -754,13 +795,16 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                           onChange={(e) => setSignupPassword(e.target.value)}
                           placeholder="••••••••"
                           required
-                          minLength={6}
+                          minLength={8}
                           className="w-full pl-12 pr-4 py-3.5 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-xl focus:outline-none focus:border-indigo-500 dark:focus:border-indigo-400 transition-all text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500"
                           style={{ boxShadow: 'none' }}
                           onFocus={(e) => e.target.style.boxShadow = '0 0 0 3px rgba(124,58,237,0.15)'}
                           onBlur={(e) => e.target.style.boxShadow = 'none'}
                         />
                       </div>
+                      <p className="mt-1.5 text-xs text-slate-500 dark:text-slate-400">
+                        8+ chars, uppercase, lowercase, and a digit
+                      </p>
                     </motion.div>
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}

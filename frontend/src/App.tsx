@@ -1,26 +1,31 @@
 import React from 'react';
-import { Navbar } from './components/Navbar';
-import { Home } from './pages/Home';
-import { Auth } from './pages/Auth';
-import { FileUpload } from './components/FileUpload';
-import { Processing } from './pages/Processing';
-import { Quiz } from './pages/Quiz';
-import { Results } from './pages/Results';
-import { Topics } from './pages/Topics';
-import { Library } from './pages/Library';
-import { Profile } from './pages/Profile';
-import { Flashcards } from './pages/Flashcards';
-import { AppState, Question, QuizResult } from './types';
+import { Navbar } from './shared/components/Navbar';
+import { Home } from './features/library/pages/Home';
+import { Auth } from './features/auth/pages/Auth';
+import { FileUpload } from './shared/components/FileUpload';
+import { Processing } from './features/library/pages/Processing';
+import { Quiz } from './features/quiz/pages/Quiz';
+import { Results } from './features/quiz/pages/Results';
+import { Topics } from './features/library/pages/Topics';
+import { Library } from './features/library/pages/Library';
+import { Profile } from './features/profile/pages/Profile';
+import { Flashcards } from './features/flashcards/pages/Flashcards';
+import { Question, QuizResult } from './features/quiz/types';
+import { FileRecord } from './features/library/services/libraryApi';
 import { motion, AnimatePresence } from 'motion/react';
-import { api, ApiError, FileRecord } from './services/api';
-import { ERROR_MESSAGES, APP_CONFIG } from './config/constants';
-import { PdfViewer } from './components/PdfViewer';
-import { PdfViewerWithAnnotations } from './components/PdfViewerWithAnnotations';
-import { Chat } from './components/Chat';
-import { useAuth } from './contexts/AuthContext';
-import { useToast } from './contexts/ToastContext';
-import { ToastContainer } from './components/Toast';
+import { libraryApi } from './features/library/services/libraryApi';
+import { quizApi } from './features/quiz/services/quizApi';
+import { ApiError } from './shared/utils/httpClient';
+import { ERROR_MESSAGES, APP_CONFIG } from './shared/config/constants';
+import { PdfViewer } from './shared/components/PdfViewer';
+import { PdfViewerWithAnnotations } from './shared/components/PdfViewerWithAnnotations';
+import { Chat } from './shared/components/Chat';
+import { useAuth } from './shared/contexts/AuthContext';
+import { useToast } from './shared/contexts/ToastContext';
+import { ToastContainer } from './shared/components/Toast';
 import { Book, BookOpen, FileText, Pencil, GraduationCap, Notebook } from 'lucide-react';
+
+export type AppState = 'HOME' | 'UPLOAD' | 'PROCESSING' | 'TOPICS' | 'QUIZ' | 'RESULTS' | 'LIBRARY' | 'FLASHCARDS' | 'PDF_VIEW' | 'PROFILE' | 'LOGIN' | 'SIGNUP';
 
 export default function App() {
   const { isAuthenticated, loading } = useAuth();
@@ -64,27 +69,44 @@ export default function App() {
     setError(null);
     setUploadProgress(0);
 
+    let uploadResult: { fileId: string; filename?: string };
+
     try {
       // Upload file with real progress tracking
-      const uploadResult = await api.uploadFile(file, (progress) => {
+      uploadResult = await libraryApi.uploadFile(file, (progress) => {
         setUploadProgress(progress);
       });
 
+      setIsUploading(false);
+    } catch (err) {
+      setIsUploading(false);
+      const errorMessage = err instanceof ApiError
+        ? err.message
+        : ERROR_MESSAGES.UPLOAD_FAILED;
+      setError(errorMessage);
+      setState('UPLOAD');
+      console.error('Upload error:', err);
+      toast.error('Upload Failed', errorMessage);
+      return;
+    }
+
+    try {
+      const storedFilename = uploadResult.filename || `${uploadResult.fileId}.pdf`;
+
       const apiUrl = new URL(APP_CONFIG.API_BASE_URL);
       const baseUrl = `${apiUrl.protocol}//${apiUrl.host}`;
-      const url = `${baseUrl}/uploads/${uploadResult.fileId}.pdf`;
+      const url = `${baseUrl}/uploads/${storedFilename}`;
 
       setPdfUrl(url);
       setCurrentFileId(uploadResult.fileId);
       setCurrentFileName(file.name);
-      setIsUploading(false);
       setState('PROCESSING');
 
       // Show success toast
       toast.success('Upload Complete!', `${file.name} uploaded successfully`);
 
       // Process document with AI
-      const processResult = await api.processDocument(uploadResult.fileId);
+      const processResult = await libraryApi.processDocument(uploadResult.fileId);
 
       setTopics(processResult.topics);
       setQuestions(processResult.questions);
@@ -94,23 +116,22 @@ export default function App() {
       toast.success('Analysis Complete!', `Found ${processResult.topics.length} topics and ${processResult.questions.length} questions`);
 
     } catch (err) {
-      setIsUploading(false);
       const errorMessage = err instanceof ApiError
         ? err.message
-        : ERROR_MESSAGES.UPLOAD_FAILED;
-      setError(errorMessage);
+        : ERROR_MESSAGES.PROCESSING_FAILED;
+      setError(`File uploaded successfully, but analysis failed: ${errorMessage}`);
       setState('UPLOAD'); // Go back to the upload screen to show the error
-      console.error('Upload/Process error:', err);
+      console.error('Process error:', err);
       
       // Show error toast
-      toast.error('Upload Failed', errorMessage);
+      toast.error('Analysis Failed', errorMessage);
     }
   };
 
   const handleStudyFile = (file: FileRecord) => {
     const apiUrl = new URL(APP_CONFIG.API_BASE_URL);
     const baseUrl = `${apiUrl.protocol}//${apiUrl.host}`;
-    setPdfUrl(`${baseUrl}/uploads/${file.id}.pdf`);
+    setPdfUrl(`${baseUrl}/uploads/${file.filename}`);
     setTopics(file.topics);
     setQuestions(file.questions);
     setCurrentFileId(file.id);
@@ -138,7 +159,7 @@ export default function App() {
     // Save quiz attempt to database
     if (currentFileId) {
       try {
-        await api.submitQuizAttempt(currentFileId, score, questions.length);
+        await quizApi.submitQuizAttempt(currentFileId, score, questions.length);
       } catch (error) {
         console.error('Failed to save quiz attempt:', error);
       }

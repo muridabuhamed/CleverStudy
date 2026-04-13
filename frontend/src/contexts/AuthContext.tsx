@@ -49,14 +49,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    const response = await api.login(email, password);
+    const normalizedEmail = email.trim().toLowerCase();
+    const response = await api.login(normalizedEmail, password);
     setToken(response.token);
     setUser(response.user);
     localStorage.setItem('auth_token', response.token);
   };
 
   const signup = async (email: string, password: string, name: string) => {
-    const response = await api.signup(email, password, name);
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedName = name.trim();
+    const response = await api.signup(normalizedEmail, password, normalizedName);
     setToken(response.token);
     setUser(response.user);
     localStorage.setItem('auth_token', response.token);

@@ -23,15 +23,32 @@ async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     const errorText = await response.text();
     console.error(`API Error [${response.status}]:`, errorText);
-    const error = JSON.parse(errorText || '{"error": "Unknown error"}');
+    let error: any = { error: 'Unknown error' };
+    try {
+      error = JSON.parse(errorText || '{"error": "Unknown error"}');
+    } catch {
+      error = { detail: errorText || ERROR_MESSAGES.NETWORK_ERROR };
+    }
     throw new ApiError(response.status, error.detail || error.error || ERROR_MESSAGES.NETWORK_ERROR);
   }
-  return response.json();
+
+  // Some successful endpoints (e.g. DELETE 204) have no response body.
+  if (response.status === 204) {
+    return {} as T;
+  }
+
+  const text = await response.text();
+  if (!text) {
+    return {} as T;
+  }
+
+  return JSON.parse(text) as T;
 }
 
 export interface UploadResponse {
   success: boolean;
   fileId: string;
+  filename?: string;
   message: string;
 }
 
@@ -106,7 +123,7 @@ export const api = {
         } else {
           try {
             const error = JSON.parse(xhr.responseText);
-            reject(new ApiError(xhr.status, error.error || ERROR_MESSAGES.UPLOAD_FAILED));
+            reject(new ApiError(xhr.status, error.detail || error.error || ERROR_MESSAGES.UPLOAD_FAILED));
           } catch {
             reject(new ApiError(xhr.status, ERROR_MESSAGES.UPLOAD_FAILED));
           }

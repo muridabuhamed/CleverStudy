@@ -16,11 +16,37 @@ def init_db():
         CREATE TABLE IF NOT EXISTS users (
             id TEXT PRIMARY KEY,
             email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
+            password_hash TEXT NOT NULL,
             name TEXT NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    
+    # Migration: Rename password column to password_hash if it exists
+    try:
+        cursor.execute("PRAGMA table_info(users)")
+        columns = [column[1] for column in cursor.fetchall()]
+        if 'password' in columns and 'password_hash' not in columns:
+            # SQLite doesn't support RENAME COLUMN directly in all versions
+            # So we need to recreate the table
+            cursor.execute('''
+                CREATE TABLE users_new (
+                    id TEXT PRIMARY KEY,
+                    email TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    name TEXT NOT NULL,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                )
+            ''')
+            cursor.execute('''
+                INSERT INTO users_new (id, email, password_hash, name, created_at)
+                SELECT id, email, password, name, created_at FROM users
+            ''')
+            cursor.execute('DROP TABLE users')
+            cursor.execute('ALTER TABLE users_new RENAME TO users')
+            print("✓ Migrated users table: password → password_hash")
+    except Exception as e:
+        print(f"Migration note: {e}")
     
     # Files table with user_id
     cursor.execute('''
@@ -199,7 +225,7 @@ def create_user(user_id: str, email: str, password_hash: str, name: str):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     cursor.execute(
-        'INSERT INTO users (id, email, password, name) VALUES (?, ?, ?, ?)',
+        'INSERT INTO users (id, email, password_hash, name) VALUES (?, ?, ?, ?)',
         (user_id, email, password_hash, name)
     )
     conn.commit()
