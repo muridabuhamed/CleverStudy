@@ -22,3 +22,25 @@ uploads/
 
 # SQLite database
 data/
+
+# Test files and responses
+test_*.json
+test_*.py
+login_response.json
+*_response.json
+
+# Internal documentation
+*_GUIDE.md
+*_COMPLETE.md
+*_PLAN.md
+*_SUMMARY.md
+*_REVIEW.md
+*_STRUCTURE.md
+ALL_FILES_MANAGED.md
+
+# Backup files
+*.backup
+*.bak
+
+# Example directory
+EXAMPLES/
