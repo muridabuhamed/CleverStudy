@@ -14,6 +14,7 @@ import {
 import { flashcardsApi } from '../services/flashcardsApi';
 import { FlashcardStats } from '../types';
 import { StudyTimer } from '../../../shared/components/StudyTimer';
+import { extractErrorMessage } from '@/shared/utils/errors';
 
 interface FlashcardsProps {
   fileId: string;
@@ -48,7 +49,7 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
       }
     } catch (err: any) {
       console.error('Failed to load flashcards:', err);
-      setError(err.message || 'Failed to load flashcards');
+      setError(extractErrorMessage(err));
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +63,7 @@ export const Flashcards: React.FC<FlashcardsProps> = ({ fileId, fileName, onBack
       await loadFlashcards();
     } catch (err: any) {
       console.error('Failed to generate flashcards:', err);
-      setError(err.message || 'Failed to generate flashcards');
+      setError(extractErrorMessage(err));
     } finally {
       setIsGenerating(false);
     }

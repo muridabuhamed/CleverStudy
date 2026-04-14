@@ -6,6 +6,7 @@ import type { FileRecord } from '../services/libraryApi';
 import { AppState, Question } from '../types';
 import { Modal } from '@/shared/components/Modal';
 import { useToast } from '@/shared/contexts/ToastContext';
+import { extractErrorMessage } from '@/shared/utils/errors';
 
 interface LibraryProps {
     onStudy: (file: FileRecord) => void;
@@ -27,7 +28,8 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
             setFiles(data);
         } catch (error) {
             console.error('Failed to load files:', error);
-            toast.error('Failed to Load', 'Could not load your library. Please try again.');
+            const errorMsg = extractErrorMessage(error);
+            toast.error('Failed to Load', errorMsg);
         } finally {
             setIsLoading(false);
         }
@@ -53,7 +55,8 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
             setFileToDelete(null);
         } catch (error) {
             console.error('Failed to delete file:', error);
-            toast.error('Delete Failed', 'Could not delete the document. Please try again.');
+            const errorMsg = extractErrorMessage(error);
+            toast.error('Delete Failed', errorMsg);
         } finally {
             setIsDeleting(false);
         }

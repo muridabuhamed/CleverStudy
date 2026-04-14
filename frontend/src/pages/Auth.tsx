@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { LogIn, UserPlus, Mail, Lock, User, Loader2, Sparkles, Book, BookOpen, FileText, Pencil, GraduationCap, Notebook } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
+import { extractErrorMessage } from '../shared/utils/errors';
 
 type Tab = 'login' | 'signup';
 
@@ -38,17 +39,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
       await login(loginEmail, loginPassword);
       toast.success('Welcome Back!', `Successfully logged in as ${loginEmail}`);
     } catch (err: any) {
-      // Extract error message properly
-      let errorMsg = 'Failed to login. Please check your credentials.';
-      if (typeof err === 'string') {
-        errorMsg = err;
-      } else if (err?.message && typeof err.message === 'string') {
-        errorMsg = err.message;
-      } else if (err?.detail && typeof err.detail === 'string') {
-        errorMsg = err.detail;
-      } else if (err?.error && typeof err.error === 'string') {
-        errorMsg = err.error;
-      }
+      const errorMsg = extractErrorMessage(err);
       setLoginError(errorMsg);
       toast.error('Login Failed', errorMsg);
     } finally {
@@ -97,17 +88,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
       await signup(signupEmail, signupPassword, signupName);
       toast.success('Account Created!', `Welcome ${signupName}! Your account has been created successfully.`);
     } catch (err: any) {
-      // Extract error message properly
-      let errorMsg = 'Failed to create account. Please try again.';
-      if (typeof err === 'string') {
-        errorMsg = err;
-      } else if (err?.message && typeof err.message === 'string') {
-        errorMsg = err.message;
-      } else if (err?.detail && typeof err.detail === 'string') {
-        errorMsg = err.detail;
-      } else if (err?.error && typeof err.error === 'string') {
-        errorMsg = err.error;
-      }
+      const errorMsg = extractErrorMessage(err);
       setSignupError(errorMsg);
       toast.error('Signup Failed', errorMsg);
     } finally {

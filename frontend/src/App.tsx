@@ -16,6 +16,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { libraryApi } from './features/library/services/libraryApi';
 import { quizApi } from './features/quiz/services/quizApi';
 import { ApiError } from './shared/utils/httpClient';
+import { extractErrorMessage } from './shared/utils/errors';
 import { ERROR_MESSAGES, APP_CONFIG } from './shared/config/constants';
 import { PdfViewer } from './shared/components/PdfViewer';
 import { PdfViewerWithAnnotations } from './shared/components/PdfViewerWithAnnotations';
@@ -40,6 +41,13 @@ export default function App() {
   const [currentFileId, setCurrentFileId] = React.useState<string | null>(null);
   const [currentFileName, setCurrentFileName] = React.useState<string>('');
   const [pdfUrl, setPdfUrl] = React.useState<string | null>(null);
+
+  // Navigate to HOME after successful login or signup
+  React.useEffect(() => {
+    if (!loading && isAuthenticated && (state === 'LOGIN' || state === 'SIGNUP')) {
+      setState('HOME');
+    }
+  }, [isAuthenticated, loading, state]);
 
   // Clear all state when user logs out
   React.useEffect(() => {
@@ -80,9 +88,7 @@ export default function App() {
       setIsUploading(false);
     } catch (err) {
       setIsUploading(false);
-      const errorMessage = err instanceof ApiError
-        ? err.message
-        : ERROR_MESSAGES.UPLOAD_FAILED;
+      const errorMessage = extractErrorMessage(err);
       setError(errorMessage);
       setState('UPLOAD');
       console.error('Upload error:', err);
@@ -116,9 +122,7 @@ export default function App() {
       toast.success('Analysis Complete!', `Found ${processResult.topics.length} topics and ${processResult.questions.length} questions`);
 
     } catch (err) {
-      const errorMessage = err instanceof ApiError
-        ? err.message
-        : ERROR_MESSAGES.PROCESSING_FAILED;
+      const errorMessage = extractErrorMessage(err);
       setError(`File uploaded successfully, but analysis failed: ${errorMessage}`);
       setState('UPLOAD'); // Go back to the upload screen to show the error
       console.error('Process error:', err);

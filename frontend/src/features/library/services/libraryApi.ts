@@ -25,9 +25,7 @@ export interface ProcessResponse {
 
 export const libraryApi = {
   async uploadFile(file: File, onProgress?: (progress: number) => void): Promise<UploadResponse> {
-    const formData = new FormData();
-    formData.append('file', file);
-    return httpClient.uploadFile('/upload', formData, onProgress);
+    return httpClient.uploadFile('/upload', file, onProgress);
   },
 
   async processDocument(fileId: string): Promise<ProcessResponse> {
