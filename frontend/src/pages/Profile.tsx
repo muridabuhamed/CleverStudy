@@ -17,15 +17,26 @@ export const Profile: React.FC = () => {
 
   const loadStats = async () => {
     try {
+      console.log('📊 Loading stats...');
+      const token = localStorage.getItem('auth_token');
+      console.log('🔐 Token exists:', !!token);
+      
       const data = await api.getUserStats();
+      console.log('✅ Stats received:', data);
       setStats(data.stats);
       setRecentAttempts(data.recentAttempts);
       
       // Load total study time
       const studyTimeData = await api.getTotalStudyTime();
+      console.log('⏱️ Study time:', studyTimeData);
       setTotalStudyTime(studyTimeData.totalSeconds || 0);
-    } catch (error) {
-      console.error('Failed to load stats:', error);
+    } catch (error: any) {
+      console.error('❌ Failed to load stats:', error);
+      console.error('Error details:', {
+        message: error.message,
+        statusCode: error.statusCode,
+        stack: error.stack
+      });
     } finally {
       setIsLoading(false);
     }
