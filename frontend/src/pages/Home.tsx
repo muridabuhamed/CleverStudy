@@ -213,6 +213,11 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           transition={{ delay: 0.3, duration: 0.6 }}
           className="mt-48"
         >
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+              Live Demo
+            </h2>
+          </div>
           <AnimatedDemo />
         </motion.div>
 
@@ -282,8 +287,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
               transition={{ delay: 0.8 }}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/30 to-purple-500/30 border-2 border-violet-400/50 text-violet-200 text-sm font-bold mb-6 backdrop-blur-xl shadow-xl"
             >
-              <Zap className="w-4 h-4" />
-              Powerful Features
+              Live Demo
             </motion.span>
             <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
               Everything You Need{' '}
