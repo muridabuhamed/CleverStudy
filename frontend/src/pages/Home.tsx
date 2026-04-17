@@ -181,7 +181,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 </div>
               </motion.div>
 
-              {/* Card 4 - AI Chat Assistant */}
+              {/* Card 4 - AI Chat Assistant */} // New card with chat bubbles animation
               <motion.div
                 animate={{ y: [0, -8, 0] }}
                 transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 2 }}
