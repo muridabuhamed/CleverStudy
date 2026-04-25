@@ -35,9 +35,41 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
     e.preventDefault();
     setLoginError('');
     setLoginLoading(true);
+    
+    // Input validation
+    const trimmedEmail = loginEmail.trim();
+    const trimmedPassword = loginPassword;
+    
+    // Check for empty fields
+    if (!trimmedEmail) {
+      const errorMsg = 'Email is required';
+      setLoginError(errorMsg);
+      toast.error('Login Failed', errorMsg);
+      setLoginLoading(false);
+      return;
+    }
+    
+    if (!trimmedPassword) {
+      const errorMsg = 'Password is required';
+      setLoginError(errorMsg);
+      toast.error('Login Failed', errorMsg);
+      setLoginLoading(false);
+      return;
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(trimmedEmail)) {
+      const errorMsg = 'Please enter a valid email address';
+      setLoginError(errorMsg);
+      toast.error('Login Failed', errorMsg);
+      setLoginLoading(false);
+      return;
+    }
+    
     try {
-      await login(loginEmail, loginPassword);
-      toast.success('Welcome Back!', `Successfully logged in as ${loginEmail}`);
+      await login(trimmedEmail, trimmedPassword);
+      toast.success('Welcome Back!', `Successfully logged in as ${trimmedEmail}`);
     } catch (err: any) {
       const errorMsg = extractErrorMessage(err);
       setLoginError(errorMsg);
