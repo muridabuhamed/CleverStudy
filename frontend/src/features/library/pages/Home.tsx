@@ -208,22 +208,24 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
         {/* Animated Demo Section */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3, duration: 0.6 }}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.65, ease: 'easeOut' }}
           className="mt-48"
         >
           <AnimatedDemo />
         </motion.div>
 
         {/* How It Works Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="mt-32 mb-16"
-        >
-          <div className="text-center mb-16">
+        <div className="mt-32 mb-16">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-sm font-semibold mb-4 backdrop-blur-sm">
               Simple Process
             </span>
@@ -233,120 +235,54 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             <p className="text-lg text-slate-300 max-w-2xl mx-auto">
               Get started in three simple steps and transform your study materials into interactive learning
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-            {/* Connection line - aligned with icon centers, hidden on mobile */}
             <div className="hidden md:block absolute top-8 left-[16.67%] right-[16.67%] h-0.5 bg-gradient-to-r from-indigo-500/30 via-violet-500/30 to-purple-500/30 -z-10"></div>
-            
-            <StepCard
-              step={1}
-              icon={<Upload className="w-8 h-8 text-white" />}
-              title="Upload Your Material"
-              description="Drop your PDF lecture notes, textbooks, or study guides. We support all major document formats."
-              color="bg-indigo-600"
-              delay={0.5}
-            />
-            
-            <StepCard
-              step={2}
-              icon={<Brain className="w-8 h-8 text-white" />}
-              title="AI Analysis"
-              description="Our advanced AI extracts key concepts, topics, and generates smart questions tailored to your content."
-              color="bg-violet-600"
-              delay={0.6}
-            />
-            
-            <StepCard
-              step={3}
-              icon={<CheckCircle className="w-8 h-8 text-white" />}
-              title="Practice & Master"
-              description="Take quizzes, review flashcards, and track your progress to ace your exams with confidence."
-              color="bg-purple-600"
-              delay={0.7}
-            />
+            <StepCard step={1} icon={<Upload className="w-8 h-8 text-white" />} title="Upload Your Material" description="Drop your PDF lecture notes, textbooks, or study guides. We support all major document formats." color="bg-indigo-600" delay={0} />
+            <StepCard step={2} icon={<Brain className="w-8 h-8 text-white" />} title="AI Analysis" description="Our advanced AI extracts key concepts, topics, and generates smart questions tailored to your content." color="bg-violet-600" delay={0.15} />
+            <StepCard step={3} icon={<CheckCircle className="w-8 h-8 text-white" />} title="Practice & Master" description="Take quizzes, review flashcards, and track your progress to ace your exams with confidence." color="bg-purple-600" delay={0.3} />
           </div>
-        </motion.div>
+        </div>
 
         {/* Powerful Features Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8, duration: 0.6 }}
-          className="mt-32 mb-20"
-        >
-          <div className="text-center mb-16">
-            <motion.span 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.8 }}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/30 to-purple-500/30 border-2 border-violet-400/50 text-violet-200 text-sm font-bold mb-6 backdrop-blur-xl shadow-xl"
-            >
+        <div className="mt-32 mb-20">
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/30 to-purple-500/30 border-2 border-violet-400/50 text-violet-200 text-sm font-bold mb-6 backdrop-blur-xl shadow-xl">
               <Zap className="w-4 h-4" />
               Powerful Features
-            </motion.span>
+            </span>
             <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
               Everything You Need{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">
-                to Excel
-              </span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">to Excel</span>
             </h2>
             <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
               Comprehensive AI-powered tools designed to transform your learning experience
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard
-              icon={<FileText className="w-7 h-7" />}
-              title="Upload PDFs & Documents"
-              description="Drag and drop your lecture notes, textbooks, and research papers. Support for PDF, DOCX, and TXT formats."
-              gradient="from-blue-500 to-indigo-600"
-              delay={0.9}
-            />
-            <FeatureCard
-              icon={<MessageSquare className="w-7 h-7" />}
-              title="AI Chat with Your Notes"
-              description="Ask questions about your materials and get instant, intelligent explanations powered by advanced AI."
-              gradient="from-emerald-500 to-teal-600"
-              delay={1.0}
-            />
-            <FeatureCard
-              icon={<ListChecks className="w-7 h-7" />}
-              title="Automatic Quiz Generation"
-              description="AI analyzes your content and creates smart multiple-choice questions targeting key concepts."
-              gradient="from-purple-500 to-violet-600"
-              delay={1.1}
-            />
-            <FeatureCard
-              icon={<CreditCard className="w-7 h-7" />}
-              title="Smart Flashcards"
-              description="Automatically generate flashcards from important terms with spaced repetition algorithms."
-              gradient="from-pink-500 to-rose-600"
-              delay={1.2}
-            />
-            <FeatureCard
-              icon={<BarChart3 className="w-7 h-7" />}
-              title="Progress Analytics"
-              description="Track your quiz scores, monitor learning patterns, and identify areas for improvement."
-              gradient="from-amber-500 to-orange-600"
-              delay={1.3}
-            />
-            <FeatureCard
-              icon={<BookOpenCheck className="w-7 h-7" />}
-              title="Topic Summaries"
-              description="Get clear, concise summaries of complex topics to accelerate your review and understanding."
-              gradient="from-indigo-500 to-purple-600"
-              delay={1.4}
-            />
+            <FeatureCard icon={<FileText className="w-7 h-7" />} title="Upload PDFs & Documents" description="Drag and drop your lecture notes, textbooks, and research papers. Support for PDF, DOCX, and TXT formats." gradient="from-blue-500 to-indigo-600" delay={0} />
+            <FeatureCard icon={<MessageSquare className="w-7 h-7" />} title="AI Chat with Your Notes" description="Ask questions about your materials and get instant, intelligent explanations powered by advanced AI." gradient="from-emerald-500 to-teal-600" delay={0.1} />
+            <FeatureCard icon={<ListChecks className="w-7 h-7" />} title="Automatic Quiz Generation" description="AI analyzes your content and creates smart multiple-choice questions targeting key concepts." gradient="from-purple-500 to-violet-600" delay={0.2} />
+            <FeatureCard icon={<CreditCard className="w-7 h-7" />} title="Smart Flashcards" description="Automatically generate flashcards from important terms with spaced repetition algorithms." gradient="from-pink-500 to-rose-600" delay={0.3} />
+            <FeatureCard icon={<BarChart3 className="w-7 h-7" />} title="Progress Analytics" description="Track your quiz scores, monitor learning patterns, and identify areas for improvement." gradient="from-amber-500 to-orange-600" delay={0.4} />
+            <FeatureCard icon={<BookOpenCheck className="w-7 h-7" />} title="Topic Summaries" description="Get clear, concise summaries of complex topics to accelerate your review and understanding." gradient="from-indigo-500 to-purple-600" delay={0.5} />
           </div>
-        </motion.div>
+        </div>
 
         {/* Premium Footer */}
         <motion.footer
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
           className="relative mt-32 pt-16 pb-8 border-t border-white/10"
         >
           {/* Footer Gradient Orbs */}
@@ -420,10 +356,11 @@ const FeatureCard = ({ icon, title, description, gradient, delay }: {
   delay?: number;
 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 30, scale: 0.95 }}
-    animate={{ opacity: 1, y: 0, scale: 1 }}
-    transition={{ delay: delay || 0, duration: 0.5, type: "spring" }}
-    whileHover={{ y: -10, scale: 1.03 }}
+    initial={{ opacity: 0, y: 32 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.15 }}
+    transition={{ delay: delay ?? 0, duration: 0.55, ease: 'easeOut' }}
+    whileHover={{ y: -8, scale: 1.02 }}
     className="group relative p-8 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-xl hover:shadow-2xl hover:border-white/30 transition-all overflow-hidden cursor-pointer"
   >
     {/* Animated Gradient Background on Hover */}
@@ -485,8 +422,9 @@ const StepCard = ({ step, icon, title, description, color, delay }: {
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay, duration: 0.5 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ delay, duration: 0.55, ease: 'easeOut' }}
     className="relative"
   >
     {/* Icon Badge with Step Number */}
