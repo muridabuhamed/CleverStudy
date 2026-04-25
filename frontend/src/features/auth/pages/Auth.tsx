@@ -23,6 +23,18 @@ const inputError  = 'border-red-400 dark:border-red-500 focus:border-red-500 foc
 // ─── Email validator ───────────────────────────────────────────────────────
 const isValidEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
+// ─── Password strength (0-4) ───────────────────────────────────────────────
+function pwStrength(p: string): number {
+  let s = 0;
+  if (p.length >= 8) s++;
+  if (/[A-Z]/.test(p)) s++;
+  if (/[a-z]/.test(p)) s++;
+  if (/\d/.test(p)) s++;
+  return s;
+}
+const strengthLabel = ['Too weak', 'Weak', 'Fair', 'Good', 'Strong'];
+const strengthColor = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-emerald-400', 'bg-emerald-600'];
+
 export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
   const [activeTab, setActiveTab] = useState<Tab>(defaultTab);
   const toast = useToast();
@@ -55,6 +67,10 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
   const [showConfirmPw, setShowConfirmPw]     = useState(false);
   const [signupError, setSignupError]         = useState('');
   const [signupLoading, setSignupLoading]     = useState(false);
+  const [signupFieldErrors, setSignupFieldErrors] = useState<{
+    name?: string; email?: string; password?: string; confirm?: string;
+  }>({});
+  const clearSF = (k: string) => setSignupFieldErrors(p => ({ ...p, [k]: undefined }));
 
   // ── Login handler ──────────────────────────────────────────────────────
   const handleLogin = async (e: React.FormEvent) => {
@@ -91,22 +107,24 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
     e.preventDefault();
     setSignupError('');
 
-    if (signupPassword.length < 8)           { setSignupError('Password must be at least 8 characters.'); return; }
-    if (!/[A-Z]/.test(signupPassword))        { setSignupError('Password must contain at least one uppercase letter.'); return; }
-    if (!/[a-z]/.test(signupPassword))        { setSignupError('Password must contain at least one lowercase letter.'); return; }
-    if (!/\d/.test(signupPassword))           { setSignupError('Password must contain at least one digit.'); return; }
-    if (signupPassword !== signupConfirm)     { setSignupError('Passwords do not match.'); return; }
+    // Per-field validation
+    const fe: typeof signupFieldErrors = {};
+    if (!signupName.trim())          fe.name     = 'Full name is required.';
+    if (!signupEmail.trim())         fe.email    = 'Email address is required.';
+    else if (!isValidEmail(signupEmail)) fe.email = 'Enter a valid email address.';
+    if (!signupPassword)             fe.password = 'Password is required.';
+    else if (pwStrength(signupPassword) < 4) fe.password = 'Password does not meet all requirements.';
+    if (!signupConfirm)              fe.confirm  = 'Please confirm your password.';
+    else if (signupConfirm !== signupPassword) fe.confirm = 'Passwords do not match.';
+    if (Object.keys(fe).length) { setSignupFieldErrors(fe); return; }
+    setSignupFieldErrors({});
 
     setSignupLoading(true);
     try {
       await signup(signupEmail.trim().toLowerCase(), signupPassword, signupName.trim());
       toast.success('Account created!', `Welcome, ${signupName.trim()}!`);
-    } catch (err: any) {
-      const msg =
-        (typeof err === 'string' ? err : null) ??
-        err?.message ?? err?.detail ?? err?.error ??
-        'Could not create account. Please try again.';
-      setSignupError(msg);
+    } catch {
+      setSignupError('Unable to create account. Please check your details and try again.');
     } finally {
       setSignupLoading(false);
     }
@@ -386,12 +404,17 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                         <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                         <input
                           id="signup-name" type="text" autoComplete="name"
-                          value={signupName} onChange={e => setSignupName(e.target.value)}
-                          placeholder="Jane Doe" required
-                          className={fieldCls(false)}
+                          value={signupName}
+                          onChange={e => { setSignupName(e.target.value); clearSF('name'); }}
+                          onBlur={() => { if (!signupName.trim()) setSignupFieldErrors(p => ({ ...p, name: 'Full name is required.' })); }}
+                          placeholder="Jane Doe"
+                          className={fieldCls(!!signupFieldErrors.name)}
                           disabled={signupLoading}
                         />
                       </div>
+                      {signupFieldErrors.name && (
+                        <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{signupFieldErrors.name}</p>
+                      )}
                     </div>
 
                     {/* Email */}
@@ -401,15 +424,23 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                         <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
                         <input
                           id="signup-email" type="email" autoComplete="email"
-                          value={signupEmail} onChange={e => setSignupEmail(e.target.value)}
-                          placeholder="you@example.com" required
-                          className={fieldCls(false)}
+                          value={signupEmail}
+                          onChange={e => { setSignupEmail(e.target.value); clearSF('email'); }}
+                          onBlur={() => {
+                            if (!signupEmail.trim()) setSignupFieldErrors(p => ({ ...p, email: 'Email address is required.' }));
+                            else if (!isValidEmail(signupEmail)) setSignupFieldErrors(p => ({ ...p, email: 'Enter a valid email address.' }));
+                          }}
+                          placeholder="you@example.com"
+                          className={fieldCls(!!signupFieldErrors.email)}
                           disabled={signupLoading}
                         />
                       </div>
+                      {signupFieldErrors.email && (
+                        <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{signupFieldErrors.email}</p>
+                      )}
                     </div>
 
-                    {/* Password */}
+                    {/* Password + strength meter */}
                     <div>
                       <label htmlFor="signup-password" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
                       <div className="relative">
@@ -417,18 +448,43 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                         <input
                           id="signup-password" type={showSignupPw ? 'text' : 'password'}
                           autoComplete="new-password"
-                          value={signupPassword} onChange={e => setSignupPassword(e.target.value)}
-                          placeholder="••••••••" required minLength={8}
-                          className={`${fieldCls(false)} pr-10`}
+                          value={signupPassword}
+                          onChange={e => {
+                            const v = e.target.value;
+                            setSignupPassword(v);
+                            // Clear error only once all requirements are met
+                            if (pwStrength(v) === 4) clearSF('password');
+                          }}
+                          placeholder="••••••••"
+                          className={`${fieldCls(!!signupFieldErrors.password)} pr-10`}
                           disabled={signupLoading}
                         />
-                        <button type="button" aria-label={showSignupPw ? 'Hide' : 'Show'}
+                        <button type="button" aria-label={showSignupPw ? 'Hide password' : 'Show password'}
                           onClick={() => setShowSignupPw(v => !v)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
                           {showSignupPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                       </div>
-                      <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">8+ characters · uppercase · lowercase · digit</p>
+                      {/* Strength meter */}
+                      {signupPassword.length > 0 && (() => {
+                        const s = pwStrength(signupPassword);
+                        return (
+                          <div className="mt-2 space-y-1">
+                            <div className="flex gap-1">
+                              {[1,2,3,4].map(i => (
+                                <div key={i} className={`h-1 flex-1 rounded-full transition-all duration-300 ${i <= s ? strengthColor[s] : 'bg-slate-200 dark:bg-slate-600'}`} />
+                              ))}
+                            </div>
+                            <p className={`text-xs font-medium ${s <= 1 ? 'text-red-500' : s === 2 ? 'text-yellow-500' : s === 3 ? 'text-emerald-500' : 'text-emerald-600'}`}>
+                              {strengthLabel[s]}
+                            </p>
+                          </div>
+                        );
+                      })()}
+                      {!signupPassword && <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">8+ characters · uppercase · lowercase · digit</p>}
+                      {signupFieldErrors.password && (
+                        <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{signupFieldErrors.password}</p>
+                      )}
                     </div>
 
                     {/* Confirm password */}
@@ -439,21 +495,31 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
                         <input
                           id="signup-confirm" type={showConfirmPw ? 'text' : 'password'}
                           autoComplete="new-password"
-                          value={signupConfirm} onChange={e => setSignupConfirm(e.target.value)}
-                          placeholder="••••••••" required
-                          className={`${fieldCls(signupConfirm.length > 0 && signupConfirm !== signupPassword)} pr-10`}
+                          value={signupConfirm}
+                          onChange={e => {
+                            const v = e.target.value;
+                            setSignupConfirm(v);
+                            // Clear mismatch error as soon as values match
+                            if (v === signupPassword) clearSF('confirm');
+                          }}
+                          onBlur={() => {
+                            if (signupConfirm && signupConfirm !== signupPassword)
+                              setSignupFieldErrors(p => ({ ...p, confirm: 'Passwords do not match.' }));
+                            if (!signupConfirm)
+                              setSignupFieldErrors(p => ({ ...p, confirm: 'Please confirm your password.' }));
+                          }}
+                          placeholder="••••••••"
+                          className={`${fieldCls(!!signupFieldErrors.confirm)} pr-10`}
                           disabled={signupLoading}
                         />
-                        <button type="button" aria-label={showConfirmPw ? 'Hide' : 'Show'}
+                        <button type="button" aria-label={showConfirmPw ? 'Hide password' : 'Show password'}
                           onClick={() => setShowConfirmPw(v => !v)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
                           {showConfirmPw ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                         </button>
                       </div>
-                      {signupConfirm.length > 0 && signupConfirm !== signupPassword && (
-                        <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1">
-                          <AlertCircle className="w-3 h-3" />Passwords do not match.
-                        </p>
+                      {signupFieldErrors.confirm && (
+                        <p className="mt-1 text-xs text-red-600 dark:text-red-400 flex items-center gap-1"><AlertCircle className="w-3 h-3" />{signupFieldErrors.confirm}</p>
                       )}
                     </div>
 
