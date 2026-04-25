@@ -308,10 +308,15 @@ export const httpClient = new HttpClient({
     // Log all errors
     console.error('❌ API Error:', error);
     
-    // Auto-logout on 401
+    // Auto-logout on 401, but ONLY if there was an active session.
+    // A failed login attempt also returns 401 — we must not redirect in that case,
+    // as no session/token was ever created.
     if (error.statusCode === 401) {
+      const hadSession = !!localStorage.getItem('auth_token');
       localStorage.removeItem('auth_token');
-      window.location.href = '/';
+      if (hadSession) {
+        window.location.href = '/';
+      }
     }
   },
 });
