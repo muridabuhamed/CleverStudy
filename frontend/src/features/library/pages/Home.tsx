@@ -245,36 +245,220 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           </div>
         </div>
 
-        {/* Powerful Features Section */}
+        {/* ── FEATURES SECTION ── */}
         <div className="mt-32 mb-20">
+
+          {/* Section heading */}
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-20"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <span className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-violet-500/30 to-purple-500/30 border-2 border-violet-400/50 text-violet-200 text-sm font-bold mb-6 backdrop-blur-xl shadow-xl">
-              <Zap className="w-4 h-4" />
-              Powerful Features
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/15 text-slate-300 text-xs font-semibold mb-5 uppercase tracking-widest">
+              <Zap className="w-3.5 h-3.5" /> Features
             </span>
-            <h2 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight">
-              Everything You Need{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">to Excel</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">
+              Everything you need to study smarter
             </h2>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-              Comprehensive AI-powered tools designed to transform your learning experience
+            <p className="text-slate-400 max-w-xl mx-auto">
+              From upload to mastery — CleverStudy handles every step.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <FeatureCard icon={<FileText className="w-7 h-7" />} title="Upload PDFs & Documents" description="Drag and drop your lecture notes, textbooks, and research papers. Support for PDF, DOCX, and TXT formats." gradient="from-blue-500 to-indigo-600" delay={0} />
-            <FeatureCard icon={<MessageSquare className="w-7 h-7" />} title="AI Chat with Your Notes" description="Ask questions about your materials and get instant, intelligent explanations powered by advanced AI." gradient="from-emerald-500 to-teal-600" delay={0.1} />
-            <FeatureCard icon={<ListChecks className="w-7 h-7" />} title="Automatic Quiz Generation" description="AI analyzes your content and creates smart multiple-choice questions targeting key concepts." gradient="from-purple-500 to-violet-600" delay={0.2} />
-            <FeatureCard icon={<CreditCard className="w-7 h-7" />} title="Smart Flashcards" description="Automatically generate flashcards from important terms with spaced repetition algorithms." gradient="from-pink-500 to-rose-600" delay={0.3} />
-            <FeatureCard icon={<BarChart3 className="w-7 h-7" />} title="Progress Analytics" description="Track your quiz scores, monitor learning patterns, and identify areas for improvement." gradient="from-amber-500 to-orange-600" delay={0.4} />
-            <FeatureCard icon={<BookOpenCheck className="w-7 h-7" />} title="Topic Summaries" description="Get clear, concise summaries of complex topics to accelerate your review and understanding." gradient="from-indigo-500 to-purple-600" delay={0.5} />
+          {/* ── 3 PRIMARY FEATURES (alternating) ── */}
+          <div className="space-y-24">
+
+            {/* Feature 1 — Upload */}
+            <motion.div
+              className="grid md:grid-cols-2 gap-12 items-center"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+              <div>
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/8 border border-white/10 mb-6">
+                  <FileText className="w-5 h-5 text-indigo-300" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Upload PDFs and start instantly</h3>
+                <p className="text-slate-400 leading-relaxed mb-6">
+                  Drop any lecture note or textbook. CleverStudy processes it in seconds.
+                </p>
+                <ul className="space-y-2">
+                  {['PDF, DOCX, and TXT formats', 'Drag-and-drop or file picker', 'Processes in under 30 seconds'].map(t => (
+                    <li key={t} className="flex items-center gap-2.5 text-sm text-slate-300">
+                      <CheckCircle className="w-4 h-4 text-indigo-400 flex-shrink-0" />{t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* Mockup */}
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
+                  <span className="ml-2 text-xs text-slate-500">Upload</span>
+                </div>
+                <div className="border-2 border-dashed border-white/15 rounded-xl p-10 flex flex-col items-center gap-3">
+                  <Upload className="w-8 h-8 text-indigo-400" />
+                  <p className="text-sm text-slate-300 font-medium">Drop your PDF here</p>
+                  <p className="text-xs text-slate-500">or click to browse files</p>
+                  <span className="mt-2 px-4 py-1.5 rounded-lg bg-indigo-600/80 text-white text-xs font-semibold">Choose File</span>
+                </div>
+                <div className="mt-4 p-3 rounded-xl bg-white/5 border border-white/8 flex items-center gap-3">
+                  <FileText className="w-5 h-5 text-indigo-300 flex-shrink-0" />
+                  <div className="flex-1">
+                    <div className="text-xs text-white font-medium mb-1">lecture_notes.pdf</div>
+                    <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                      <motion.div className="h-full bg-indigo-500 rounded-full" initial={{ width: '0%' }} whileInView={{ width: '100%' }} viewport={{ once: true }} transition={{ duration: 1.5, delay: 0.3 }} />
+                    </div>
+                  </div>
+                  <CheckCircle className="w-4 h-4 text-emerald-400" />
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Feature 2 — AI Chat (reversed) */}
+            <motion.div
+              className="grid md:grid-cols-2 gap-12 items-center"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+              {/* Mockup first on desktop */}
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur md:order-first order-last">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
+                  <span className="ml-2 text-xs text-slate-500">AI Chat</span>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-end">
+                    <span className="bg-indigo-600/80 text-white text-xs px-3 py-2 rounded-2xl rounded-tr-sm max-w-[75%]">Explain photosynthesis in simple terms</span>
+                  </div>
+                  <div className="flex justify-start">
+                    <span className="bg-white/8 border border-white/10 text-slate-200 text-xs px-3 py-2 rounded-2xl rounded-tl-sm max-w-[80%]">Photosynthesis is how plants convert sunlight into energy. They use CO₂ and water to produce glucose and oxygen.</span>
+                  </div>
+                  <div className="flex justify-end">
+                    <span className="bg-indigo-600/80 text-white text-xs px-3 py-2 rounded-2xl rounded-tr-sm max-w-[75%]">What are the two main stages?</span>
+                  </div>
+                  <div className="flex justify-start">
+                    <span className="bg-white/8 border border-white/10 text-slate-200 text-xs px-3 py-2 rounded-2xl rounded-tl-sm max-w-[80%]">The light-dependent reactions and the Calvin cycle (light-independent reactions).</span>
+                  </div>
+                  <div className="flex gap-2 mt-2">
+                    <input readOnly placeholder="Ask anything about your notes…" className="flex-1 bg-white/6 border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-400 outline-none" />
+                    <span className="px-3 py-2 rounded-xl bg-indigo-600/80 text-white text-xs font-semibold">Send</span>
+                  </div>
+                </div>
+              </div>
+              <div className="md:order-last">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/8 border border-white/10 mb-6">
+                  <MessageSquare className="w-5 h-5 text-emerald-300" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Chat directly with your notes</h3>
+                <p className="text-slate-400 leading-relaxed mb-6">
+                  Ask anything about your material and get an instant, accurate answer.
+                </p>
+                <ul className="space-y-2">
+                  {['Context-aware AI responses', 'Cite exact page references', 'Works across all your documents'].map(t => (
+                    <li key={t} className="flex items-center gap-2.5 text-sm text-slate-300">
+                      <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />{t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+
+            {/* Feature 3 — Quizzes */}
+            <motion.div
+              className="grid md:grid-cols-2 gap-12 items-center"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+            >
+              <div>
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-white/8 border border-white/10 mb-6">
+                  <ListChecks className="w-5 h-5 text-violet-300" />
+                </div>
+                <h3 className="text-2xl md:text-3xl font-bold text-white mb-4">Auto-generated quizzes and flashcards</h3>
+                <p className="text-slate-400 leading-relaxed mb-6">
+                  Generates targeted questions from your content — so you study what matters.
+                </p>
+                <ul className="space-y-2">
+                  {['Multiple-choice questions from your PDF', 'Spaced-repetition flashcards', 'Track scores and progress over time'].map(t => (
+                    <li key={t} className="flex items-center gap-2.5 text-sm text-slate-300">
+                      <CheckCircle className="w-4 h-4 text-violet-400 flex-shrink-0" />{t}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              {/* Mockup */}
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-400/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-400/70" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-green-400/70" />
+                  <span className="ml-2 text-xs text-slate-500">Quiz</span>
+                </div>
+                <p className="text-sm text-white font-semibold mb-4">What is the primary function of mitochondria?</p>
+                <div className="space-y-2">
+                  {[
+                    { label: 'A', text: 'Protein synthesis', correct: false },
+                    { label: 'B', text: 'Energy production (ATP)', correct: true },
+                    { label: 'C', text: 'DNA replication', correct: false },
+                    { label: 'D', text: 'Cell division', correct: false },
+                  ].map(opt => (
+                    <div key={opt.label} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border text-xs font-medium ${
+                      opt.correct
+                        ? 'bg-emerald-500/15 border-emerald-500/40 text-emerald-200'
+                        : 'bg-white/4 border-white/8 text-slate-300'
+                    }`}>
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
+                        opt.correct ? 'bg-emerald-500 text-white' : 'bg-white/10 text-slate-400'
+                      }`}>{opt.label}</span>
+                      {opt.text}
+                      {opt.correct && <CheckCircle className="w-3.5 h-3.5 text-emerald-400 ml-auto" />}
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 flex items-center justify-between text-xs text-slate-500">
+                  <span>Question 3 of 12</span>
+                  <span className="text-emerald-400 font-semibold">2 / 2 correct</span>
+                </div>
+              </div>
+            </motion.div>
           </div>
+
+          {/* ── SECONDARY FEATURES — inline stat row ── */}
+          <motion.div
+            className="mt-24 pt-12 border-t border-white/8"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.55, ease: 'easeOut' }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/8">
+              {[
+                { icon: <CreditCard className="w-4 h-4 text-pink-300" />, title: 'Smart Flashcards', desc: 'Key terms, auto-generated with spaced repetition.' },
+                { icon: <BarChart3 className="w-4 h-4 text-amber-300" />, title: 'Progress Analytics', desc: 'See your scores improve session over session.' },
+                { icon: <BookOpenCheck className="w-4 h-4 text-sky-300" />, title: 'Topic Summaries', desc: 'AI-written summaries ready to review in minutes.' },
+              ].map(({ icon, title, desc }, i) => (
+                <div key={title} className={`flex flex-col gap-2 py-6 ${i === 0 ? 'md:pr-10' : i === 1 ? 'md:px-10' : 'md:pl-10'}`}>
+                  <div className="flex items-center gap-2 text-white text-sm font-semibold">
+                    {icon}{title}
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">{desc}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
         </div>
 
         {/* ── PRICING SECTION ── */}
@@ -499,69 +683,6 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
   );
 };
 
-const FeatureCard = ({ icon, title, description, gradient, delay }: { 
-  icon: React.ReactNode; 
-  title: string; 
-  description: string; 
-  gradient: string;
-  delay?: number;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 32 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.15 }}
-    transition={{ delay: delay ?? 0, duration: 0.55, ease: 'easeOut' }}
-    whileHover={{ y: -8, scale: 1.02 }}
-    className="group relative p-8 bg-white/5 backdrop-blur-xl rounded-3xl border border-white/10 shadow-xl hover:shadow-2xl hover:border-white/30 transition-all overflow-hidden cursor-pointer"
-  >
-    {/* Animated Gradient Background on Hover */}
-    <motion.div 
-      className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`}
-      animate={{ 
-        backgroundPosition: ['0% 0%', '100% 100%'],
-      }}
-      transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
-    />
-    
-    {/* Glow Effect */}
-    <div className={`absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-20 rounded-full blur-3xl transition-all duration-500`} />
-    
-    <div className="relative">
-      <motion.div 
-        whileHover={{ rotate: [0, -10, 10, -10, 0], scale: 1.15 }}
-        transition={{ duration: 0.6 }}
-        className={`w-14 h-14 bg-gradient-to-br ${gradient} rounded-2xl flex items-center justify-center mb-6 shadow-lg text-white`}
-      >
-        {icon}
-      </motion.div>
-      
-      <h3 className="text-xl font-bold text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-300 group-hover:to-purple-300 transition-all">
-        {title}
-      </h3>
-      
-      <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
-        {description}
-      </p>
-
-      {/* Arrow indicator */}
-      <motion.div
-        initial={{ opacity: 0, x: -10 }}
-        whileHover={{ opacity: 1, x: 0 }}
-        className="absolute bottom-6 right-6 text-white/50 group-hover:text-white/80"
-      >
-        <ArrowRight className="w-5 h-5" />
-      </motion.div>
-    </div>
-
-    {/* Shine Effect */}
-    <motion.div
-      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent opacity-0 group-hover:opacity-100"
-      animate={{ x: ['-100%', '100%'] }}
-      transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2 }}
-      style={{ transform: 'skewX(-20deg)' }}
-    />
-  </motion.div>
-);
 
 const StepCard = ({ step, icon, title, description, color, delay }: { 
   step: number; 
