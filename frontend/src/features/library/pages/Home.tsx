@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles, Shield, Zap, Upload, Brain, CheckCircle, FileText, MessageSquare, ListChecks, CreditCard, BarChart3, BookOpenCheck, Highlighter } from 'lucide-react';
-import { AppState } from '../types';
+import { ArrowRight, Sparkles, Shield, Zap, Upload, Brain, CheckCircle, FileText, MessageSquare, ListChecks, CreditCard, BarChart3, BookOpenCheck, Highlighter, Star } from 'lucide-react';
+import { AppState } from '@/App';
 import { useAuth } from '@/shared/contexts/AuthContext';
 import { AnimatedDemo } from '@/shared/components/AnimatedDemo';
 
@@ -275,6 +275,157 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             <FeatureCard icon={<BarChart3 className="w-7 h-7" />} title="Progress Analytics" description="Track your quiz scores, monitor learning patterns, and identify areas for improvement." gradient="from-amber-500 to-orange-600" delay={0.4} />
             <FeatureCard icon={<BookOpenCheck className="w-7 h-7" />} title="Topic Summaries" description="Get clear, concise summaries of complex topics to accelerate your review and understanding." gradient="from-indigo-500 to-purple-600" delay={0.5} />
           </div>
+        </div>
+
+        {/* ── PRICING SECTION ── */}
+        <div className="mt-32 mb-20">
+          {/* Heading */}
+          <motion.div
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+          >
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-sm font-semibold mb-4 backdrop-blur-sm">
+              <Star className="w-4 h-4" /> Pricing
+            </span>
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+              Simple, Transparent Pricing
+            </h2>
+            <p className="text-lg text-slate-300 max-w-2xl mx-auto">
+              Choose the plan that fits your study needs
+            </p>
+          </motion.div>
+
+          {/* Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+
+            {/* Free */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: 0 }}
+              whileHover={{ y: -6 }}
+              className="relative flex flex-col p-10 bg-white/[0.04] backdrop-blur-xl rounded-3xl border border-white/10 hover:border-white/20 transition-all duration-300"
+            >
+              <div className="mb-8">
+                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3">Free</p>
+                <div className="flex items-end gap-1.5 mb-1">
+                  <span className="text-5xl font-black text-white leading-none">$0</span>
+                  <span className="text-slate-400 text-sm mb-1.5">/month</span>
+                </div>
+                <p className="text-slate-500 text-xs mt-2">Perfect to get started</p>
+              </div>
+              <div className="h-px bg-white/8 mb-8" />
+              <ul className="space-y-3.5 flex-1">
+                {['Upload limited PDFs', 'Basic AI analysis', 'Limited quizzes', 'Standard support'].map(f => (
+                  <li key={f} className="flex items-center gap-2.5 text-slate-300 text-sm">
+                    <CheckCircle className="w-4 h-4 text-slate-400 flex-shrink-0" />{f}
+                  </li>
+                ))}
+              </ul>
+              <motion.button
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                onClick={() => onNavigate('SIGNUP')}
+                className="mt-10 w-full py-3.5 rounded-xl border border-white/15 text-slate-300 text-sm font-semibold hover:border-white/30 hover:text-white transition-all duration-200"
+              >
+                Get Started Free
+              </motion.button>
+            </motion.div>
+
+            {/* Pro — highlighted */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.1 }}
+              whileHover={{ y: -6 }}
+              className="relative flex flex-col p-10 rounded-3xl border-2 border-indigo-500/80 scale-[1.05] z-10 transition-all duration-300"
+              style={{ background: 'linear-gradient(150deg,rgba(79,70,229,0.22) 0%,rgba(109,40,217,0.18) 100%)' }}
+            >
+              {/* Most Popular badge */}
+              <div className="absolute -top-[17px] left-1/2 -translate-x-1/2 whitespace-nowrap">
+                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wide text-white"
+                  style={{ background: 'linear-gradient(135deg,#6366f1,#7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.5)' }}>
+                  <Star className="w-3 h-3 fill-white" /> Most Popular
+                </span>
+              </div>
+              {/* Subtle glow */}
+              <div className="absolute inset-0 rounded-3xl bg-indigo-600/5 blur-2xl -z-10 pointer-events-none" />
+
+              <div className="mb-8">
+                <p className="text-xs font-semibold uppercase tracking-widest text-indigo-300 mb-3">Pro</p>
+                <div className="flex items-end gap-1.5 mb-1">
+                  <span className="text-5xl font-black text-white leading-none">$9.99</span>
+                  <span className="text-indigo-200 text-sm mb-1.5">/month</span>
+                </div>
+                <p className="text-indigo-300/70 text-xs mt-2">Best for serious students</p>
+              </div>
+              <div className="h-px bg-indigo-400/20 mb-8" />
+              <ul className="space-y-3.5 flex-1">
+                {['Unlimited PDF uploads', 'Full AI analysis', 'Unlimited quizzes & flashcards', 'AI Chat Assistant', 'Progress analytics'].map(f => (
+                  <li key={f} className="flex items-center gap-2.5 text-slate-200 text-sm">
+                    <CheckCircle className="w-4 h-4 text-indigo-400 flex-shrink-0" />{f}
+                  </li>
+                ))}
+              </ul>
+              <motion.button
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                onClick={() => onNavigate('SIGNUP')}
+                className="mt-10 w-full py-3.5 rounded-xl text-white text-sm font-bold transition-all duration-200"
+                style={{ background: 'linear-gradient(135deg,#6366f1,#7c3aed)', boxShadow: '0 6px 24px rgba(99,102,241,0.45)' }}
+              >
+                Upgrade to Pro
+              </motion.button>
+            </motion.div>
+
+            {/* Premium */}
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.2 }}
+              whileHover={{ y: -6 }}
+              className="relative flex flex-col p-10 bg-white/[0.04] backdrop-blur-xl rounded-3xl border border-white/10 hover:border-violet-400/30 transition-all duration-300"
+            >
+              <div className="mb-8">
+                <p className="text-xs font-semibold uppercase tracking-widest text-violet-300 mb-3">Premium</p>
+                <div className="flex items-end gap-1.5 mb-1">
+                  <span className="text-5xl font-black text-white leading-none">$19.99</span>
+                  <span className="text-slate-400 text-sm mb-1.5">/month</span>
+                </div>
+                <p className="text-slate-500 text-xs mt-2">For power users & teams</p>
+              </div>
+              <div className="h-px bg-white/8 mb-8" />
+              <ul className="space-y-3.5 flex-1">
+                {['Everything in Pro', 'Faster AI responses', 'Advanced analytics', 'Priority support'].map(f => (
+                  <li key={f} className="flex items-center gap-2.5 text-slate-300 text-sm">
+                    <CheckCircle className="w-4 h-4 text-violet-400 flex-shrink-0" />{f}
+                  </li>
+                ))}
+              </ul>
+              <motion.button
+                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                onClick={() => onNavigate('SIGNUP')}
+                className="mt-10 w-full py-3.5 rounded-xl border border-violet-400/30 text-slate-300 text-sm font-semibold hover:border-violet-400/60 hover:text-white hover:bg-violet-500/10 transition-all duration-200"
+              >
+                Go Premium
+              </motion.button>
+            </motion.div>
+          </div>
+
+          {/* Trust line */}
+          <motion.p
+            className="text-center text-slate-400 text-sm mt-8"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+          >
+            No credit card required. Cancel anytime.
+          </motion.p>
         </div>
 
         {/* Premium Footer */}

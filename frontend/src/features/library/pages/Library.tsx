@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook, AlertTriangle } from 'lucide-react';
 import { libraryApi } from '../services/libraryApi';
 import type { FileRecord } from '../services/libraryApi';
-import { AppState, Question } from '../types';
+import { AppState } from '@/App';
 import { Modal } from '@/shared/components/Modal';
 import { useToast } from '@/shared/contexts/ToastContext';
 import { extractErrorMessage } from '@/shared/utils/errors';
