@@ -1,15 +1,12 @@
 import { httpClient } from '@/shared/utils/httpClient';
 
-export interface UserStats {
-  totalStudyTime: number;
-  filesUploaded: number;
-  quizzesCompleted: number;
-  flashcardsReviewed: number;
-  averageScore: number;
+export interface UserStatsResponse {
+  stats: any;
+  recentAttempts: any[];
 }
 
 export const profileApi = {
-  async getUserStats(): Promise<UserStats> {
+  async getUserStats(): Promise<UserStatsResponse> {
     return httpClient.get('/user/stats');
   },
 };

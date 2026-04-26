@@ -1,6 +1,7 @@
 export const APP_CONFIG = {
   MAX_FILE_SIZE: 10 * 1024 * 1024, // 10MB
   SUPPORTED_FORMATS: ['.pdf'],
+  DEBUG: import.meta.env ? import.meta.env.DEV : true,
   // @ts-ignore
   API_BASE_URL: (typeof import.meta !== 'undefined' && import.meta.env ? import.meta.env.VITE_API_URL : process.env.VITE_API_URL) || 'http://localhost:8000/api',
 } as const;

@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Highlighter, Search, Trash2 
+  Highlighter, Search, Trash2, MessageSquare 
 } from 'lucide-react';
-import { Highlight } from '../types';
-import { api } from '../services/api';
+import { Highlight, annotationsApi } from '@/features/annotations';
 
 interface AnnotationSidebarProps {
   fileId: string;
@@ -28,7 +27,7 @@ export const AnnotationSidebar: React.FC<AnnotationSidebarProps> = ({
   // Load highlights
   const loadAnnotations = React.useCallback(async () => {
     try {
-      const data = await api.getAllAnnotations(fileId);
+      const data = await annotationsApi.getAllAnnotations(fileId);
       setHighlights(data.highlights);
     } catch (error) {
       console.error('Failed to load highlights:', error);
@@ -67,7 +66,7 @@ export const AnnotationSidebar: React.FC<AnnotationSidebarProps> = ({
 
     setIsSearching(true);
     try {
-      const data = await api.searchAnnotations(query, fileId);
+      const data = await annotationsApi.searchAnnotations(query, fileId);
       setSearchResults(data.results);
     } catch (error) {
       console.error('Search failed:', error);
@@ -79,7 +78,7 @@ export const AnnotationSidebar: React.FC<AnnotationSidebarProps> = ({
   // Delete highlight
   const handleDeleteHighlight = async (id: string) => {
     try {
-      await api.deleteHighlight(id);
+      await annotationsApi.deleteHighlight(id);
       setHighlights(highlights.filter(h => h.id !== id));
     } catch (error) {
       console.error('Failed to delete highlight:', error);

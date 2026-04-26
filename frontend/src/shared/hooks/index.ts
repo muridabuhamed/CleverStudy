@@ -4,7 +4,7 @@
  * Reusable hooks for common patterns across features.
  */
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ApiError, getErrorMessage } from '../utils/httpClient';
 
 /**

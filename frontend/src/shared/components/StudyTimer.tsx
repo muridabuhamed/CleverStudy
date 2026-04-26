@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'motion/react';
 import { Clock, Play, Pause, RotateCcw, X, Minimize2, Maximize2, GripVertical } from 'lucide-react';
-import { api } from '../services/api';
+import { studyApi } from '@/features/profile/services/studyApi';
 
 interface StudyTimerProps {
   fileId: string;

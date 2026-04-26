@@ -115,7 +115,7 @@ export class HttpClient {
       const errorText = await response.text();
       console.error(`API Error [${response.status}]:`, errorText);
       
-      let errorMessage = ERROR_MESSAGES.NETWORK_ERROR;
+      let errorMessage: string = ERROR_MESSAGES.NETWORK_ERROR;
       let errorDetails: any = null;
 
       try {

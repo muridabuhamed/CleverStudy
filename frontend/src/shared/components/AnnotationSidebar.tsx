@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  Highlighter, Search, Trash2 
+  Highlighter, Search, Trash2, MessageSquare 
 } from 'lucide-react';
-import { Highlight } from '../types';
-import { api } from '../services/api';
+import { Highlight, annotationsApi } from '@/features/annotations';
 
 interface AnnotationSidebarProps {
   fileId: string;

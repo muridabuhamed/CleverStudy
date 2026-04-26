@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { BookOpen, MessageSquare, CheckCircle, Zap, TrendingUp } from 'lucide-react';
-import { api } from '../services/api';
+
 
 interface ProgressStats {
   filesStudied: number;

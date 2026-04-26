@@ -1,6 +1,6 @@
 import React from 'react';
 import { Loader2, Highlighter, Sparkles } from 'lucide-react';
-import { api } from '../services/api';
+import { annotationsApi } from '@/features/annotations';
 import { AnnotationSidebar } from './AnnotationSidebar';
 
 interface PdfViewerWithAnnotationsProps {

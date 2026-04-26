@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { BookOpen, Upload, Layout, CheckCircle, HelpCircle, BarChart2, User } from 'lucide-react';
-import { AppState } from '../types';
+import { AppState } from '../types/globalTypes';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
 
