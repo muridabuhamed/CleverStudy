@@ -96,9 +96,26 @@ def init_db():
             question TEXT NOT NULL,
             answer TEXT NOT NULL,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            next_review_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            interval INTEGER DEFAULT 0,
+            ease_factor FLOAT DEFAULT 2.5,
+            repetitions INTEGER DEFAULT 0,
             FOREIGN KEY (file_id) REFERENCES files(id)
         )
     ''')
+    
+    # Migration: Add SRS columns to flashcards table if they don't exist
+    try:
+        cursor.execute("PRAGMA table_info(flashcards)")
+        columns = [column[1] for column in cursor.fetchall()]
+        if 'next_review_at' not in columns:
+            cursor.execute('ALTER TABLE flashcards ADD COLUMN next_review_at DATETIME DEFAULT CURRENT_TIMESTAMP')
+            cursor.execute('ALTER TABLE flashcards ADD COLUMN interval INTEGER DEFAULT 0')
+            cursor.execute('ALTER TABLE flashcards ADD COLUMN ease_factor FLOAT DEFAULT 2.5')
+            cursor.execute('ALTER TABLE flashcards ADD COLUMN repetitions INTEGER DEFAULT 0')
+            print("✓ Added SRS columns to flashcards table")
+    except Exception as e:
+        print(f"Migration note: {e}")
     
     # Flashcard reviews table
     cursor.execute('''

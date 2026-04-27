@@ -7,7 +7,8 @@ export interface FileRecord {
   created_at: string;
   topics: string[];
   questions: any[];
-  status: 'pending' | 'completed';
+  status: 'pending' | 'completed' | 'processing' | 'error';
+  due_flashcards_count?: number;
 }
 
 export interface UploadResponse {

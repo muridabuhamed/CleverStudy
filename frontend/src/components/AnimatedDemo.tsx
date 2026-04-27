@@ -304,7 +304,7 @@ export const AnimatedDemo: React.FC = () => {
             <div className="w-3 h-3 rounded-full bg-green-500"></div>
           </div>
           <div className="flex-1 bg-slate-700 rounded px-3 py-1 text-center">
-            <span className="text-xs text-slate-300">cleverstudy.com</span>
+            <span className="text-xs text-slate-300">acadify.com</span>
           </div>
         </div>
 

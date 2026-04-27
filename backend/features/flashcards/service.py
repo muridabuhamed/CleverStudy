@@ -192,7 +192,7 @@ class FlashcardService:
         user_id: str
     ) -> FlashcardReviewModel:
         """
-        Record a flashcard review.
+        Record a flashcard review and update its SRS schedule using SM-2.
         
         Args:
             review_data: Review data
@@ -200,16 +200,63 @@ class FlashcardService:
             
         Returns:
             Created review
-            
-        Raises:
-            ResourceNotFoundError: If flashcard doesn't exist
         """
         # Verify flashcard exists
         flashcard = self.flashcard_repo.find_by_id(review_data.flashcard_id)
         if not flashcard:
             raise ResourceNotFoundError("Flashcard", review_data.flashcard_id)
         
-        # Create review
+        # Map difficulty string to SM-2 quality (0-5)
+        # Quality scale:
+        # 5: easy (perfect)
+        # 4: good (hesitation)
+        # 3: hard (difficult)
+        # 0-2: again (fail)
+        quality_map = {
+            FlashcardDifficulty.EASY: 5,
+            FlashcardDifficulty.GOOD: 4,
+            FlashcardDifficulty.HARD: 3,
+            FlashcardDifficulty.AGAIN: 0
+        }
+        quality = quality_map.get(review_data.difficulty, 0)
+        
+        # Calculate new SRS values (SM-2 Algorithm)
+        new_interval = flashcard.interval
+        new_ease_factor = flashcard.ease_factor
+        new_repetitions = flashcard.repetitions
+        
+        if quality >= 3:  # Correct response
+            if new_repetitions == 0:
+                new_interval = 1
+            elif new_repetitions == 1:
+                new_interval = 6
+            else:
+                new_interval = round(new_interval * new_ease_factor)
+            
+            new_repetitions += 1
+            
+            # Update ease factor: EF = EF + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+            new_ease_factor = new_ease_factor + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
+            if new_ease_factor < 1.3:
+                new_ease_factor = 1.3
+        else:  # Incorrect response
+            new_repetitions = 0
+            new_interval = 1
+        
+        # Schedule next review
+        from datetime import timedelta
+        next_review_at = datetime.now() + timedelta(days=new_interval)
+        
+        # Update flashcard SRS data
+        self.flashcard_repo.update_srs(
+            flashcard_id=flashcard.id,
+            interval=new_interval,
+            ease_factor=new_ease_factor,
+            repetitions=new_repetitions,
+            next_review_at=next_review_at
+        )
+        
+        # Create review record
         review_id = str(uuid.uuid4())
         review = FlashcardReviewModel(
             id=review_id,
@@ -223,11 +270,11 @@ class FlashcardService:
         
         logger.info(
             f"Flashcard review recorded: {review_id} "
-            f"(difficulty: {review_data.difficulty})"
+            f"(quality: {quality}, next review: {next_review_at.date()})"
         )
         
         return created_review
-    
+
     def get_flashcard_stats(
         self,
         user_id: str,
@@ -244,40 +291,24 @@ class FlashcardService:
             Flashcard statistics
         """
         return self.review_repo.get_user_stats(user_id, file_id=file_id)
-    
+
     def get_cards_due_for_review(
         self,
         user_id: str,
-        file_id: str,
-        days_since_review: int = 7
+        file_id: Optional[str] = None
     ) -> List[FlashcardModel]:
         """
-        Get flashcards that need review.
-        
-        Useful for spaced repetition scheduling.
+        Get flashcards that are due for review based on SM-2.
         
         Args:
             user_id: User identifier
-            file_id: File identifier
-            days_since_review: Days threshold
+            file_id: Optional file filter
             
         Returns:
             Flashcards due for review
         """
-        # Verify access
-        file = self.file_repo.find_by_id(file_id)
-        if not file:
-            raise ResourceNotFoundError("File", file_id)
-        
-        if file.user_id != user_id:
-            raise AuthorizationError(f"Access denied to file {file_id}")
-        
         # Get card IDs due for review
-        card_ids = self.review_repo.get_cards_due_for_review(
-            user_id,
-            file_id,
-            days_since_review
-        )
+        card_ids = self.review_repo.get_cards_due_for_review(user_id, file_id)
         
         # Get full flashcard objects
         cards = []

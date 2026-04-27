@@ -2,17 +2,18 @@
 import shutil
 import uuid
 from pathlib import Path
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Annotated
 from fastapi import APIRouter, Depends, UploadFile, File, status
 from pydantic import BaseModel
 
 from api.dependencies import (
-    CurrentUser, FileServ, handle_service_exception,
-    get_gemini_client, get_pdf_processor
+    CurrentUser, FileServ, FlashcardServ, handle_service_exception,
+    get_gemini_client, get_pdf_processor, get_flashcard_service
 )
 from core.config import get_settings
 from services.ai.gemini_client import GeminiClient
 from services.ai.pdf_processor import PdfProcessor
+from services.flashcard_service import FlashcardService
 from domain.file import FileStatus
 
 router = APIRouter()
@@ -27,23 +28,26 @@ class ChatRequest(BaseModel):
 @router.get("/api/files")
 async def list_files(
     user_id: CurrentUser,
-    file_service: FileServ
+    file_service: FileServ,
+    flashcard_service: Annotated[FlashcardService, Depends(get_flashcard_service)]
 ) -> List[Dict[str, Any]]:
-    """Get all files for the authenticated user."""
+    """Get all files for the authenticated user with SRS due counts."""
     try:
         files = file_service.list_user_files(user_id)
-        return [
-            {
+        result = []
+        for f in files:
+            due_cards = flashcard_service.get_cards_due_for_review(user_id, f.id)
+            result.append({
                 "id": f.id,
                 "original_name": f.original_name,
                 "filename": f.filename,
                 "status": f.status,
                 "created_at": f.created_at.isoformat(),
                 "topics": f.topics,
-                "questions": [q.dict() if hasattr(q, 'dict') else q for q in f.questions]
-            }
-            for f in files
-        ]
+                "questions": [q.dict() if hasattr(q, 'dict') else q for q in f.questions],
+                "due_flashcards_count": len(due_cards)
+            })
+        return result
     except Exception as e:
         raise handle_service_exception(e)
 

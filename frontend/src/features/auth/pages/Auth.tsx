@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/shared/contexts/AuthContext';
 import { useToast } from '@/shared/contexts/ToastContext';
+import { Logo } from '@/shared/components/Logo';
 
 type Tab = 'login' | 'signup';
 
@@ -173,13 +174,12 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
         className="w-full max-w-md relative z-10"
       >
         {/* Brand */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 flex flex-col items-center">
           <motion.div
-            className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4"
-            style={{ background: 'linear-gradient(135deg,#6366f1,#7c3aed)', boxShadow: '0 8px 24px rgba(124,58,237,0.35)' }}
-            whileHover={{ scale: 1.08, rotate: 3 }}
+            className="mb-4"
+            whileHover={{ scale: 1.08 }}
           >
-            <BookOpen className="w-7 h-7 text-white" />
+            <Logo size="xl" variant="light" />
           </motion.div>
           <AnimatePresence mode="wait">
             <motion.h1
@@ -190,7 +190,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
             >
-              {activeTab === 'login' ? 'Sign in to CleverStudy' : 'Create your account'}
+               {activeTab === 'login' ? 'Sign in to Acadify' : 'Create your account'}
             </motion.h1>
           </AnimatePresence>
           <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">
@@ -636,7 +636,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
         </div>
 
         <p className="text-center text-xs text-slate-400 dark:text-slate-500 mt-5">
-          Learn smarter, not harder · CleverStudy
+          Learn smarter, not harder · Acadify
         </p>
       </motion.div>
     </div>

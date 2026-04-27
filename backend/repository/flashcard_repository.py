@@ -102,6 +102,41 @@ class FlashcardRepository(BaseRepository[FlashcardModel]):
         rows = self.execute_query(sql, (file_id, search_term, search_term))
         return [self._row_to_model(row) for row in rows]
 
+    def update_srs(
+        self,
+        flashcard_id: str,
+        interval: int,
+        ease_factor: float,
+        repetitions: int,
+        next_review_at: datetime
+    ) -> bool:
+        """
+        Update SRS metadata for a flashcard.
+        
+        Args:
+            flashcard_id: Flashcard identifier
+            interval: New interval in days
+            ease_factor: New SM-2 ease factor
+            repetitions: New successful repetition count
+            next_review_at: New scheduled review time
+            
+        Returns:
+            True if updated
+        """
+        sql = f"""
+            UPDATE {self.table_name}
+            SET interval = ?,
+                ease_factor = ?,
+                repetitions = ?,
+                next_review_at = ?
+            WHERE id = ?
+        """
+        
+        return self.execute_non_query(
+            sql,
+            (interval, ease_factor, repetitions, next_review_at.isoformat(), flashcard_id)
+        )
+
 
 class FlashcardReviewRepository(BaseRepository[FlashcardReviewModel]):
     """Repository for flashcard review operations."""
@@ -218,7 +253,7 @@ class FlashcardReviewRepository(BaseRepository[FlashcardReviewModel]):
                 SELECT 
                     COUNT(DISTINCT fr.flashcard_id) as reviewed_count,
                     SUM(CASE WHEN fr.difficulty = 'easy' THEN 1 ELSE 0 END) as easy_count,
-                    SUM(CASE WHEN fr.difficulty = 'medium' THEN 1 ELSE 0 END) as medium_count,
+                    SUM(CASE WHEN fr.difficulty = 'good' THEN 1 ELSE 0 END) as good_count,
                     SUM(CASE WHEN fr.difficulty = 'hard' THEN 1 ELSE 0 END) as hard_count,
                     SUM(CASE WHEN fr.difficulty = 'again' THEN 1 ELSE 0 END) as again_count,
                     MAX(fr.reviewed_at) as last_review
@@ -232,7 +267,7 @@ class FlashcardReviewRepository(BaseRepository[FlashcardReviewModel]):
                 SELECT 
                     COUNT(DISTINCT flashcard_id) as reviewed_count,
                     SUM(CASE WHEN difficulty = 'easy' THEN 1 ELSE 0 END) as easy_count,
-                    SUM(CASE WHEN difficulty = 'medium' THEN 1 ELSE 0 END) as medium_count,
+                    SUM(CASE WHEN difficulty = 'good' THEN 1 ELSE 0 END) as good_count,
                     SUM(CASE WHEN difficulty = 'hard' THEN 1 ELSE 0 END) as hard_count,
                     SUM(CASE WHEN difficulty = 'again' THEN 1 ELSE 0 END) as again_count,
                     MAX(reviewed_at) as last_review
@@ -256,7 +291,7 @@ class FlashcardReviewRepository(BaseRepository[FlashcardReviewModel]):
             total_cards=total_cards,
             reviewed_count=row[0] or 0,
             easy_count=row[1] or 0,
-            medium_count=row[2] or 0,
+            good_count=row[2] or 0,
             hard_count=row[3] or 0,
             again_count=row[4] or 0,
             last_review=last_review
@@ -265,39 +300,37 @@ class FlashcardReviewRepository(BaseRepository[FlashcardReviewModel]):
     def get_cards_due_for_review(
         self,
         user_id: str,
-        file_id: str,
-        days_since_review: int = 7
+        file_id: Optional[str] = None
     ) -> List[str]:
         """
-        Get flashcard IDs that haven't been reviewed recently.
-        
-        Useful for spaced repetition scheduling.
+        Get flashcard IDs that are due for review based on SM-2 schedule.
         
         Args:
             user_id: User identifier
-            file_id: File identifier
-            days_since_review: Days threshold
+            file_id: Optional file identifier to filter
             
         Returns:
             List of flashcard IDs due for review
         """
-        cutoff_date = datetime.now() - timedelta(days=days_since_review)
+        now = datetime.now()
         
         sql = """
             SELECT f.id
             FROM flashcards f
-            LEFT JOIN (
-                SELECT flashcard_id, MAX(reviewed_at) as last_reviewed
-                FROM flashcard_reviews
-                WHERE user_id = ?
-                GROUP BY flashcard_id
-            ) lr ON f.id = lr.flashcard_id
-            WHERE f.file_id = ?
-            AND (lr.last_reviewed IS NULL OR lr.last_reviewed < ?)
-            ORDER BY lr.last_reviewed ASC NULLS FIRST
+            INNER JOIN files fi ON f.file_id = fi.id
+            WHERE fi.user_id = ?
         """
         
-        rows = self.execute_query(sql, (user_id, file_id, cutoff_date.isoformat()))
+        params = [user_id]
+        
+        if file_id:
+            sql += " AND f.file_id = ?"
+            params.append(file_id)
+            
+        sql += " AND f.next_review_at <= ? ORDER BY f.next_review_at ASC"
+        params.append(now.isoformat())
+        
+        rows = self.execute_query(sql, tuple(params))
         return [row[0] for row in rows]
     
     def count_reviews_by_difficulty(
@@ -328,7 +361,7 @@ class FlashcardReviewRepository(BaseRepository[FlashcardReviewModel]):
         
         result = {
             'easy': 0,
-            'medium': 0,
+            'good': 0,
             'hard': 0,
             'again': 0
         }

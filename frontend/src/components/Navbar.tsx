@@ -4,6 +4,7 @@ import { BookOpen, Upload, Layout, CheckCircle, HelpCircle, BarChart2, User } fr
 import { AppState } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { ThemeToggle } from './ThemeToggle';
+import { Logo } from '../shared/components/Logo';
 
 interface NavbarProps {
   currentState: AppState;
@@ -21,12 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => onNavigate('HOME')}
           >
-            <div className="bg-gradient-to-r from-indigo-600 to-violet-600 p-2 rounded-lg">
-              <BookOpen className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-violet-400">
-              Smart Study Platform
-            </span>
+            <Logo size="md" variant="dark" />
           </div>
 
           {isAuthenticated && (

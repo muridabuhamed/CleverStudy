@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook, AlertTriangle } from 'lucide-react';
+import { FileText, Trash2, BookOpen, Clock, ChevronRight, Search, Book, Pencil, GraduationCap, Notebook, AlertTriangle, Zap } from 'lucide-react';
 import { libraryApi } from '../services/libraryApi';
 import type { FileRecord } from '../services/libraryApi';
 import { AppState } from '@/App';
@@ -247,15 +247,27 @@ export const Library: React.FC<LibraryProps> = ({ onStudy, onNavigate }) => {
                                 >
                                     <FileText className="w-6 h-6" />
                                 </motion.div>
-                                <motion.button
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.9 }}
-                                    onClick={(e) => handleDelete(e, file)}
-                                    className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all"
-                                    title="Delete document"
-                                >
-                                    <Trash2 className="w-4 h-4" />
-                                </motion.button>
+                                <div className="flex items-center gap-2">
+                                    {file.due_flashcards_count && file.due_flashcards_count > 0 ? (
+                                        <motion.div
+                                            initial={{ scale: 0 }}
+                                            animate={{ scale: 1 }}
+                                            className="px-3 py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 rounded-2xl text-[10px] font-bold flex items-center gap-1.5 border border-amber-200 dark:border-amber-800 shadow-sm"
+                                        >
+                                            <Zap className="w-3 h-3 fill-amber-500" />
+                                            {file.due_flashcards_count} DUE
+                                        </motion.div>
+                                    ) : null}
+                                    <motion.button
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                        onClick={(e) => handleDelete(e, file)}
+                                        className="p-2 text-slate-400 dark:text-slate-500 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all"
+                                        title="Delete document"
+                                    >
+                                        <Trash2 className="w-4 h-4" />
+                                    </motion.button>
+                                </div>
                             </div>
 
                             <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-2 line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">

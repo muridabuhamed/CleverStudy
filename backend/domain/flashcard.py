@@ -10,24 +10,30 @@ from enum import Enum
 
 
 class FlashcardDifficulty(str, Enum):
-    """Spaced repetition difficulty levels."""
-    EASY = "easy"
-    MEDIUM = "medium"
-    HARD = "hard"
-    AGAIN = "again"
+    """Spaced repetition difficulty levels mapped to SM-2 quality scores."""
+    EASY = "easy"    # Quality 5
+    GOOD = "good"    # Quality 4
+    HARD = "hard"    # Quality 3
+    AGAIN = "again"  # Quality 0-2
 
 
 class FlashcardModel(BaseModel):
     """
     Flashcard entity from the database.
     
-    Represents a question-answer pair generated from study material.
+    Represents a question-answer pair with spaced repetition (SRS) metadata.
     """
     id: str = Field(..., description="Unique flashcard identifier")
     file_id: str = Field(..., description="Associated file ID")
     question: str = Field(..., min_length=1, description="Flashcard question")
     answer: str = Field(..., min_length=1, description="Flashcard answer")
     created_at: datetime = Field(default_factory=datetime.now, description="Creation timestamp")
+    
+    # SRS Metadata
+    next_review_at: datetime = Field(default_factory=datetime.now, description="Next scheduled review")
+    interval: int = Field(default=0, description="Current interval in days")
+    ease_factor: float = Field(default=2.5, description="SM-2 ease factor")
+    repetitions: int = Field(default=0, description="Successful review streak")
     
     class Config:
         from_attributes = True
@@ -37,7 +43,11 @@ class FlashcardModel(BaseModel):
                 "file_id": "file-456",
                 "question": "What is photosynthesis?",
                 "answer": "The process by which plants convert light energy into chemical energy",
-                "created_at": "2024-01-15T10:30:00"
+                "created_at": "2024-01-15T10:30:00",
+                "next_review_at": "2024-01-16T10:30:00",
+                "interval": 1,
+                "ease_factor": 2.5,
+                "repetitions": 1
             }
         }
 
@@ -109,7 +119,7 @@ class FlashcardStats(BaseModel):
     total_cards: int = Field(default=0, description="Total flashcards available")
     reviewed_count: int = Field(default=0, description="Cards reviewed at least once")
     easy_count: int = Field(default=0, description="Cards marked easy")
-    medium_count: int = Field(default=0, description="Cards marked medium")
+    good_count: int = Field(default=0, description="Cards marked good")
     hard_count: int = Field(default=0, description="Cards marked hard")
     again_count: int = Field(default=0, description="Cards marked again")
     last_review: Optional[datetime] = Field(default=None, description="Last review timestamp")
@@ -133,8 +143,8 @@ class FlashcardStats(BaseModel):
         
         score = (
             (self.easy_count * 100) +
-            (self.medium_count * 60) +
-            (self.hard_count * 30) +
+            (self.good_count * 75) +
+            (self.hard_count * 40) +
             (self.again_count * 0)
         )
         return min(100.0, score / self.reviewed_count)

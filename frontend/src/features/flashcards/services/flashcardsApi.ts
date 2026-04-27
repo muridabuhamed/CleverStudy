@@ -6,11 +6,15 @@ export interface Flashcard {
   question: string;
   answer: string;
   created_at: string;
+  next_review_at?: string;
+  interval?: number;
+  ease_factor?: number;
+  repetitions?: number;
 }
 
 export interface FlashcardStats extends Flashcard {
   review_count: number;
-  last_difficulty: 'easy' | 'medium' | 'hard' | null;
+  last_difficulty: 'easy' | 'good' | 'hard' | 'again' | null;
   last_reviewed: string | null;
 }
 
@@ -39,7 +43,12 @@ export const flashcardsApi = {
     return httpClient.get(`/flashcards/${fileId}`);
   },
 
-  async reviewFlashcard(flashcardId: string, difficulty: 'easy' | 'medium' | 'hard'): Promise<ReviewFlashcardResponse> {
+  async reviewFlashcard(flashcardId: string, difficulty: 'easy' | 'good' | 'hard' | 'again'): Promise<ReviewFlashcardResponse> {
     return httpClient.post('/flashcards/review', { flashcardId, difficulty });
+  },
+
+  async getDueFlashcards(fileId?: string): Promise<{ flashcards: Flashcard[]; count: number }> {
+    const url = fileId ? `/flashcards/review/due?file_id=${fileId}` : '/flashcards/review/due';
+    return httpClient.get(url);
   },
 };

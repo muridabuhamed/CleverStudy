@@ -4,6 +4,7 @@ import { ArrowRight, Sparkles, Shield, Zap, Upload, Brain, CheckCircle, FileText
 import { AppState } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { AnimatedDemo } from '../components/AnimatedDemo';
+import { Logo } from '../shared/components/Logo';
 
 interface HomeProps {
   onStart: () => void;
@@ -361,10 +362,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             {/* Brand Column */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-2xl shadow-xl">
-                  <Brain className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-2xl font-black text-white">Smart Study Platform</h3>
+                <Logo size="lg" variant="dark" />
               </div>
               <p className="text-slate-400 text-base leading-relaxed max-w-md">
                 Empowering students worldwide to achieve academic excellence through AI-powered learning tools.
@@ -406,7 +404,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           <div className="pt-8 border-t border-white/10">
             <div className="text-center">
               <p className="text-slate-400 text-sm">
-                © 2026 Smart Study Platform. All rights reserved.
+                © 2026 Acadify. All rights reserved.
               </p>
             </div>
           </div>

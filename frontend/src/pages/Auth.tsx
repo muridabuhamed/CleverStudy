@@ -4,6 +4,7 @@ import { LogIn, UserPlus, Mail, Lock, User, Loader2, Sparkles, Book, BookOpen, F
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { extractErrorMessage } from '../shared/utils/errors';
+import { Logo } from '../shared/components/Logo';
 
 type Tab = 'login' | 'signup';
 
@@ -476,17 +477,11 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
           transition={{ delay: 0.1, duration: 0.5 }}
         >
           <motion.div 
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-50 text-indigo-700 text-sm font-semibold mb-4"
+            className="inline-flex justify-center mb-4 w-full"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <motion.div
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
-            >
-              <Sparkles className="w-4 h-4" />
-            </motion.div>
-            Smart Study Platform
+            <Logo size="lg" variant="light" />
           </motion.div>
           <motion.h1 
             className="text-3xl font-bold text-slate-900 dark:text-slate-100" 
