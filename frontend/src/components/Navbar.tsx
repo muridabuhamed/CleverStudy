@@ -22,7 +22,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => onNavigate('HOME')}
           >
-            <Logo size="md" variant="dark" />
+            <Logo size="md" variant="auto" />
           </div>
 
           {isAuthenticated && (

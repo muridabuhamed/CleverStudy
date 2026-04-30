@@ -55,8 +55,8 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             </h1>
 
             <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-xl font-medium tracking-tight">
-              Transform your PDFs into personalized quizzes, smart flashcards, and AI-powered chat.
-              Master any subject with intelligent study tools designed for your success.
+              Transform your study materials into personalized quizzes, smart flashcards, and AI-powered chat.
+              Master any subject with intelligent tools designed for your success.
             </p>
 
             <div className="flex flex-col sm:flex-row items-start gap-4">
@@ -246,57 +246,73 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* How It Works Section */}
-        <div id="how-it-works" className="mt-32 mb-16 scroll-mt-32">
+
+      {/* How It Works Section - Off-white Background */}
+      <div id="how-it-works" className="bg-[#fcfbf7] py-24 scroll-mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
-            className="text-center mb-16"
+            className="text-center mb-20"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-300 text-sm font-semibold mb-4 backdrop-blur-sm">
+            <span className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-sm font-semibold mb-6">
               Simple Process
             </span>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
-              How It Works
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight">
+              How it works
             </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-              Get started in three simple steps and transform your study materials into interactive learning
+            <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed">
+              Three steps to turn any study material into an interactive learning experience.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+          <div className="relative">
             {/* Connection Line - Desktop */}
-            <div className="hidden md:block absolute top-12 left-0 right-0 h-px -z-10">
-              <svg className="w-full h-20 overflow-visible" preserveAspectRatio="none">
-                <motion.path
-                  d="M 16.67% 40 Q 50% 120 83.33% 40"
-                  fill="none"
-                  stroke="url(#step-gradient)"
-                  strokeWidth="2"
-                  strokeDasharray="8 8"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  whileInView={{ pathLength: 1, opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 1.5, ease: "easeInOut" }}
-                />
-                <defs>
-                  <linearGradient id="step-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#6366f1" stopOpacity="0.2" />
-                    <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#a855f7" stopOpacity="0.2" />
-                  </linearGradient>
-                </defs>
-              </svg>
+            <div className="hidden lg:flex absolute top-12 left-[15%] right-[15%] h-[2px] bg-indigo-100 items-center justify-between -z-0">
+              <div className="w-2.5 h-2.5 rounded-full bg-indigo-300 -translate-x-1/2 ml-[25%]" />
+              <div className="w-2.5 h-2.5 rounded-full bg-indigo-300 translate-x-1/2 mr-[25%]" />
             </div>
-            <StepCard step={1} icon={<Upload className="w-8 h-8 text-white" />} title="Upload Your Material" description="Drop your PDF lecture notes, textbooks, or study guides. We support all major document formats." color="bg-indigo-600" delay={0} />
-            <StepCard step={2} icon={<Brain className="w-8 h-8 text-white" />} title="AI Analysis" description="Our advanced AI extracts key concepts, topics, and generates smart questions tailored to your content." color="bg-violet-600" delay={0.15} />
-            <StepCard step={3} icon={<CheckCircle className="w-8 h-8 text-white" />} title="Practice & Master" description="Take quizzes, review flashcards, and track your progress to ace your exams with confidence." color="bg-purple-600" delay={0.3} />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 relative z-10">
+              <StepCard 
+                step="1" 
+                icon={<Upload className="w-10 h-10 text-white" />} 
+                title="Upload your material" 
+                description="PDF lecture notes, textbooks, or study guides — we support all major formats." 
+                badge="PDF, DOCX, TXT"
+                badgeColor="bg-indigo-50 text-indigo-600"
+                color="bg-[#4f46e5]" 
+                delay={0} 
+              />
+              <StepCard 
+                step="2" 
+                icon={<Brain className="w-10 h-10 text-white" />} 
+                title="AI analysis" 
+                description="Our AI extracts key concepts and generates smart questions tailored to your content." 
+                badge="Runs in seconds"
+                badgeColor="bg-emerald-50 text-emerald-600"
+                color="bg-[#3730a3]" 
+                delay={0.2} 
+              />
+              <StepCard 
+                step="3" 
+                icon={<CheckCircle className="w-10 h-10 text-white" />} 
+                title="Practice and master" 
+                description="Take quizzes, review flashcards, and track your progress to ace your exams." 
+                badge="Avg. 94% score lift"
+                badgeColor="bg-pink-50 text-pink-600"
+                color="bg-[#9d174d]" 
+                delay={0.4} 
+              />
+            </div>
           </div>
         </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* ── FEATURES SECTION ── */}
         <div id="features" className="mt-32 mb-20 scroll-mt-32">
@@ -335,7 +351,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 mb-6">
                   <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-300" />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Upload PDFs and start instantly</h3>
+                <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Upload your materials and start instantly</h3>
                 <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
                   Drop any lecture note or textbook. CleverStudy processes it in seconds.
                 </p>
@@ -357,7 +373,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 </div>
                 <div className="border-2 border-dashed border-slate-300 dark:border-white/15 rounded-xl p-10 flex flex-col items-center gap-3">
                   <Upload className="w-8 h-8 text-indigo-500" />
-                  <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">Drop your PDF here</p>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 font-medium">Drop any document here</p>
                   <p className="text-xs text-slate-500">or click to browse files</p>
                   <span className="mt-2 px-4 py-1.5 rounded-lg bg-indigo-600 text-white text-xs font-semibold">Choose File</span>
                 </div>
@@ -668,13 +684,15 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           </motion.p>
         </div>
 
+
+
         {/* Premium Footer */}
         <motion.footer
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="relative mt-32 pt-16 pb-8 border-t border-white/10"
+          className="relative mt-32 pt-16 pb-8 border-t border-slate-200 dark:border-white/10"
         >
           {/* Footer Gradient Orbs */}
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
@@ -684,7 +702,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             {/* Brand Column */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <Logo size="xl" variant="dark" />
+                <Logo size="xl" variant="auto" />
               </div>
               <p className="text-slate-400 text-base leading-relaxed max-w-md">
                 Empowering students worldwide to achieve academic excellence through AI-powered learning tools.
@@ -693,7 +711,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-white font-bold text-lg mb-4">Quick Links</h4>
+              <h4 className="text-slate-900 dark:text-white font-bold text-lg mb-4">Quick Links</h4>
               <ul className="space-y-3">
                 {['Features', 'How It Works', 'Pricing', 'About Us'].map((link) => (
                   <li key={link}>
@@ -708,7 +726,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
             {/* Support */}
             <div>
-              <h4 className="text-white font-bold text-lg mb-4">Support</h4>
+              <h4 className="text-slate-900 dark:text-white font-bold text-lg mb-4">Support</h4>
               <ul className="space-y-3">
                 {['Help Center', 'Contact Us', 'Privacy Policy', 'Terms of Service'].map((link) => (
                   <li key={link}>
@@ -723,7 +741,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           </div>
 
           {/* Bottom Bar */}
-          <div className="pt-8 border-t border-white/10">
+          <div className="pt-8 border-t border-slate-200 dark:border-white/10">
             <div className="text-center">
               <p className="text-slate-400 text-sm">
                 © 2026 Acadify. All rights reserved.
@@ -737,48 +755,50 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 };
 
 
-const StepCard = ({ step, icon, title, description, color, delay }: {
-  step: number;
+const StepCard = ({ step, icon, title, description, color, delay, badge, badgeColor }: {
+  step: string;
   icon: React.ReactNode;
   title: string;
   description: string;
   color: string;
   delay: number;
+  badge?: string;
+  badgeColor?: string;
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 30 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.3 }}
-    className="group relative"
+    viewport={{ once: true }}
+    transition={{ duration: 0.6, delay }}
+    className="text-center flex flex-col items-center group"
   >
-    {/* Decorative element */}
-    <div className={`absolute top-12 left-1/2 -translate-x-1/2 w-32 h-32 ${color}/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+    {/* Circular Icon with Step Number */}
+    <div className="relative mb-8">
+      {/* Step Number Circle */}
+      <div className="absolute -top-1 -right-1 w-8 h-8 bg-white border border-slate-100 rounded-full flex items-center justify-center shadow-md z-20">
+        <span className="text-sm font-bold text-indigo-600">{step}</span>
+      </div>
 
-    {/* Icon Badge with Step Number */}
-    <div className="flex justify-center mb-8">
-      <div className="relative">
-        {/* Step Number - positioned on top-left of icon */}
-        <motion.div
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          className="absolute -top-3 -left-3 w-10 h-10 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex items-center justify-center z-20 shadow-xl shadow-slate-200/50 dark:shadow-none"
-        >
-          <span className={`text-base font-black bg-clip-text text-transparent bg-gradient-to-br from-indigo-500 to-violet-600`}>{step}</span>
-        </motion.div>
-
-        {/* Icon Badge */}
-        <motion.div
-          whileHover={{ y: -5, rotate: -5 }}
-          className={`w-20 h-20 ${color} rounded-[2rem] flex items-center justify-center shadow-2xl shadow-${color.split('-')[1]}-500/40 relative z-10`}
-        >
-          <div className="absolute inset-0 bg-white/10 rounded-[2rem] blur-[1px]" />
-          {icon}
-        </motion.div>
+      <div className={`w-24 h-24 rounded-full ${color} flex items-center justify-center text-white shadow-xl relative z-10`}>
+        {icon}
       </div>
     </div>
 
-    <div className="text-center px-4 relative z-10">
-      <h3 className="text-2xl font-black text-slate-900 dark:text-white mb-4 tracking-tight">{title}</h3>
-      <p className="text-slate-600 dark:text-slate-400 leading-relaxed font-medium">{description}</p>
+    <div className="space-y-4 max-w-[280px]">
+      <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
+        {title}
+      </h3>
+      <p className="text-slate-600 font-medium leading-relaxed">
+        {description}
+      </p>
+      
+      {badge && (
+        <div className="pt-2">
+          <span className={`inline-block px-4 py-1.5 rounded-full ${badgeColor} text-xs font-bold uppercase tracking-wider`}>
+            {badge}
+          </span>
+        </div>
+      )}
     </div>
   </motion.div>
 );

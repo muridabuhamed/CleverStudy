@@ -362,7 +362,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             {/* Brand Column */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <Logo size="lg" variant="dark" />
+                <Logo size="lg" variant="auto" />
               </div>
               <p className="text-slate-400 text-base leading-relaxed max-w-md">
                 Empowering students worldwide to achieve academic excellence through AI-powered learning tools.

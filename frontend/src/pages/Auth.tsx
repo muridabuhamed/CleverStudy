@@ -481,7 +481,7 @@ export const Auth: React.FC<AuthProps> = ({ defaultTab = 'login' }) => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Logo size="lg" variant="light" />
+            <Logo size="lg" variant="auto" />
           </motion.div>
           <motion.h1 
             className="text-3xl font-bold text-slate-900 dark:text-slate-100" 

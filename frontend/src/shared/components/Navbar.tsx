@@ -99,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
                   whileTap={{ scale: 0.95 }}
                   className="px-7 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-base shadow-xl shadow-indigo-500/30 transition-all"
                 >
-                  Sign UP
+                  Sign Up
                 </motion.button>
               </div>
             )}
