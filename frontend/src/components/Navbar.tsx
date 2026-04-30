@@ -20,7 +20,14 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
         <div className="flex justify-between h-16 items-center">
           <div
             className="flex items-center gap-2 cursor-pointer"
-            onClick={() => onNavigate('HOME')}
+            onClick={() => {
+              if (currentState === 'HOME') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                onNavigate('HOME');
+                window.scrollTo({ top: 0 });
+              }
+            }}
           >
             <Logo size="md" variant="auto" />
           </div>
@@ -90,7 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
                   onClick={() => onNavigate('SIGNUP')}
                   whileHover={{ scale: 1.05, y: -1 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-lg font-bold text-sm hover:shadow-lg hover:shadow-indigo-500/50 transition-all"
+                  className="px-6 py-2.5 bg-[#0a194f] hover:bg-[#1a295f] text-white rounded-lg font-bold text-sm shadow-lg shadow-indigo-900/30 transition-all"
                 >
                   Sign Up
                 </motion.button>

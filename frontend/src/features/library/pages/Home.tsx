@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Sparkles, Shield, Zap, Upload, Brain, CheckCircle, FileText, MessageSquare, ListChecks, CreditCard, BarChart3, BookOpenCheck, Highlighter, Star } from 'lucide-react';
+import { ArrowRight, Sparkles, Shield, Zap, Upload, Brain, CheckCircle, FileText, MessageSquare, ListChecks, CreditCard, BarChart3, BookOpenCheck, BookOpen, Highlighter, Star } from 'lucide-react';
 import { AppState } from '@/App';
 import { useAuth } from '@/shared/contexts/AuthContext';
 import { AnimatedDemo } from '@/shared/components/AnimatedDemo';
@@ -36,10 +36,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter mb-10 leading-[0.85]">
               Study Smarter,{' '}
               <span className="relative inline-block mt-4 md:mt-2">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-violet-600 to-pink-600 dark:from-indigo-400 dark:via-violet-400 dark:to-pink-400">
+                <span className="text-[#f59e0b]">
                   Not Harder
                 </span>
-                <svg className="absolute -bottom-3 left-0 w-full h-6 text-indigo-500/30 dark:text-indigo-400/20" viewBox="0 0 400 40" preserveAspectRatio="none">
+                <svg className="absolute -bottom-3 left-0 w-full h-6 text-[#f59e0b]/40" viewBox="0 0 400 40" preserveAspectRatio="none">
                   <motion.path
                     d="M 10 30 Q 100 10 200 30 Q 300 50 390 30"
                     fill="none"
@@ -92,7 +92,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                     onClick={() => onNavigate('SIGNUP')}
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="group px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-lg shadow-xl shadow-indigo-500/20 transition-all flex items-center gap-3"
+                    className="group px-10 py-4 bg-[#003f88] hover:bg-[#004fa8] text-white rounded-2xl font-bold text-lg shadow-xl shadow-[#003f88]/20 transition-all flex items-center gap-3"
                   >
                     <span className="tracking-tight">Start Learning for Free</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -118,7 +118,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent rounded-[2rem] pointer-events-none" />
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 bg-indigo-500 rounded-lg shadow-lg shadow-indigo-500/30">
+                  <div className="p-2 bg-[#0a194f] rounded-lg shadow-lg shadow-indigo-900/30">
                     <Brain className="w-6 h-6 text-white" />
                   </div>
                   <div className="text-slate-900 dark:text-white font-bold">AI Analysis</div>
@@ -127,13 +127,13 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 <div className="mt-4 flex items-center gap-2">
                   <div className="flex-1 h-2 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-indigo-500"
+                      className="h-full bg-[#0a194f]"
                       initial={{ width: '0%' }}
                       animate={{ width: '85%' }}
                       transition={{ delay: 1, duration: 1.5 }}
                     />
                   </div>
-                  <span className="text-xs font-bold text-indigo-500">85%</span>
+                  <span className="text-xs font-bold text-[#0a194f]">85%</span>
                 </div>
               </motion.div>
 
@@ -249,7 +249,32 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
 
       {/* How It Works Section - Off-white Background */}
-      <div id="how-it-works" className="bg-[#fcfbf7] py-24 scroll-mt-20">
+      <div id="how-it-works" className="bg-[#fcfbf7] py-24 scroll-mt-20 relative overflow-hidden">
+        {/* Floating Decorative Elements for Depth */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <motion.div 
+            animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }} 
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-20 left-[5%] text-indigo-200/40"
+          >
+            <BookOpen size={120} />
+          </motion.div>
+          <motion.div 
+            animate={{ y: [0, 30, 0], rotate: [0, -15, 0] }} 
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute bottom-20 right-[5%] text-violet-200/40"
+          >
+            <FileText size={140} />
+          </motion.div>
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }} 
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/2 left-[15%] text-amber-200/30"
+          >
+            <Sparkles size={60} />
+          </motion.div>
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             className="text-center mb-20"
@@ -271,9 +296,18 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
           <div className="relative">
             {/* Connection Line - Desktop */}
-            <div className="hidden lg:flex absolute top-12 left-[15%] right-[15%] h-[2px] bg-indigo-100 items-center justify-between -z-0">
-              <div className="w-2.5 h-2.5 rounded-full bg-indigo-300 -translate-x-1/2 ml-[25%]" />
-              <div className="w-2.5 h-2.5 rounded-full bg-indigo-300 translate-x-1/2 mr-[25%]" />
+            <div className="hidden lg:flex absolute top-12 left-[15%] right-[15%] h-[2px] bg-indigo-50 items-center -z-0 overflow-hidden">
+              <motion.div 
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.5, ease: "easeInOut", delay: 0.5 }}
+                className="absolute inset-0 bg-indigo-200 origin-left"
+              />
+              <div className="relative w-full h-full flex items-center justify-between pointer-events-none">
+                <div className="w-2.5 h-2.5 rounded-full bg-indigo-300 -translate-x-1/2 ml-[25%]" />
+                <div className="w-2.5 h-2.5 rounded-full bg-indigo-300 translate-x-1/2 mr-[25%]" />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 relative z-10">
@@ -773,31 +807,72 @@ const StepCard = ({ step, icon, title, description, color, delay, badge, badgeCo
     className="text-center flex flex-col items-center group"
   >
     {/* Circular Icon with Step Number */}
-    <div className="relative mb-8">
-      {/* Step Number Circle */}
-      <div className="absolute -top-1 -right-1 w-8 h-8 bg-white border border-slate-100 rounded-full flex items-center justify-center shadow-md z-20">
-        <span className="text-sm font-bold text-indigo-600">{step}</span>
-      </div>
+    <div className="relative mb-10">
+      {/* Step Number Circle with Spring Pop */}
+      <motion.div 
+        initial={{ scale: 0 }}
+        whileInView={{ scale: 1 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 400, damping: 15, delay: delay + 0.3 }}
+        className="absolute -top-2 -right-2 w-10 h-10 bg-white border-2 border-indigo-50 rounded-full flex items-center justify-center shadow-lg z-20"
+      >
+        <span className="text-base font-black text-indigo-600">{step}</span>
+      </motion.div>
 
-      <div className={`w-24 h-24 rounded-full ${color} flex items-center justify-center text-white shadow-xl relative z-10`}>
-        {icon}
-      </div>
+      {/* Pulsing Outer Glow */}
+      <motion.div 
+        animate={{ scale: [1, 1.15, 1], opacity: [0, 0.3, 0] }}
+        transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay }}
+        className={`absolute inset-0 rounded-full ${color} blur-xl -z-10`}
+      />
+
+      <motion.div 
+        animate={{ y: [0, -8, 0] }}
+        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: delay * 1.5 }}
+        whileHover={{ scale: 1.1, rotate: 5, y: -12 }}
+        className={`w-28 h-28 rounded-full ${color} flex items-center justify-center text-white shadow-2xl relative z-10 transition-shadow hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)] cursor-default`}
+      >
+        <motion.div
+          animate={{ rotate: [0, 5, -5, 0] }}
+          transition={{ repeat: Infinity, duration: 5, delay }}
+        >
+          {icon}
+        </motion.div>
+      </motion.div>
     </div>
 
     <div className="space-y-4 max-w-[280px]">
-      <h3 className="text-2xl font-bold text-slate-900 tracking-tight">
+      <motion.h3 
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: delay + 0.2 }}
+        className="text-2xl font-bold text-slate-900 tracking-tight"
+      >
         {title}
-      </h3>
-      <p className="text-slate-600 font-medium leading-relaxed">
+      </motion.h3>
+      <motion.p 
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: delay + 0.3 }}
+        className="text-slate-600 font-medium leading-relaxed"
+      >
         {description}
-      </p>
+      </motion.p>
       
       {badge && (
-        <div className="pt-2">
-          <span className={`inline-block px-4 py-1.5 rounded-full ${badgeColor} text-xs font-bold uppercase tracking-wider`}>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, delay: delay + 0.4 }}
+          className="pt-2"
+        >
+          <span className={`inline-block px-4 py-1.5 rounded-full ${badgeColor} text-xs font-bold uppercase tracking-wider shadow-sm`}>
             {badge}
           </span>
-        </div>
+        </motion.div>
       )}
     </div>
   </motion.div>
