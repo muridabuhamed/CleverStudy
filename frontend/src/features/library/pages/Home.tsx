@@ -66,10 +66,13 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                     onClick={onStart}
                     whileHover={{ scale: 1.05, y: -4 }}
                     whileTap={{ scale: 0.98 }}
-                    className="group relative px-10 py-5 bg-indigo-600 text-white rounded-2xl font-black text-xl shadow-[0_20px_50px_rgba(79,70,229,0.3)] hover:shadow-indigo-500/50 transition-all flex items-center gap-3"
+                    className="group relative px-10 py-5 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 text-white rounded-2xl font-black text-xl shadow-[0_20px_50px_rgba(79,70,229,0.3)] hover:shadow-indigo-500/60 transition-all flex items-center gap-3 overflow-hidden border border-white/10"
                   >
-                    <Upload className="w-6 h-6" />
-                    Upload PDF Now
+                    {/* Animated Shine Effect */}
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite] pointer-events-none" />
+                    
+                    <Upload className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                    <span className="relative z-10 tracking-tight">Upload PDF Now</span>
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                   </motion.button>
                   <motion.button
@@ -89,10 +92,13 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                     onClick={() => onNavigate('SIGNUP')}
                     whileHover={{ scale: 1.05, y: -4 }}
                     whileTap={{ scale: 0.98 }}
-                    className="group relative px-10 py-5 bg-indigo-600 text-white rounded-2xl font-black text-xl shadow-[0_20px_50px_rgba(79,70,229,0.3)] hover:shadow-indigo-500/50 transition-all flex items-center gap-3"
+                    className="group relative px-10 py-5 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 text-white rounded-2xl font-black text-xl shadow-[0_20px_50px_rgba(79,70,229,0.3)] hover:shadow-indigo-500/60 transition-all flex items-center gap-3 overflow-hidden border border-white/10"
                   >
-                    <Sparkles className="w-6 h-6" />
-                    Get Started Free
+                    {/* Animated Shine Effect */}
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite] pointer-events-none" />
+                    
+                    <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                    <span className="relative z-10 tracking-tight">Get Started Free</span>
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
                   </motion.button>
                   <motion.button
@@ -547,9 +553,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 ))}
               </ul>
               <motion.button
-                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => onNavigate('SIGNUP')}
-                className="mt-10 w-full py-3.5 rounded-xl border border-slate-200 dark:border-white/15 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:border-indigo-500 dark:hover:border-white/30 hover:text-indigo-600 dark:hover:text-white transition-all duration-200"
+                className="mt-10 w-full py-4 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-black shadow-xl transition-all"
               >
                 Get Started Free
               </motion.button>
@@ -592,10 +599,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 ))}
               </ul>
               <motion.button
-                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => onNavigate('SIGNUP')}
-                className="mt-10 w-full py-3.5 rounded-xl text-white text-sm font-bold transition-all duration-200"
-                style={{ background: 'linear-gradient(135deg,#6366f1,#7c3aed)', boxShadow: '0 6px 24px rgba(99,102,241,0.45)' }}
+                className="mt-10 w-full py-4 rounded-2xl bg-white text-indigo-600 text-sm font-black shadow-[0_10px_30px_rgba(255,255,255,0.2)] transition-all"
               >
                 Upgrade to Pro
               </motion.button>
@@ -627,9 +634,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 ))}
               </ul>
               <motion.button
-                whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                whileHover={{ scale: 1.02, y: -2 }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => onNavigate('SIGNUP')}
-                className="mt-10 w-full py-3.5 rounded-xl border border-violet-400/30 text-slate-600 dark:text-slate-300 text-sm font-semibold hover:border-violet-400/60 hover:text-indigo-600 dark:hover:text-white hover:bg-violet-500/10 transition-all duration-200"
+                className="mt-10 w-full py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-black shadow-xl shadow-violet-500/20 transition-all"
               >
                 Go Premium
               </motion.button>

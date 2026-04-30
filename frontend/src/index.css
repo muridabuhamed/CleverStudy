@@ -111,3 +111,12 @@
     transform: scale(1);
   }
 }
+
+@keyframes shine {
+  from {
+    transform: translateX(-100%) skewX(-20deg);
+  }
+  to {
+    transform: translateX(200%) skewX(-20deg);
+  }
+}
