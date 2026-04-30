@@ -14,7 +14,7 @@ export const Logo: React.FC<LogoProps> = ({
   const sizes = {
     sm: { height: 28 },
     md: { height: 40 },
-    lg: { height: 64 },
+    lg: { height: 52 },
     xl: { height: 80 }
   };
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navbar } from './shared/components/Navbar';
+import { StudyBackground } from './shared/components/StudyBackground';
 import { Home } from './features/library/pages/Home';
 import { Auth } from './features/auth/pages/Auth';
 import { FileUpload } from './shared/components/FileUpload';
@@ -373,13 +374,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 font-sans text-slate-900 dark:text-slate-100 transition-colors">
-      {/* Toast Notifications */}
-      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismissToast} />
-      
-      <Navbar currentState={state} onNavigate={setState} />
+    <StudyBackground className="flex flex-col">
+      <div className="min-h-screen font-sans text-slate-900 dark:text-slate-100 transition-colors">
+        {/* Toast Notifications */}
+        <ToastContainer toasts={toast.toasts} onDismiss={toast.dismissToast} />
+        
+        <Navbar currentState={state} onNavigate={setState} />
 
-      <main className="relative flex-1 flex flex-col min-h-0">
+        <main className="relative flex-1 flex flex-col min-h-0 pt-28">
 
         {/* PDF with Annotations + Chat side by side — shown on PROCESSING/TOPICS/QUIZ/RESULTS */}
         {['PROCESSING', 'TOPICS', 'QUIZ', 'RESULTS'].includes(state) && pdfUrl && currentFileId && (
@@ -414,6 +416,7 @@ export default function App() {
         </div>
 
       </main>
-    </div>
+      </div>
+    </StudyBackground>
   );
 }
