@@ -14,7 +14,7 @@ interface HomeProps {
 
 export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
   const { isAuthenticated } = useAuth();
-  
+
   return (
     <>
       {/* Hero Mesh Background Accent */}
@@ -53,9 +53,9 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 </svg>
               </span>
             </h1>
-            
+
             <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-xl font-medium tracking-tight">
-              Transform your PDFs into personalized quizzes, smart flashcards, and AI-powered chat. 
+              Transform your PDFs into personalized quizzes, smart flashcards, and AI-powered chat.
               Master any subject with intelligent study tools designed for your success.
             </p>
 
@@ -70,7 +70,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                   >
                     {/* Animated Shine Effect */}
                     <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite] pointer-events-none" />
-                    
+
                     <Upload className="w-6 h-6 group-hover:scale-110 transition-transform" />
                     <span className="relative z-10 tracking-tight">Upload PDF Now</span>
                     <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
@@ -90,25 +90,12 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 <>
                   <motion.button
                     onClick={() => onNavigate('SIGNUP')}
-                    whileHover={{ scale: 1.05, y: -4 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="group relative px-10 py-5 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 text-white rounded-2xl font-black text-xl shadow-[0_20px_50px_rgba(79,70,229,0.3)] hover:shadow-indigo-500/60 transition-all flex items-center gap-3 overflow-hidden border border-white/10"
-                  >
-                    {/* Animated Shine Effect */}
-                    <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite] pointer-events-none" />
-                    
-                    <Sparkles className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-                    <span className="relative z-10 tracking-tight">Get Started Free</span>
-                    <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                  </motion.button>
-                  <motion.button
-                    onClick={() => onNavigate('LOGIN')}
                     whileHover={{ scale: 1.02, y: -2 }}
                     whileTap={{ scale: 0.98 }}
-                    className="group px-8 py-5 bg-white/50 dark:bg-white/5 backdrop-blur-md text-slate-700 dark:text-white border border-slate-200 dark:border-white/10 rounded-2xl font-bold text-lg hover:bg-white dark:hover:bg-white/10 hover:border-indigo-500/30 transition-all flex items-center gap-3"
+                    className="group px-10 py-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-lg shadow-xl shadow-indigo-500/20 transition-all flex items-center gap-3"
                   >
-                    Sign In
-                    <ArrowRight className="w-5 h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                    <span className="tracking-tight">Start Learning for Free</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </motion.button>
                 </>
               )}
@@ -218,24 +205,51 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           </motion.div>
         </div>
 
-        {/* Animated Demo Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.65, ease: 'easeOut' }}
-          className="mt-48"
-        >
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
-              Live Demo
-            </h2>
-          </div>
-          <AnimatedDemo />
-        </motion.div>
+      </div> {/* End of max-w-7xl */}
+
+      {/* Animated Demo Section - Full Width Dark Blue */}
+      <div id="demo" className="relative w-full bg-[#0a1930] py-14 overflow-hidden scroll-mt-20">
+        {/* Decorative Background Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Subtle Glows */}
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px]" />
+
+          {/* Contour / Wavy Lines Pattern (SVG) */}
+          <svg className="absolute inset-0 w-full h-full opacity-[0.03]" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path d="M0 20 Q 25 10 50 20 T 100 20" fill="none" stroke="white" strokeWidth="0.5" />
+            <path d="M0 40 Q 25 30 50 40 T 100 40" fill="none" stroke="white" strokeWidth="0.5" />
+            <path d="M0 60 Q 25 50 50 60 T 100 60" fill="none" stroke="white" strokeWidth="0.5" />
+            <path d="M0 80 Q 25 70 50 80 T 100 80" fill="none" stroke="white" strokeWidth="0.5" />
+          </svg>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.65, ease: 'easeOut' }}
+          >
+            <div className="text-center mb-2">
+              <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-2">
+                Live Demo
+              </h2>
+              <div className="w-12 h-1 bg-indigo-500 mx-auto rounded-full" />
+              <p className="mt-2 text-xl text-slate-300 max-w-2xl mx-auto font-medium">
+                See it in action.
+              </p>
+            </div>
+
+            <AnimatedDemo />
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* How It Works Section */}
-        <div className="mt-32 mb-16">
+        <div id="how-it-works" className="mt-32 mb-16 scroll-mt-32">
           <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 30 }}
@@ -285,7 +299,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         </div>
 
         {/* ── FEATURES SECTION ── */}
-        <div className="mt-32 mb-20">
+        <div id="features" className="mt-32 mb-20 scroll-mt-32">
 
           {/* Section heading */}
           <motion.div
@@ -453,14 +467,12 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                     { label: 'C', text: 'DNA replication', correct: false },
                     { label: 'D', text: 'Cell division', correct: false },
                   ].map(opt => (
-                    <div key={opt.label} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border text-xs font-medium ${
-                      opt.correct
-                        ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-900 dark:text-emerald-200'
-                        : 'bg-white dark:bg-white/4 border-slate-200 dark:border-white/8 text-slate-600 dark:text-slate-300'
-                    }`}>
-                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${
-                        opt.correct ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-white/10 text-slate-500 dark:text-slate-400'
-                      }`}>{opt.label}</span>
+                    <div key={opt.label} className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border text-xs font-medium ${opt.correct
+                      ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-900 dark:text-emerald-200'
+                      : 'bg-white dark:bg-white/4 border-slate-200 dark:border-white/8 text-slate-600 dark:text-slate-300'
+                      }`}>
+                      <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold flex-shrink-0 ${opt.correct ? 'bg-emerald-500 text-white' : 'bg-slate-200 dark:bg-white/10 text-slate-500 dark:text-slate-400'
+                        }`}>{opt.label}</span>
                       {opt.text}
                       {opt.correct && <CheckCircle className="w-3.5 h-3.5 text-emerald-500 ml-auto" />}
                     </div>
@@ -501,7 +513,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         </div>
 
         {/* ── PRICING SECTION ── */}
-        <div className="mt-32 mb-20">
+        <div id="pricing" className="mt-32 mb-20 scroll-mt-32">
           {/* Heading */}
           <motion.div
             className="text-center mb-16"
@@ -667,12 +679,12 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           {/* Footer Gradient Orbs */}
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
           <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-violet-500/10 rounded-full blur-3xl -z-10" />
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
             {/* Brand Column */}
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <Logo size="lg" variant="dark" />
+                <Logo size="xl" variant="dark" />
               </div>
               <p className="text-slate-400 text-base leading-relaxed max-w-md">
                 Empowering students worldwide to achieve academic excellence through AI-powered learning tools.
@@ -725,11 +737,11 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 };
 
 
-const StepCard = ({ step, icon, title, description, color, delay }: { 
-  step: number; 
-  icon: React.ReactNode; 
-  title: string; 
-  description: string; 
+const StepCard = ({ step, icon, title, description, color, delay }: {
+  step: number;
+  icon: React.ReactNode;
+  title: string;
+  description: string;
   color: string;
   delay: number;
 }) => (
@@ -741,20 +753,20 @@ const StepCard = ({ step, icon, title, description, color, delay }: {
   >
     {/* Decorative element */}
     <div className={`absolute top-12 left-1/2 -translate-x-1/2 w-32 h-32 ${color}/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-    
+
     {/* Icon Badge with Step Number */}
     <div className="flex justify-center mb-8">
       <div className="relative">
         {/* Step Number - positioned on top-left of icon */}
-        <motion.div 
+        <motion.div
           whileHover={{ scale: 1.1, rotate: 5 }}
           className="absolute -top-3 -left-3 w-10 h-10 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl flex items-center justify-center z-20 shadow-xl shadow-slate-200/50 dark:shadow-none"
         >
           <span className={`text-base font-black bg-clip-text text-transparent bg-gradient-to-br from-indigo-500 to-violet-600`}>{step}</span>
         </motion.div>
-        
+
         {/* Icon Badge */}
-        <motion.div 
+        <motion.div
           whileHover={{ y: -5, rotate: -5 }}
           className={`w-20 h-20 ${color} rounded-[2rem] flex items-center justify-center shadow-2xl shadow-${color.split('-')[1]}-500/40 relative z-10`}
         >

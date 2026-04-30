@@ -398,7 +398,7 @@ export default function App() {
         )}
 
         {/* Page Content below */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1">
           <AnimatePresence mode="wait">
             <motion.div
               key={state}

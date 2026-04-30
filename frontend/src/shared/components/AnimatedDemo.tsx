@@ -282,7 +282,7 @@ export const AnimatedDemo: React.FC = () => {
   const StepIcon = currentStepData.icon;
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-12">
+    <div className="w-full max-w-5xl mx-auto px-4 pt-0 pb-8">
       <div className="relative">
         {/* Live Demo Badge */}
         <motion.div
