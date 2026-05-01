@@ -202,15 +202,15 @@ export default function App() {
       case 'UPLOAD':
         return (
           <div className="max-w-4xl mx-auto py-20 px-4 relative">
-            {/* Floating Books and Papers Background */}
+            {/* Floating Books and Papers Background - Optimized */}
             <motion.div
                 className="absolute top-16 left-12 text-indigo-400 opacity-30 pointer-events-none"
-                animate={{
-                    y: [0, -25, 0],
-                    rotate: [0, 15, 0]
+                whileInView={{
+                    y: [0, -15, 0],
+                    rotate: [0, 10, 0]
                 }}
                 transition={{
-                    duration: 7,
+                    duration: 8,
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
@@ -220,12 +220,12 @@ export default function App() {
             
             <motion.div
                 className="absolute top-1/3 right-20 text-violet-400 opacity-35 pointer-events-none"
-                animate={{
-                    y: [0, 30, 0],
-                    rotate: [0, -20, 0]
+                whileInView={{
+                    y: [0, 20, 0],
+                    rotate: [0, -15, 0]
                 }}
                 transition={{
-                    duration: 8,
+                    duration: 9,
                     repeat: Infinity,
                     ease: "easeInOut",
                     delay: 0.5
@@ -236,12 +236,12 @@ export default function App() {
             
             <motion.div
                 className="absolute bottom-20 left-16 text-indigo-500 opacity-32 pointer-events-none"
-                animate={{
-                    y: [0, -20, 0],
-                    rotate: [0, 10, 0]
+                whileInView={{
+                    y: [0, -12, 0],
+                    rotate: [0, 8, 0]
                 }}
                 transition={{
-                    duration: 6.5,
+                    duration: 7.5,
                     repeat: Infinity,
                     ease: "easeInOut",
                     delay: 1.2
@@ -252,12 +252,12 @@ export default function App() {
             
             <motion.div
                 className="absolute top-1/2 left-1/4 text-violet-400 opacity-28 pointer-events-none"
-                animate={{
-                    y: [0, 25, 0],
-                    rotate: [0, -15, 0]
+                whileInView={{
+                    y: [0, 18, 0],
+                    rotate: [0, -12, 0]
                 }}
                 transition={{
-                    duration: 7.5,
+                    duration: 8.5,
                     repeat: Infinity,
                     ease: "easeInOut",
                     delay: 2
@@ -268,12 +268,12 @@ export default function App() {
             
             <motion.div
                 className="absolute top-2/3 right-1/3 text-indigo-400 opacity-30 pointer-events-none"
-                animate={{
-                    y: [0, -30, 0],
-                    rotate: [0, 20, 0]
+                whileInView={{
+                    y: [0, -20, 0],
+                    rotate: [0, 15, 0]
                 }}
                 transition={{
-                    duration: 9,
+                    duration: 10,
                     repeat: Infinity,
                     ease: "easeInOut",
                     delay: 0.8
@@ -284,12 +284,12 @@ export default function App() {
             
             <motion.div
                 className="absolute bottom-32 right-16 text-violet-500 opacity-35 pointer-events-none"
-                animate={{
-                    y: [0, 20, 0],
-                    rotate: [0, -25, 0]
+                whileInView={{
+                    y: [0, 15, 0],
+                    rotate: [0, -15, 0]
                 }}
                 transition={{
-                    duration: 8.5,
+                    duration: 9.5,
                     repeat: Infinity,
                     ease: "easeInOut",
                     delay: 1.5
@@ -300,12 +300,12 @@ export default function App() {
             
             <motion.div
                 className="absolute top-1/4 left-1/3 text-indigo-300 opacity-28 pointer-events-none"
-                animate={{
-                    y: [0, -22, 0],
-                    rotate: [0, 12, 0]
+                whileInView={{
+                    y: [0, -14, 0],
+                    rotate: [0, 10, 0]
                 }}
                 transition={{
-                    duration: 7.8,
+                    duration: 8.8,
                     repeat: Infinity,
                     ease: "easeInOut",
                     delay: 0.3

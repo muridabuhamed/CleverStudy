@@ -16,8 +16,8 @@ const DEMO_STEPS = [
           <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition"></div>
           <div className="relative flex flex-col items-center gap-4 p-8 bg-white rounded-2xl border-2 border-dashed border-indigo-300 hover:border-indigo-400 transition">
             <motion.div
-              animate={{ y: [0, -10, 0] }}
-              transition={{ repeat: Infinity, duration: 2 }}
+              whileInView={{ y: [0, -10, 0] }}
+              transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
             >
               <Upload className="w-12 h-12 text-indigo-600" />
             </motion.div>
@@ -54,8 +54,8 @@ const DEMO_STEPS = [
         {/* AI Processing Header */}
         <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl shadow-lg">
           <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+            whileInView={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 3, ease: "linear" }}
           >
             <Sparkles className="w-6 h-6 text-white" />
           </motion.div>
@@ -173,11 +173,11 @@ const DEMO_STEPS = [
                 <motion.div
                   key={i}
                   className="w-1.5 h-1.5 bg-slate-400 rounded-full"
-                  animate={{ y: [0, -4, 0] }}
+                  whileInView={{ y: [0, -4, 0] }}
                   transition={{
                     repeat: Infinity,
-                    duration: 0.6,
-                    delay: i * 0.15,
+                    duration: 0.8,
+                    delay: i * 0.2,
                   }}
                 />
               ))}
@@ -284,11 +284,11 @@ export const AnimatedDemo: React.FC = () => {
   return (
     <div className="w-full max-w-5xl mx-auto px-4 py-12">
       <div className="relative">
-        {/* Live Demo Badge */}
+        {/* Live Demo Badge - Optimized */}
         <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="absolute -top-4 -right-4 z-10"
+          whileInView={{ y: [0, -8, 0] }}
+          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+          className="absolute -top-4 -right-4 z-10 motion-safe-gpu"
         >
           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-full shadow-lg border border-slate-200">
             <Sparkles className="w-3 h-3 text-amber-500" />

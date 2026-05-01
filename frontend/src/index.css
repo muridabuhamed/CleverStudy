@@ -10,9 +10,8 @@
 @variant dark (.dark &);
 
 @layer base {
-  * {
-    @apply transition-colors duration-200;
-  }
+  /* Remove global transition on all elements as it causes massive performance overhead */
+  /* * { @apply transition-colors duration-200; } */
   
   html {
     scroll-behavior: smooth;
@@ -27,11 +26,12 @@
     color-scheme: dark;
   }
 
-  /* Hardware acceleration for smooth animations */
-  [class*="motion-"] {
+  /* Hardware acceleration for smooth animations - using more specific targets */
+  .motion-safe-gpu {
     transform: translateZ(0);
     backface-visibility: hidden;
     perspective: 1000px;
+    will-change: transform, opacity;
   }
 }
 

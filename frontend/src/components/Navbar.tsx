@@ -15,7 +15,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
   const { user, isAuthenticated } = useAuth();
   
   return (
-    <nav className="sticky top-0 z-50 w-full backdrop-blur-xl border-b border-white/10 dark:border-slate-700/50 bg-gradient-to-r from-slate-900 via-indigo-900 to-violet-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900">
+    <nav className="sticky top-0 z-50 w-full backdrop-blur-lg border-b border-white/10 dark:border-slate-700/50 bg-gradient-to-r from-slate-900 via-indigo-900 to-violet-900 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 motion-safe-gpu">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <div
