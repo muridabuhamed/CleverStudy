@@ -34,9 +34,20 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             transition={{ duration: 0.6 }}
             className="text-left"
           >
-            <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter mb-10 leading-[0.85]">
-              Study Smarter,{' '}
-              <span className="relative inline-block mt-4 md:mt-2">
+            <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter mb-10 leading-[0.85] flex flex-col">
+              <motion.span
+                initial={{ opacity: 0, x: -30, rotate: -3 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
+                transition={{ duration: 2.0, type: "spring", stiffness: 40, damping: 20 }}
+              >
+                Study Smarter,
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 2.0, delay: 0.8, type: "spring", stiffness: 40, damping: 20 }}
+                className="relative inline-block mt-4 md:mt-2"
+              >
                 <span className="text-[#f59e0b]">
                   Not Harder
                 </span>
@@ -49,10 +60,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                     strokeLinecap="round"
                     initial={{ pathLength: 0 }}
                     animate={{ pathLength: 1 }}
-                    transition={{ delay: 1, duration: 1.2, ease: "easeInOut" }}
+                    transition={{ delay: 2.5, duration: 2.0, ease: "easeInOut" }}
                   />
                 </svg>
-              </span>
+              </motion.span>
             </h1>
 
             <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed max-w-xl font-medium tracking-tight">
@@ -234,16 +245,26 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           >
             <div className="text-center mb-10">
               {/* Title */}
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.55 }}
-                className="text-5xl md:text-6xl font-black tracking-tight mb-4"
-              >
-                <span className="text-white">Live </span>
-                <span className="text-orange-500">Demo</span>
-              </motion.h2>
+              <div className="flex items-center justify-center gap-x-3 text-5xl md:text-6xl font-black tracking-tight mb-4">
+                <motion.span
+                  initial={{ opacity: 0, x: -30, rotate: -5 }}
+                  whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-white"
+                >
+                  Live
+                </motion.span>
+                <motion.span
+                  initial={{ opacity: 0, x: 30, rotate: 5 }}
+                  whileInView={{ opacity: 1, x: 0, rotate: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  className="text-orange-500"
+                >
+                  Demo
+                </motion.span>
+              </div>
 
               {/* Animated gradient underline */}
               <motion.div
@@ -279,16 +300,26 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
           <div className="text-center mb-20">
             {/* Title */}
-            <motion.h2
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="text-5xl md:text-7xl font-black tracking-tight mb-4"
-            >
-              <span className="text-slate-900">How it </span>
-              <span className="text-orange-500">works</span>
-            </motion.h2>
+            <div className="flex items-center justify-center gap-x-4 text-5xl md:text-7xl font-black tracking-tight mb-4">
+              <motion.span
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: "easeOut" }}
+                className="text-slate-900"
+              >
+                How it
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8, rotate: 10 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 100 }}
+                className="text-orange-500 inline-block"
+              >
+                works
+              </motion.span>
+            </div>
 
             {/* Animated gradient underline */}
             <motion.div
@@ -371,22 +402,28 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           {/* Section heading */}
           <div className="text-center mb-20">
             {/* Title */}
-            <motion.h2
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="flex flex-col items-center mb-4 text-center"
-            >
-              <span className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+            <div className="flex flex-col items-center mb-4 text-center">
+              <motion.span
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white mb-2"
+              >
                 Everything you need to
-              </span>
-              <span className="text-2xl md:text-3xl font-bold italic pr-1">
+              </motion.span>
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+                whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2, type: "spring", stiffness: 100 }}
+                className="text-2xl md:text-3xl font-bold italic pr-1 inline-block"
+              >
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-500 to-orange-400">
                   study smarter, not harder
                 </span>
-              </span>
-            </motion.h2>
+              </motion.span>
+            </div>
 
             {/* Animated gradient underline */}
             <motion.div
