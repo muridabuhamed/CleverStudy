@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
-import { CheckCircle, Sparkles, Zap, Shield, ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
+import { CheckCircle, Sparkles, ArrowRight, Zap } from 'lucide-react';
+import { AppState } from '@/App';
 
 interface PricingPlan {
   name: string;
@@ -13,195 +14,209 @@ interface PricingPlan {
   buttonText: string;
   highlighted?: boolean;
   badge?: string;
-  icon: React.ReactNode;
 }
 
 const plans: PricingPlan[] = [
   {
     name: 'Free',
     price: { monthly: '0', annual: '0' },
-    description: 'Perfect to get started',
+    description: 'Perfect for individuals exploring the basics.',
     features: [
-      'Upload limited PDFs',
-      'Basic AI analysis',
-      'Limited quizzes',
+      '3 PDF uploads / month',
+      'Standard AI analysis',
+      '5 AI-generated quizzes',
       'Standard support'
     ],
     buttonText: 'Get Started Free',
-    icon: <Shield className="w-6 h-6" />
   },
   {
     name: 'Pro',
     price: { monthly: '9.99', annual: '7.99' },
-    description: 'Best for serious students',
+    description: 'The complete suite for dedicated students.',
     features: [
       'Unlimited PDF uploads',
-      'Full AI analysis',
+      'Deep semantic analysis',
       'Unlimited quizzes & flashcards',
       'AI Chat Assistant',
-      'Progress analytics'
+      'Smart progress analytics'
     ],
-    buttonText: 'Upgrade to Pro',
+    buttonText: 'Start Free Trial',
     highlighted: true,
-    badge: 'Most Popular',
-    icon: <Sparkles className="w-6 h-6" />
+    badge: 'MOST POPULAR',
   },
   {
     name: 'Premium',
     price: { monthly: '19.99', annual: '15.99' },
-    description: 'For power users & teams',
+    description: 'Power tools for researchers and teams.',
     features: [
       'Everything in Pro',
-      'Faster AI responses',
-      'Advanced analytics',
-      'Priority support'
+      'Cross-document synthesis',
+      'Advanced data visualization',
+      'Priority 24/7 support',
+      'Shared team workspace'
     ],
-    buttonText: 'Go Premium',
-    icon: <Zap className="w-6 h-6" />
+    buttonText: 'Contact Sales',
   }
 ];
 
-export const Pricing: React.FC = () => {
+interface PricingProps {
+  onNavigate: (state: AppState) => void;
+}
+
+export const Pricing: React.FC<PricingProps> = ({ onNavigate }) => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   return (
-    <section id="pricing" className="py-32 relative overflow-hidden">
-      {/* Background Orbs for Pricing Section */}
-      <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-500/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-[120px]" />
+    <section id="pricing" className="py-32 relative overflow-hidden transition-colors duration-500">
+      {/* Background Orbs to match the rest of the website */}
+      <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
+        <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-24">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-400/20 text-indigo-300 text-sm font-bold mb-6 backdrop-blur-sm"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/5 border border-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-black uppercase tracking-widest mb-6 backdrop-blur-sm"
           >
-            <Sparkles className="w-4 h-4" />
-            Pricing
+            <Zap className="w-3.5 h-3.5" />
+            Pricing Plans
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-white mb-6"
+            className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white mb-6 tracking-tight leading-tight"
           >
-            Simple, Transparent Pricing
+            Simple, <span className="text-indigo-600">Transparent</span> Pricing
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-xl text-slate-400 max-w-2xl mx-auto mb-12"
+            transition={{ delay: 0.1 }}
+            className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-12 font-medium"
           >
-            Choose the plan that fits your study needs
+            Choose the perfect plan for your academic journey. No hidden fees.
           </motion.p>
 
-          {/* Toggle */}
-          <div className="flex items-center justify-center gap-4 mb-16">
-            <span className={`text-sm font-bold transition-colors ${!isAnnual ? 'text-white' : 'text-slate-500'}`}>Monthly</span>
+          {/* Toggle Switch */}
+          <div className="flex items-center justify-center gap-6 mt-10">
+            <span className={`text-sm font-bold transition-colors ${!isAnnual ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>Monthly Billing</span>
             <button
               onClick={() => setIsAnnual(!isAnnual)}
-              className="relative w-14 h-7 bg-white/10 backdrop-blur-md rounded-full border border-white/20 p-1 transition-colors hover:border-white/40"
+              className="relative w-[60px] h-[32px] bg-slate-200/50 dark:bg-slate-800/50 backdrop-blur-md rounded-full p-1.5 transition-all focus:outline-none ring-offset-white dark:ring-offset-slate-950 focus:ring-2 focus:ring-indigo-500 border border-slate-300/20"
             >
               <motion.div
                 animate={{ x: isAnnual ? 28 : 0 }}
-                className="w-5 h-5 bg-gradient-to-br from-indigo-400 to-violet-500 rounded-full shadow-lg"
+                className="w-5 h-5 bg-indigo-600 rounded-full shadow-lg"
               />
             </button>
-            <div className="flex items-center gap-2">
-              <span className={`text-sm font-bold transition-colors ${isAnnual ? 'text-white' : 'text-slate-500'}`}>Annual</span>
-              <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-wider">
+            <div className="flex items-center gap-3">
+              <span className={`text-sm font-bold transition-colors ${isAnnual ? 'text-slate-900 dark:text-white' : 'text-slate-400'}`}>Annual Billing</span>
+              <span className="px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-[10px] font-black uppercase tracking-widest border border-emerald-200 dark:border-emerald-800">
                 Save 20%
               </span>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch lg:px-4">
           {plans.map((plan, index) => (
-            <PricingCard key={plan.name} plan={plan} isAnnual={isAnnual} index={index} />
+            <PricingCard key={plan.name} plan={plan} isAnnual={isAnnual} index={index} onNavigate={onNavigate} />
           ))}
         </div>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.6 }}
-          className="text-center mt-12 text-slate-500 text-sm font-medium"
+          className="mt-20 text-center"
         >
-          No credit card required. Cancel anytime.
-        </motion.p>
+          <p className="text-slate-500 dark:text-slate-400 text-sm font-bold mb-4 italic">
+            No credit card required to start your free trial. Cancel anytime.
+          </p>
+          <div className="h-px w-24 bg-slate-200 dark:bg-slate-800 mx-auto" />
+        </motion.div>
       </div>
     </section>
   );
 };
 
-const PricingCard: React.FC<{ plan: PricingPlan; isAnnual: boolean; index: number }> = ({ plan, isAnnual, index }) => {
+const PricingCard: React.FC<{ plan: PricingPlan; isAnnual: boolean; index: number; onNavigate: (state: AppState) => void }> = ({ plan, isAnnual, index, onNavigate }) => {
   const price = isAnnual ? plan.price.annual : plan.price.monthly;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: 0.1 * index, duration: 0.5 }}
-      whileHover={{ y: -10 }}
-      className={`relative flex flex-col p-8 rounded-3xl backdrop-blur-xl border transition-all duration-500 group ${
+      transition={{ delay: 0.1 * index, duration: 0.6, ease: "easeOut" }}
+      className={`relative flex flex-col p-10 rounded-[2.5rem] border transition-all duration-500 group ${
         plan.highlighted
-          ? 'bg-indigo-500/10 border-indigo-400/40 shadow-2xl shadow-indigo-500/20'
-          : 'bg-white/5 border-white/10 hover:border-white/20'
+          ? 'border-indigo-500 ring-4 ring-indigo-500/5 shadow-2xl bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl scale-105 z-10'
+          : 'border-slate-200 dark:border-white/5 shadow-sm bg-white/40 dark:bg-slate-900/20 backdrop-blur-xl hover:bg-white/60 dark:hover:bg-slate-900/30 hover:border-slate-300 dark:hover:border-white/10'
       }`}
     >
       {plan.badge && (
-        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-gradient-to-r from-indigo-500 to-violet-600 rounded-full text-white text-xs font-black shadow-lg shadow-indigo-500/40 z-20">
-          {plan.badge}
+        <div className="absolute -top-[1.25rem] left-1/2 -translate-x-1/2 z-20">
+          <span className="bg-indigo-600 text-white px-6 py-2.5 rounded-full text-[11px] font-black tracking-[0.2em] whitespace-nowrap shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
+            {plan.badge}
+          </span>
         </div>
       )}
 
-      <div className="flex items-center gap-3 mb-6">
-        <div className={`p-2.5 rounded-xl ${plan.highlighted ? 'bg-indigo-500 text-white' : 'bg-white/10 text-slate-300'}`}>
-          {plan.icon}
+      <div className="mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{plan.name}</h3>
+          {plan.highlighted && <Sparkles className="w-6 h-6 text-indigo-500" />}
         </div>
-        <h3 className="text-2xl font-bold text-white">{plan.name}</h3>
+        <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{plan.description}</p>
       </div>
 
-      <div className="mb-6">
-        <div className="flex items-baseline gap-1">
-          <span className="text-5xl font-black text-white">${price}</span>
-          <span className="text-slate-400 font-bold">/month</span>
+      <div className="mb-10">
+        <div className="flex items-baseline gap-2">
+          <span className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter">${price}</span>
+          <span className="text-slate-500 dark:text-slate-500 font-bold text-lg">/mo</span>
         </div>
-        <p className="text-slate-400 mt-2 font-medium">{plan.description}</p>
       </div>
 
-      <div className="h-px bg-white/10 w-full mb-8" />
+      <div className="h-px w-full bg-slate-100 dark:bg-slate-800 mb-10" />
 
-      <div className="flex-1 space-y-4 mb-10">
+      <div className="flex-1 space-y-5 mb-12">
         {plan.features.map((feature, i) => (
-          <div key={i} className="flex items-start gap-3">
-            <CheckCircle className={`w-5 h-5 mt-0.5 shrink-0 ${plan.highlighted ? 'text-indigo-400' : 'text-slate-500'}`} />
-            <span className="text-slate-300 text-sm font-medium leading-tight">{feature}</span>
+          <div key={i} className="flex items-start gap-4">
+            <div className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
+              plan.highlighted ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
+            }`}>
+              <CheckCircle className="w-4 h-4" />
+            </div>
+            <span className="text-slate-700 dark:text-slate-300 text-[15px] font-bold tracking-tight leading-snug">{feature}</span>
           </div>
         ))}
       </div>
 
       <motion.button
-        whileHover={{ scale: 1.02 }}
+        whileHover={{ scale: 1.02, y: -4 }}
         whileTap={{ scale: 0.98 }}
-        className={`w-full py-4 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-2 ${
+        onClick={() => onNavigate('SIGNUP')}
+        className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 overflow-hidden relative group/btn ${
           plan.highlighted
-            ? 'bg-white text-indigo-900 shadow-xl shadow-white/10 hover:shadow-white/20'
-            : 'bg-slate-900/50 text-white border border-white/10 hover:bg-slate-900/80 hover:border-white/20'
+            ? 'bg-indigo-600 text-white shadow-[0_15px_40px_rgba(79,70,229,0.4)] hover:bg-indigo-700'
+            : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-xl'
         }`}
       >
-        {plan.buttonText}
-        <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        <span className="relative z-10">{plan.buttonText}</span>
+        <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
+        
+        {/* Animated Shine Effect for Pro button */}
+        {plan.highlighted && (
+          <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover/btn:animate-[shine_1.5s_infinite] pointer-events-none" />
+        )}
       </motion.button>
     </motion.div>
   );

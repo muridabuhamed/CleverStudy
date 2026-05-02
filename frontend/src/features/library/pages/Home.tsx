@@ -6,6 +6,7 @@ import { useAuth } from '@/shared/contexts/AuthContext';
 import { AnimatedDemo } from '@/shared/components/AnimatedDemo';
 import { Logo } from '@/shared/components/Logo';
 import { StudyBackground } from '@/shared/components/StudyBackground';
+import { Pricing } from '@/components/Pricing';
 
 interface HomeProps {
   onStart: () => void;
@@ -252,22 +253,22 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
       <div id="how-it-works" className="bg-[#fcfbf7] py-24 scroll-mt-20 relative overflow-hidden">
         {/* Floating Decorative Elements for Depth */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <motion.div 
-            animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }} 
+          <motion.div
+            animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
             transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-20 left-[5%] text-indigo-200/40"
           >
             <BookOpen size={120} />
           </motion.div>
-          <motion.div 
-            animate={{ y: [0, 30, 0], rotate: [0, -15, 0] }} 
+          <motion.div
+            animate={{ y: [0, 30, 0], rotate: [0, -15, 0] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
             className="absolute bottom-20 right-[5%] text-violet-200/40"
           >
             <FileText size={140} />
           </motion.div>
-          <motion.div 
-            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }} 
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-1/2 left-[15%] text-amber-200/30"
           >
@@ -297,7 +298,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           <div className="relative">
             {/* Connection Line - Desktop */}
             <div className="hidden lg:flex absolute top-12 left-[15%] right-[15%] h-[2px] bg-indigo-50 items-center -z-0 overflow-hidden">
-              <motion.div 
+              <motion.div
                 initial={{ scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
                 viewport={{ once: true }}
@@ -311,35 +312,35 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 relative z-10">
-              <StepCard 
-                step="1" 
-                icon={<Upload className="w-10 h-10 text-white" />} 
-                title="Upload your material" 
-                description="PDF lecture notes, textbooks, or study guides — we support all major formats." 
+              <StepCard
+                step="1"
+                icon={<Upload className="w-10 h-10 text-white" />}
+                title="Upload your material"
+                description="PDF lecture notes, textbooks, or study guides — we support all major formats."
                 badge="PDF, DOCX, TXT"
                 badgeColor="bg-indigo-50 text-indigo-600"
-                color="bg-[#4f46e5]" 
-                delay={0} 
+                color="bg-[#4f46e5]"
+                delay={0}
               />
-              <StepCard 
-                step="2" 
-                icon={<Brain className="w-10 h-10 text-white" />} 
-                title="AI analysis" 
-                description="Our AI extracts key concepts and generates smart questions tailored to your content." 
+              <StepCard
+                step="2"
+                icon={<Brain className="w-10 h-10 text-white" />}
+                title="AI analysis"
+                description="Our AI extracts key concepts and generates smart questions tailored to your content."
                 badge="Runs in seconds"
                 badgeColor="bg-emerald-50 text-emerald-600"
-                color="bg-[#3730a3]" 
-                delay={0.2} 
+                color="bg-[#3730a3]"
+                delay={0.2}
               />
-              <StepCard 
-                step="3" 
-                icon={<CheckCircle className="w-10 h-10 text-white" />} 
-                title="Practice and master" 
-                description="Take quizzes, review flashcards, and track your progress to ace your exams." 
+              <StepCard
+                step="3"
+                icon={<CheckCircle className="w-10 h-10 text-white" />}
+                title="Practice and master"
+                description="Take quizzes, review flashcards, and track your progress to ace your exams."
                 badge="Avg. 94% score lift"
                 badgeColor="bg-pink-50 text-pink-600"
-                color="bg-[#9d174d]" 
-                delay={0.4} 
+                color="bg-[#9d174d]"
+                delay={0.4}
               />
             </div>
           </div>
@@ -562,161 +563,8 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
         </div>
 
-        {/* ── PRICING SECTION ── */}
-        <div id="pricing" className="mt-32 mb-20 scroll-mt-32">
-          {/* Heading */}
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-sm font-semibold mb-4 backdrop-blur-sm">
-              <Star className="w-4 h-4" /> Pricing
-            </span>
-            <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-              Choose the plan that fits your study needs
-            </p>
-          </motion.div>
-
-          {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-stretch">
-
-            {/* Free */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              onClick={() => onNavigate('SIGNUP')}
-              className="group relative p-8 bg-white/60 dark:bg-slate-900/40 backdrop-blur-2xl rounded-[2.5rem] border border-white/20 dark:border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.3)] hover:shadow-[0_30px_60px_rgba(99,102,241,0.15)] transition-all duration-500 overflow-hidden cursor-pointer"
-            >
-              {/* Background accent */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-transform duration-700" />
-              <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3">Free</p>
-                <div className="flex items-end gap-1.5 mb-1">
-                  <span className="text-5xl font-black text-slate-900 dark:text-white leading-none">$0</span>
-                  <span className="text-slate-400 text-sm mb-1.5">/month</span>
-                </div>
-                <p className="text-slate-600 dark:text-slate-500 text-xs mt-2">Perfect to get started</p>
-              </div>
-              <div className="h-px bg-slate-200 dark:bg-white/8 mb-8" />
-              <ul className="space-y-3.5 flex-1">
-                {['Upload limited PDFs', 'Basic AI analysis', 'Limited quizzes', 'Standard support'].map(f => (
-                  <li key={f} className="flex items-center gap-2.5 text-slate-600 dark:text-slate-300 text-sm">
-                    <CheckCircle className="w-4 h-4 text-slate-400 flex-shrink-0" />{f}
-                  </li>
-                ))}
-              </ul>
-              <motion.button
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onNavigate('SIGNUP')}
-                className="mt-10 w-full py-4 rounded-2xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-black shadow-xl transition-all"
-              >
-                Get Started Free
-              </motion.button>
-            </motion.div>
-
-            {/* Pro — highlighted */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.1 }}
-              whileHover={{ y: -6 }}
-              className="relative flex flex-col p-10 rounded-3xl border-2 border-indigo-500/80 scale-[1.05] z-10 transition-all duration-300"
-              style={{ background: 'linear-gradient(150deg,rgba(79,70,229,0.22) 0%,rgba(109,40,217,0.18) 100%)' }}
-            >
-              {/* Most Popular badge */}
-              <div className="absolute -top-[17px] left-1/2 -translate-x-1/2 whitespace-nowrap">
-                <span className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold tracking-wide text-white"
-                  style={{ background: 'linear-gradient(135deg,#6366f1,#7c3aed)', boxShadow: '0 4px 14px rgba(99,102,241,0.5)' }}>
-                  <Star className="w-3 h-3 fill-white" /> Most Popular
-                </span>
-              </div>
-              {/* Subtle glow */}
-              <div className="absolute inset-0 rounded-3xl bg-indigo-600/5 blur-2xl -z-10 pointer-events-none" />
-
-              <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-indigo-300 mb-3">Pro</p>
-                <div className="flex items-end gap-1.5 mb-1">
-                  <span className="text-5xl font-black text-white leading-none">$9.99</span>
-                  <span className="text-indigo-200 text-sm mb-1.5">/month</span>
-                </div>
-                <p className="text-indigo-300/70 text-xs mt-2">Best for serious students</p>
-              </div>
-              <div className="h-px bg-indigo-400/20 mb-8" />
-              <ul className="space-y-3.5 flex-1">
-                {['Unlimited PDF uploads', 'Full AI analysis', 'Unlimited quizzes & flashcards', 'AI Chat Assistant', 'Progress analytics'].map(f => (
-                  <li key={f} className="flex items-center gap-2.5 text-slate-200 text-sm">
-                    <CheckCircle className="w-4 h-4 text-indigo-400 flex-shrink-0" />{f}
-                  </li>
-                ))}
-              </ul>
-              <motion.button
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onNavigate('SIGNUP')}
-                className="mt-10 w-full py-4 rounded-2xl bg-white text-indigo-600 text-sm font-black shadow-[0_10px_30px_rgba(255,255,255,0.2)] transition-all"
-              >
-                Upgrade to Pro
-              </motion.button>
-            </motion.div>
-
-            {/* Premium */}
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.55, ease: 'easeOut', delay: 0.2 }}
-              whileHover={{ y: -6 }}
-              className="relative flex flex-col p-10 bg-white/[0.04] backdrop-blur-xl rounded-3xl border border-white/10 hover:border-violet-400/30 transition-all duration-300"
-            >
-              <div className="mb-8">
-                <p className="text-xs font-semibold uppercase tracking-widest text-violet-300 mb-3">Premium</p>
-                <div className="flex items-end gap-1.5 mb-1">
-                  <span className="text-5xl font-black text-white leading-none">$19.99</span>
-                  <span className="text-slate-400 text-sm mb-1.5">/month</span>
-                </div>
-                <p className="text-slate-500 text-xs mt-2">For power users & teams</p>
-              </div>
-              <div className="h-px bg-white/8 mb-8" />
-              <ul className="space-y-3.5 flex-1">
-                {['Everything in Pro', 'Faster AI responses', 'Advanced analytics', 'Priority support'].map(f => (
-                  <li key={f} className="flex items-center gap-2.5 text-slate-300 text-sm">
-                    <CheckCircle className="w-4 h-4 text-violet-400 flex-shrink-0" />{f}
-                  </li>
-                ))}
-              </ul>
-              <motion.button
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onNavigate('SIGNUP')}
-                className="mt-10 w-full py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-black shadow-xl shadow-violet-500/20 transition-all"
-              >
-                Go Premium
-              </motion.button>
-            </motion.div>
-          </div>
-
-          {/* Trust line */}
-          <motion.p
-            className="text-center text-slate-400 text-sm mt-8"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3, duration: 0.5 }}
-          >
-            No credit card required. Cancel anytime.
-          </motion.p>
-        </div>
+        {/* Pricing Section */}
+        <Pricing onNavigate={onNavigate} />
 
 
 
@@ -809,7 +657,7 @@ const StepCard = ({ step, icon, title, description, color, delay, badge, badgeCo
     {/* Circular Icon with Step Number */}
     <div className="relative mb-10">
       {/* Step Number Circle with Spring Pop */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 0 }}
         whileInView={{ scale: 1 }}
         viewport={{ once: true }}
@@ -820,13 +668,13 @@ const StepCard = ({ step, icon, title, description, color, delay, badge, badgeCo
       </motion.div>
 
       {/* Pulsing Outer Glow */}
-      <motion.div 
+      <motion.div
         animate={{ scale: [1, 1.15, 1], opacity: [0, 0.3, 0] }}
         transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay }}
         className={`absolute inset-0 rounded-full ${color} blur-xl -z-10`}
       />
 
-      <motion.div 
+      <motion.div
         animate={{ y: [0, -8, 0] }}
         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut", delay: delay * 1.5 }}
         whileHover={{ scale: 1.1, rotate: 5, y: -12 }}
@@ -842,7 +690,7 @@ const StepCard = ({ step, icon, title, description, color, delay, badge, badgeCo
     </div>
 
     <div className="space-y-4 max-w-[280px]">
-      <motion.h3 
+      <motion.h3
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -851,7 +699,7 @@ const StepCard = ({ step, icon, title, description, color, delay, badge, badgeCo
       >
         {title}
       </motion.h3>
-      <motion.p 
+      <motion.p
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -860,9 +708,9 @@ const StepCard = ({ step, icon, title, description, color, delay, badge, badgeCo
       >
         {description}
       </motion.p>
-      
+
       {badge && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
