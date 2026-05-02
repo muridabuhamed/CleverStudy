@@ -67,7 +67,7 @@ export const Pricing: React.FC<PricingProps> = ({ onNavigate }) => {
   const [isAnnual, setIsAnnual] = useState(false);
 
   return (
-    <section id="pricing" className="py-32 relative overflow-hidden transition-colors duration-500">
+    <section id="pricing" className="pt-32 pb-12 relative overflow-hidden transition-colors duration-500">
       {/* Background Orbs to match the rest of the website */}
       <div className="absolute inset-0 -z-10 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-indigo-500/5 rounded-full blur-[120px] animate-pulse" />

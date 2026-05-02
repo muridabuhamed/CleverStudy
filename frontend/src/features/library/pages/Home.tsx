@@ -655,7 +655,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
-          className="relative mt-32 pt-16 pb-8 border-t border-slate-200 dark:border-white/10"
+          className="relative mt-0 pt-16 pb-8 border-t border-slate-200 dark:border-white/10"
         >
           {/* Footer Gradient Orbs */}
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl -z-10" />
