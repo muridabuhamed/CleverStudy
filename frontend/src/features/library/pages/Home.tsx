@@ -25,7 +25,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         <div className="absolute bottom-[20%] left-[20%] w-[35%] h-[35%] bg-pink-500/10 rounded-full blur-[110px] animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 pt-16 pb-24 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Hero content */}
           <motion.div
@@ -225,7 +225,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           </svg>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -276,7 +276,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           </motion.div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
           <motion.div
             className="text-center mb-20"
             initial={{ opacity: 0, y: 30 }}
@@ -347,7 +347,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 py-20">
 
         {/* ── FEATURES SECTION ── */}
         <div id="features" className="mt-32 mb-20 scroll-mt-32">

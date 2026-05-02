@@ -74,7 +74,7 @@ export const Pricing: React.FC<PricingProps> = ({ onNavigate }) => {
         <div className="absolute bottom-1/4 -right-20 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
         <div className="text-center mb-24">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -156,46 +156,46 @@ const PricingCard: React.FC<{ plan: PricingPlan; isAnnual: boolean; index: numbe
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: 0.1 * index, duration: 0.6, ease: "easeOut" }}
-      className={`relative flex flex-col p-10 rounded-[2.5rem] border transition-all duration-500 group ${
+      className={`relative flex flex-col p-8 rounded-[2rem] border transition-all duration-500 group max-w-md mx-auto w-full ${
         plan.highlighted
           ? 'border-indigo-500 ring-4 ring-indigo-500/5 shadow-2xl bg-white/80 dark:bg-slate-900/60 backdrop-blur-2xl scale-105 z-10'
           : 'border-slate-200 dark:border-white/5 shadow-sm bg-white/40 dark:bg-slate-900/20 backdrop-blur-xl hover:bg-white/60 dark:hover:bg-slate-900/30 hover:border-slate-300 dark:hover:border-white/10'
       }`}
     >
       {plan.badge && (
-        <div className="absolute -top-[1.25rem] left-1/2 -translate-x-1/2 z-20">
-          <span className="bg-indigo-600 text-white px-6 py-2.5 rounded-full text-[11px] font-black tracking-[0.2em] whitespace-nowrap shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
+        <div className="absolute -top-[1.1rem] left-1/2 -translate-x-1/2 z-20">
+          <span className="bg-indigo-600 text-white px-5 py-2 rounded-full text-[10px] font-black tracking-[0.2em] whitespace-nowrap shadow-[0_10px_30px_rgba(79,70,229,0.3)]">
             {plan.badge}
           </span>
         </div>
       )}
 
-      <div className="mb-10">
-        <div className="flex items-center gap-3 mb-4">
-          <h3 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">{plan.name}</h3>
-          {plan.highlighted && <Sparkles className="w-6 h-6 text-indigo-500" />}
+      <div className="mb-8">
+        <div className="flex items-center gap-2.5 mb-3">
+          <h3 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{plan.name}</h3>
+          {plan.highlighted && <Sparkles className="w-5 h-5 text-indigo-500" />}
         </div>
-        <p className="text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{plan.description}</p>
+        <p className="text-sm text-slate-600 dark:text-slate-400 font-medium leading-relaxed">{plan.description}</p>
       </div>
 
-      <div className="mb-10">
-        <div className="flex items-baseline gap-2">
-          <span className="text-6xl font-black text-slate-900 dark:text-white tracking-tighter">${price}</span>
-          <span className="text-slate-500 dark:text-slate-500 font-bold text-lg">/mo</span>
+      <div className="mb-8">
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter">${price}</span>
+          <span className="text-slate-500 dark:text-slate-500 font-bold text-base">/mo</span>
         </div>
       </div>
 
-      <div className="h-px w-full bg-slate-100 dark:bg-slate-800 mb-10" />
+      <div className="h-px w-full bg-slate-100 dark:bg-slate-800/50 mb-8" />
 
-      <div className="flex-1 space-y-5 mb-12">
+      <div className="flex-1 space-y-4 mb-10">
         {plan.features.map((feature, i) => (
-          <div key={i} className="flex items-start gap-4">
-            <div className={`mt-1 flex-shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${
+          <div key={i} className="flex items-start gap-3">
+            <div className={`mt-0.5 flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center ${
               plan.highlighted ? 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'
             }`}>
-              <CheckCircle className="w-4 h-4" />
+              <CheckCircle className="w-3.5 h-3.5" />
             </div>
-            <span className="text-slate-700 dark:text-slate-300 text-[15px] font-bold tracking-tight leading-snug">{feature}</span>
+            <span className="text-slate-700 dark:text-slate-300 text-[14px] font-bold tracking-tight leading-snug">{feature}</span>
           </div>
         ))}
       </div>
@@ -204,14 +204,14 @@ const PricingCard: React.FC<{ plan: PricingPlan; isAnnual: boolean; index: numbe
         whileHover={{ scale: 1.02, y: -4 }}
         whileTap={{ scale: 0.98 }}
         onClick={() => onNavigate('SIGNUP')}
-        className={`w-full py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 overflow-hidden relative group/btn ${
+        className={`w-full py-4 rounded-xl font-black text-base transition-all flex items-center justify-center gap-2.5 overflow-hidden relative group/btn ${
           plan.highlighted
             ? 'bg-indigo-600 text-white shadow-[0_15px_40px_rgba(79,70,229,0.4)] hover:bg-indigo-700'
             : 'bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:bg-slate-800 dark:hover:bg-slate-100 shadow-xl'
         }`}
       >
         <span className="relative z-10">{plan.buttonText}</span>
-        <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
+        <ArrowRight className="w-4.5 h-4.5 group-hover/btn:translate-x-1.5 transition-transform relative z-10" />
         
         {/* Animated Shine Effect for Pro button */}
         {plan.highlighted && (

@@ -27,7 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
 
   return (
     <div className="fixed top-6 left-0 right-0 z-50 px-8 pointer-events-none">
-      <nav className="max-w-7xl mx-auto backdrop-blur-3xl saturate-[1.8] border border-white/40 dark:border-white/10 bg-white/20 dark:bg-slate-900/40 rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-all pointer-events-auto overflow-hidden group/nav">
+      <nav className="max-w-[1440px] mx-auto backdrop-blur-3xl saturate-[1.8] border border-white/40 dark:border-white/10 bg-white/20 dark:bg-slate-900/40 rounded-[2.5rem] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] dark:shadow-[0_30px_60px_rgba(0,0,0,0.5)] transition-all pointer-events-auto overflow-hidden group/nav">
         {/* Subtle mesh background for the Navbar */}
         <div className="absolute inset-0 opacity-30 pointer-events-none">
           <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[140%] bg-indigo-400/15 rounded-full blur-[50px]" />
