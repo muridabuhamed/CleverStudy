@@ -128,13 +128,13 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 <div className="mt-4 flex items-center gap-2">
                   <div className="flex-1 h-2 bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                     <motion.div
-                      className="h-full bg-[#0a194f]"
+                      className="h-full bg-[#0a194f] dark:bg-white"
                       initial={{ width: '0%' }}
                       animate={{ width: '85%' }}
                       transition={{ delay: 1, duration: 1.5 }}
                     />
                   </div>
-                  <span className="text-xs font-bold text-[#0a194f]">85%</span>
+                  <span className="text-xs font-bold text-[#0a194f] dark:text-white">85%</span>
                 </div>
               </motion.div>
 
@@ -232,14 +232,38 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.65, ease: 'easeOut' }}
           >
-            <div className="text-center mb-2">
-              <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-2">
-                Live Demo
-              </h2>
-              <div className="w-12 h-1 bg-indigo-500 mx-auto rounded-full" />
-              <p className="mt-2 text-xl text-slate-300 max-w-2xl mx-auto font-medium">
-                See it in action.
-              </p>
+            <div className="text-center mb-10">
+              {/* Title */}
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55 }}
+                className="text-5xl md:text-6xl font-black tracking-tight mb-4"
+              >
+                <span className="text-white">Live </span>
+                <span className="text-orange-500">Demo</span>
+              </motion.h2>
+
+              {/* Animated gradient underline */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
+                className="mx-auto mb-5 h-1.5 w-24 rounded-full bg-orange-500 origin-center"
+              />
+
+              {/* Subtitle */}
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="text-lg text-slate-400 whitespace-nowrap mx-auto leading-relaxed"
+              >
+                Watch CleverStudy turn a PDF into quizzes, flashcards, and AI chat — in seconds.
+              </motion.p>
             </div>
 
             <AnimatedDemo />
@@ -251,49 +275,41 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
       {/* How It Works Section - Off-white Background */}
       <div id="how-it-works" className="bg-[#fcfbf7] py-24 scroll-mt-20 relative overflow-hidden">
-        {/* Floating Decorative Elements for Depth */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <motion.div
-            animate={{ y: [0, -20, 0], rotate: [0, 10, 0] }}
-            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-20 left-[5%] text-indigo-200/40"
-          >
-            <BookOpen size={120} />
-          </motion.div>
-          <motion.div
-            animate={{ y: [0, 30, 0], rotate: [0, -15, 0] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute bottom-20 right-[5%] text-violet-200/40"
-          >
-            <FileText size={140} />
-          </motion.div>
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.5, 0.2] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/2 left-[15%] text-amber-200/30"
-          >
-            <Sparkles size={60} />
-          </motion.div>
-        </div>
 
         <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 relative z-10">
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-            <span className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-sm font-semibold mb-6">
-              Simple Process
-            </span>
-            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight">
-              How it works
-            </h2>
-            <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed">
+          <div className="text-center mb-20">
+            {/* Title */}
+            <motion.h2
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="text-5xl md:text-7xl font-black tracking-tight mb-4"
+            >
+              <span className="text-slate-900">How it </span>
+              <span className="text-orange-500">works</span>
+            </motion.h2>
+
+            {/* Animated gradient underline */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+              className="mx-auto mb-5 h-1.5 w-24 rounded-full bg-orange-500 origin-center"
+            />
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.3, ease: 'easeOut' }}
+              className="text-lg md:text-xl text-slate-500 whitespace-nowrap mx-auto leading-relaxed"
+            >
               Three steps to turn any study material into an interactive learning experience.
-            </p>
-          </motion.div>
+            </motion.p>
+          </div>
 
           <div className="relative">
             {/* Connection Line - Desktop */}
@@ -347,29 +363,51 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
         </div>
       </div>
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 py-20">
+      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 pt-8 pb-20">
 
         {/* ── FEATURES SECTION ── */}
-        <div id="features" className="mt-32 mb-20 scroll-mt-32">
+        <div id="features" className="mt-8 mb-20 scroll-mt-32">
 
           {/* Section heading */}
-          <motion.div
-            className="text-center mb-20"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-          >
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-900/10 dark:border-white/15 text-slate-600 dark:text-slate-300 text-xs font-semibold mb-5 uppercase tracking-widest">
-              <Zap className="w-3.5 h-3.5" /> Features
-            </span>
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 leading-tight">
-              Everything you need to study smarter
-            </h2>
-            <p className="text-slate-600 dark:text-slate-400 max-w-xl mx-auto">
+          <div className="text-center mb-20">
+            {/* Title */}
+            <motion.h2
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="flex flex-col items-center mb-4 text-center"
+            >
+              <span className="text-4xl md:text-5xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+                Everything you need to
+              </span>
+              <span className="text-2xl md:text-3xl font-bold italic pr-1">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-amber-500 to-orange-400">
+                  study smarter, not harder
+                </span>
+              </span>
+            </motion.h2>
+
+            {/* Animated gradient underline */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.2, ease: 'easeOut' }}
+              className="mx-auto mb-5 h-1.5 w-40 rounded-full bg-orange-500 origin-center"
+            />
+
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, delay: 0.3, ease: 'easeOut' }}
+              className="text-lg text-slate-500 dark:text-slate-400 whitespace-nowrap mx-auto"
+            >
               From upload to mastery — Acadify handles every step.
-            </p>
-          </motion.div>
+            </motion.p>
+          </div>
 
           {/* ── 3 PRIMARY FEATURES (alternating) ── */}
           <div className="space-y-24">
@@ -382,15 +420,12 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
             >
-              <div>
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 mb-6">
-                  <FileText className="w-5 h-5 text-indigo-600 dark:text-indigo-300" />
-                </div>
+              <div className="text-center flex flex-col items-center">
                 <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Upload your materials and start instantly</h3>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6 max-w-md">
                   Drop any lecture note or textbook. CleverStudy processes it in seconds.
                 </p>
-                <ul className="space-y-2">
+                <ul className="space-y-2 flex flex-col items-center">
                   {['PDF, DOCX, and TXT formats', 'Drag-and-drop or file picker', 'Processes in under 30 seconds'].map(t => (
                     <li key={t} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300">
                       <CheckCircle className="w-4 h-4 text-indigo-500 flex-shrink-0" />{t}
@@ -460,15 +495,12 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                   </div>
                 </div>
               </div>
-              <div className="md:order-last">
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 mb-6">
-                  <MessageSquare className="w-5 h-5 text-emerald-600 dark:text-emerald-300" />
-                </div>
+              <div className="md:order-last text-center flex flex-col items-center">
                 <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Chat directly with your notes</h3>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6 max-w-md">
                   Ask anything about your material and get an instant, accurate answer.
                 </p>
-                <ul className="space-y-2">
+                <ul className="space-y-2 flex flex-col items-center">
                   {['Context-aware AI responses', 'Cite exact page references', 'Works across all your documents'].map(t => (
                     <li key={t} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300">
                       <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />{t}
@@ -486,15 +518,12 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
               viewport={{ once: true, amount: 0.25 }}
               transition={{ duration: 0.6, ease: 'easeOut' }}
             >
-              <div>
-                <div className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 mb-6">
-                  <ListChecks className="w-5 h-5 text-violet-600 dark:text-violet-300" />
-                </div>
+              <div className="text-center flex flex-col items-center">
                 <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4">Auto-generated quizzes and flashcards</h3>
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+                <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6 max-w-md">
                   Generates targeted questions from your content — so you study what matters.
                 </p>
-                <ul className="space-y-2">
+                <ul className="space-y-2 flex flex-col items-center">
                   {['Multiple-choice questions from your PDF', 'Spaced-repetition flashcards', 'Track scores and progress over time'].map(t => (
                     <li key={t} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300">
                       <CheckCircle className="w-4 h-4 text-violet-500 flex-shrink-0" />{t}
@@ -537,26 +566,41 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
             </motion.div>
           </div>
 
-          {/* ── SECONDARY FEATURES — inline stat row ── */}
+          {/* ── SECONDARY FEATURES — modern cards ── */}
           <motion.div
-            className="mt-24 pt-12 border-t border-slate-200 dark:border-white/8"
+            className="mt-20"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.55, ease: 'easeOut' }}
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-white/8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { icon: <CreditCard className="w-4 h-4 text-pink-500" />, title: 'Smart Flashcards', desc: 'Key terms, auto-generated with spaced repetition.' },
-                { icon: <BarChart3 className="w-4 h-4 text-amber-500" />, title: 'Progress Analytics', desc: 'See your scores improve session over session.' },
-                { icon: <BookOpenCheck className="w-4 h-4 text-sky-500" />, title: 'Topic Summaries', desc: 'AI-written summaries ready to review in minutes.' },
-              ].map(({ icon, title, desc }, i) => (
-                <div key={title} className={`flex flex-col gap-2 py-6 ${i === 0 ? 'md:pr-10' : i === 1 ? 'md:px-10' : 'md:pl-10'}`}>
-                  <div className="flex items-center gap-2 text-slate-900 dark:text-white text-sm font-semibold">
-                    {icon}{title}
-                  </div>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">{desc}</p>
-                </div>
+                {
+                  title: 'Smart Flashcards',
+                  desc: 'Key terms auto-generated with spaced repetition for long-term retention.',
+                },
+                {
+                  title: 'Progress Analytics',
+                  desc: 'Track your scores and watch your performance improve session over session.',
+                },
+                {
+                  title: 'Topic Summaries',
+                  desc: 'AI-written summaries of complex topics, ready to review in minutes.',
+                },
+              ].map(({ title, desc }, i) => (
+                <motion.div
+                  key={title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  whileHover={{ y: -6 }}
+                  className="group relative flex flex-col gap-3 p-6 rounded-2xl border border-slate-200 dark:border-white/8 bg-white/60 dark:bg-white/[0.03] backdrop-blur-sm shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <h4 className="text-slate-900 dark:text-white text-base font-bold">{title}</h4>
+                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{desc}</p>
+                </motion.div>
               ))}
             </div>
           </motion.div>
