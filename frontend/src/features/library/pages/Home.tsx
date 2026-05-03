@@ -36,16 +36,16 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           >
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter mb-10 leading-[0.85] flex flex-col">
               <motion.span
-                initial={{ opacity: 0, x: -30, rotate: -3 }}
-                animate={{ opacity: 1, x: 0, rotate: 0 }}
-                transition={{ duration: 2.0, type: "spring", stiffness: 40, damping: 20 }}
+                initial={{ opacity: 0, x: -40, rotate: -2, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, x: 0, rotate: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 1.2, type: "spring", stiffness: 60, damping: 15 }}
               >
                 Study Smarter,
               </motion.span>
               <motion.span
-                initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                transition={{ duration: 2.0, delay: 0.8, type: "spring", stiffness: 40, damping: 20 }}
+                initial={{ opacity: 0, scale: 0.9, rotate: 3, filter: 'blur(10px)' }}
+                animate={{ opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)' }}
+                transition={{ duration: 1.2, delay: 0.4, type: "spring", stiffness: 60, damping: 15 }}
                 className="relative inline-block mt-4 md:mt-2"
               >
                 <span className="text-[#f59e0b]">
@@ -76,9 +76,14 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                 <>
                   <motion.button
                     onClick={onStart}
-                    whileHover={{ scale: 1.05, y: -4 }}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      y: -4,
+                      boxShadow: '0 25px 50px -12px rgba(79, 70, 229, 0.4)'
+                    }}
                     whileTap={{ scale: 0.98 }}
-                    className="group relative px-10 py-5 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 text-white rounded-2xl font-black text-xl shadow-[0_20px_50px_rgba(79,70,229,0.3)] hover:shadow-indigo-500/60 transition-all flex items-center gap-3 overflow-hidden border border-white/10"
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className="group relative px-10 py-5 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-700 text-white rounded-2xl font-black text-xl transition-all flex items-center gap-3 overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(79,70,229,0.3)]"
                   >
                     {/* Animated Shine Effect */}
                     <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:animate-[shine_1.5s_infinite] pointer-events-none" />
@@ -678,10 +683,13 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
               <ul className="space-y-3">
                 {['Features', 'How It Works', 'Pricing', 'About Us'].map((link) => (
                   <li key={link}>
-                    <a href="#" className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2 group">
+                    <button 
+                      onClick={() => onNavigate(link === 'About Us' ? 'ABOUT_US' : 'HOME')} 
+                      className="text-slate-400 hover:text-indigo-400 transition-colors flex items-center gap-2 group"
+                    >
                       <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 -ml-6 group-hover:ml-0 transition-all" />
                       {link}
-                    </a>
+                    </button>
                   </li>
                 ))}
               </ul>

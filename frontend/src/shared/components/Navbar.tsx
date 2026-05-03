@@ -52,7 +52,7 @@ export const Navbar: React.FC<NavbarProps> = ({ currentState, onNavigate }) => {
 
           {/* Center: Navigation Links */}
           <div className="hidden lg:flex items-center gap-8">
-            <NavMenuLink label="Features" onClick={() => scrollToSection('features')} />
+            <NavMenuLink label="About Us" onClick={() => onNavigate('ABOUT_US')} />
             <NavMenuLink label="How It Works" onClick={() => scrollToSection('how-it-works')} />
             <NavMenuLink label="Demo" onClick={() => scrollToSection('demo')} />
             <NavMenuLink label="Pricing" onClick={() => scrollToSection('pricing')} />
@@ -123,7 +123,7 @@ const NavMenuLink: React.FC<{ label: string; onClick: () => void }> = ({ label, 
     className="relative px-1 py-1 text-base font-bold text-black dark:text-slate-400 hover:text-indigo-600 dark:hover:text-white transition-all group/link"
   >
     {label}
-    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-indigo-600 dark:bg-indigo-400 transition-all group-hover/link:w-full rounded-full" />
+    <span className="absolute -bottom-1 left-0 w-full h-0.5 bg-indigo-600 dark:bg-indigo-400 scale-x-0 transition-transform duration-300 origin-right group-hover/link:scale-x-100 group-hover/link:origin-left rounded-full" />
   </button>
 );
 

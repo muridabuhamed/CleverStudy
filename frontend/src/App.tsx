@@ -10,6 +10,7 @@ import { Results } from './features/quiz/pages/Results';
 import { Topics } from './features/library/pages/Topics';
 import { Library } from './features/library/pages/Library';
 import { Profile } from './features/profile/pages/Profile';
+import { AboutUs } from './pages/AboutUs';
 import { Flashcards } from './features/flashcards/pages/Flashcards';
 import { Question, QuizResult } from './features/quiz/types';
 import { FileRecord } from './features/library/services/libraryApi';
@@ -27,7 +28,7 @@ import { useToast } from './shared/contexts/ToastContext';
 import { ToastContainer } from './shared/components/Toast';
 import { Book, BookOpen, FileText, Pencil, GraduationCap, Notebook } from 'lucide-react';
 
-export type AppState = 'HOME' | 'UPLOAD' | 'PROCESSING' | 'TOPICS' | 'QUIZ' | 'RESULTS' | 'LIBRARY' | 'FLASHCARDS' | 'PDF_VIEW' | 'PROFILE' | 'LOGIN' | 'SIGNUP';
+export type AppState = 'HOME' | 'UPLOAD' | 'PROCESSING' | 'TOPICS' | 'QUIZ' | 'RESULTS' | 'LIBRARY' | 'FLASHCARDS' | 'PDF_VIEW' | 'PROFILE' | 'LOGIN' | 'SIGNUP' | 'ABOUT_US';
 
 export default function App() {
   const { isAuthenticated, loading } = useAuth();
@@ -174,11 +175,10 @@ export default function App() {
   };
 
   const getPageTransition = (currentState: AppState) => {
-    // Ultra-lightweight transitions - just opacity + minimal movement
     return {
-      initial: { opacity: 0, y: 5 },
-      animate: { opacity: 1, y: 0 },
-      exit: { opacity: 0, y: -5 }
+      initial: { opacity: 0, scale: 0.98, filter: 'blur(4px)' },
+      animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+      exit: { opacity: 0, scale: 1.02, filter: 'blur(4px)' }
     };
   };
 
@@ -189,7 +189,7 @@ export default function App() {
     }
 
     // Protected routes - redirect to login if not authenticated
-    if (!isAuthenticated && !loading && state !== 'HOME') {
+    if (!isAuthenticated && !loading && state !== 'HOME' && state !== 'ABOUT_US') {
       setState('LOGIN');
       return <Auth defaultTab="login" />;
     }
@@ -199,6 +199,8 @@ export default function App() {
         return <Home onStart={handleStart} onNavigate={setState} />;
       case 'PROFILE':
         return <Profile />;
+      case 'ABOUT_US':
+        return <AboutUs />;
       case 'UPLOAD':
         return (
           <div className="max-w-4xl mx-auto py-20 px-4 relative">
@@ -406,8 +408,8 @@ export default function App() {
               animate={getPageTransition(state).animate}
               exit={getPageTransition(state).exit}
               transition={{ 
-                duration: 0.25,
-                ease: "easeOut"
+                duration: 0.4,
+                ease: [0.23, 1, 0.32, 1]
               }}
             >
               {renderContent()}
