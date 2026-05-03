@@ -18,12 +18,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
 
   return (
     <>
-      {/* Hero Mesh Background Accent */}
-      <div className="absolute top-0 left-0 w-full h-[800px] overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute top-[10%] right-[-10%] w-[50%] h-[50%] bg-purple-500/10 rounded-full blur-[140px] animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute bottom-[20%] left-[20%] w-[35%] h-[35%] bg-pink-500/10 rounded-full blur-[110px] animate-pulse" style={{ animationDelay: '2s' }} />
-      </div>
+
 
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-16 pt-16 pb-24 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -36,15 +31,15 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           >
             <h1 className="text-6xl md:text-8xl font-black text-slate-900 dark:text-white tracking-tighter mb-10 leading-[0.85] flex flex-col">
               <motion.span
-                initial={{ opacity: 0, x: -40, rotate: -2, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, x: 0, rotate: 0, filter: 'blur(0px)' }}
+                initial={{ opacity: 0, x: -40, rotate: -2 }}
+                animate={{ opacity: 1, x: 0, rotate: 0 }}
                 transition={{ duration: 1.2, type: "spring", stiffness: 60, damping: 15 }}
               >
                 Study Smarter,
               </motion.span>
               <motion.span
-                initial={{ opacity: 0, scale: 0.9, rotate: 3, filter: 'blur(10px)' }}
-                animate={{ opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)' }}
+                initial={{ opacity: 0, scale: 0.9, rotate: 3 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
                 transition={{ duration: 1.2, delay: 0.4, type: "spring", stiffness: 60, damping: 15 }}
                 className="relative inline-block mt-4 md:mt-2"
               >
@@ -128,11 +123,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
           >
             <div className="relative h-[500px]">
               {/* Card 1 - AI Analysis (Top Right) */}
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-                className="absolute top-0 right-0 w-64 p-6 bg-white/60 dark:bg-indigo-500/10 backdrop-blur-2xl border border-indigo-200/50 dark:border-indigo-400/20 rounded-[2rem] shadow-2xl overflow-hidden z-20"
-              >
+              <div className="absolute top-0 right-0 w-64 p-6 bg-white/80 dark:bg-slate-900 border border-indigo-100 dark:border-white/10 rounded-[2rem] shadow-xl overflow-hidden z-20">
                 <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 to-transparent rounded-[2rem] pointer-events-none" />
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-[#0a194f] rounded-lg shadow-lg shadow-indigo-900/30">
@@ -152,14 +143,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                   </div>
                   <span className="text-xs font-bold text-[#0a194f] dark:text-white">85%</span>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Card 2 - Smart Highlights (Center Left) */}
-              <motion.div
-                animate={{ x: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 1 }}
-                className="absolute top-32 -left-12 w-64 p-6 bg-white/60 dark:bg-violet-500/10 backdrop-blur-2xl border border-violet-200/50 dark:border-violet-400/20 rounded-[2rem] shadow-2xl overflow-hidden z-30"
-              >
+              <div className="absolute top-32 -left-12 w-64 p-6 bg-white/80 dark:bg-slate-900 border border-violet-100 dark:border-white/10 rounded-[2rem] shadow-xl overflow-hidden z-30">
                 <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 to-transparent rounded-[2rem] pointer-events-none" />
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-violet-500 rounded-lg shadow-lg shadow-violet-500/30">
@@ -175,14 +162,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
 
               {/* Card 3 - Quiz Score (Bottom Right) */}
-              <motion.div
-                animate={{ rotate: [-2, 2, -2] }}
-                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-                className="absolute bottom-12 right-12 w-56 p-6 bg-white/60 dark:bg-pink-500/10 backdrop-blur-2xl border border-pink-200/50 dark:border-pink-400/20 rounded-[2rem] shadow-2xl overflow-hidden z-10"
-              >
+              <div className="absolute bottom-12 right-12 w-56 p-6 bg-white/80 dark:bg-slate-900 border border-pink-100 dark:border-white/10 rounded-[2rem] shadow-xl overflow-hidden z-10">
                 <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent rounded-[2rem] pointer-events-none" />
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-2 bg-pink-500 rounded-lg shadow-lg shadow-pink-500/30">
@@ -194,14 +177,10 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                   <div className="text-5xl font-black text-pink-600 dark:text-white mb-1">94%</div>
                   <div className="text-xs text-slate-500 dark:text-slate-400">Average improvement</div>
                 </div>
-              </motion.div>
+              </div>
 
               {/* Card 4 - AI Chat (Bottom Left) */}
-              <motion.div
-                animate={{ y: [0, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 5, ease: "easeInOut", delay: 2 }}
-                className="absolute bottom-0 left-0 w-64 p-5 bg-white/60 dark:bg-emerald-500/10 backdrop-blur-2xl border border-emerald-200/50 dark:border-emerald-400/20 rounded-[2rem] shadow-2xl overflow-hidden z-20"
-              >
+              <div className="absolute bottom-0 left-0 w-64 p-5 bg-white/80 dark:bg-slate-900 border border-emerald-100 dark:border-white/10 rounded-[2rem] shadow-xl overflow-hidden z-20">
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-transparent rounded-[2rem] pointer-events-none" />
                 <div className="flex items-center gap-3 mb-3">
                   <div className="p-2 bg-emerald-500 rounded-lg">
@@ -217,7 +196,7 @@ export const Home: React.FC<HomeProps> = ({ onStart, onNavigate }) => {
                     Photosynthesis converts light energy into chemical energy...
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>

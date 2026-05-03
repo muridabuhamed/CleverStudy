@@ -83,7 +83,7 @@ export const AboutUs: React.FC = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="inline-block px-8 py-10 rounded-[3rem] bg-white/30 dark:bg-slate-900/30 backdrop-blur-2xl border border-white/20 dark:border-white/5 shadow-xl"
+              className="inline-block px-8 py-10 rounded-[3rem] bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/5 shadow-xl"
             >
               <h2 className="text-5xl md:text-6xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
                 Meet the <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Team</span>
@@ -116,13 +116,13 @@ export const AboutUs: React.FC = () => {
                   
                   {/* Social Links on Hover */}
                   <div className="absolute bottom-6 left-6 right-6 flex justify-center gap-4 translate-y-12 group-hover:translate-y-0 transition-transform duration-500">
-                    <a href={member.social.twitter} className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-indigo-600 transition-all">
+                    <a href={member.social.twitter} className="w-10 h-10 rounded-full bg-slate-900/50 flex items-center justify-center text-white hover:bg-white hover:text-indigo-600 transition-all">
                       <Twitter className="w-5 h-5" />
                     </a>
-                    <a href={member.social.linkedin} className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-indigo-600 transition-all">
+                    <a href={member.social.linkedin} className="w-10 h-10 rounded-full bg-slate-900/50 flex items-center justify-center text-white hover:bg-white hover:text-indigo-600 transition-all">
                       <Linkedin className="w-5 h-5" />
                     </a>
-                    <a href={member.social.github} className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white hover:text-indigo-600 transition-all">
+                    <a href={member.social.github} className="w-10 h-10 rounded-full bg-slate-900/50 flex items-center justify-center text-white hover:bg-white hover:text-indigo-600 transition-all">
                       <Github className="w-5 h-5" />
                     </a>
                   </div>

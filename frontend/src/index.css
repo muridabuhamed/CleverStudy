@@ -44,12 +44,18 @@
     color-scheme: dark;
   }
 
-  /* Hardware acceleration for smooth animations - using more specific targets */
+  /* Hardware acceleration for smooth animations */
   .motion-safe-gpu {
-    transform: translateZ(0);
+    transform: translate3d(0, 0, 0);
     backface-visibility: hidden;
     perspective: 1000px;
-    will-change: transform, opacity, filter;
+    will-change: transform, opacity;
+  }
+
+  /* Optimize large sections */
+  section, .page-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 500px;
   }
 }
 
